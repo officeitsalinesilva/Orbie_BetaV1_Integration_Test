@@ -1,24 +1,7 @@
 export type OrbTheme = 'light' | 'dark' | 'automatic';
 export type OrbLanguage = 'pt-BR' | 'en';
 
-export type UserRole = 'user' | 'admin';
-
-export interface UserIdentity {
-  uid: string;
-  email: string | null;
-  name: string | null;
-  role: UserRole;
-  avatarUrl: string | null;
-  plan: 'free' | 'premium';
-  credits: number;
-  createdAt: string;
-  updatedAt: string;
-  preferences?: OrbPreferences;
-}
-
 export type OrbProfile = {
-  id?: string;
-  ownerUid?: string;
   fullName: string;
   preferredName: string;
   avatarUrl?: string;
@@ -36,11 +19,6 @@ export type OrbProfile = {
   currentCity?: string;
   currency?: string;
   timezone: string;
-  latitude?: number;
-  longitude?: number;
-  tz_str?: string;
-  houseSystem?: string;
-  zodiac?: string;
   theme: OrbTheme;
   language: OrbLanguage;
   dailySynthesis: boolean;
@@ -50,8 +28,6 @@ export type OrbProfile = {
   backupLocal?: boolean;
   plan?: 'free' | 'premium';
   planActivatedAt?: string;
-  createdAt?: string;
-  updatedAt?: string;
 };
 
 export type CurrencyConfig = {
@@ -126,7 +102,6 @@ export type JournalEntry = {
 
 export type AdditionalProfile = {
   id: string;
-  ownerUid?: string;
   name: string;
   fullName?: string;
   icon?: string;
@@ -139,11 +114,6 @@ export type AdditionalProfile = {
   birthHour?: string;
   birthMinute?: string;
   birthCity: string;
-  birthState?: string;
-  birthCountry?: string;
-  latitude?: number;
-  longitude?: number;
-  tz_str?: string;
   description?: string;
   bio?: string;
   notifyEnabled?: boolean;
@@ -152,12 +122,10 @@ export type AdditionalProfile = {
   completeness: number;
   unlockedItems: string[];
   createdAt: string;
-  updatedAt?: string;
 };
 
 export type RegisteredEvent = {
   id: string;
-  ownerUid?: string;
   title: string;
   icon?: string;
   category: string; // 'business' | 'marriage' | 'relocation' | 'milestone' | 'historical' | 'other'
@@ -167,9 +135,6 @@ export type RegisteredEvent = {
   eventHour?: string;
   eventMinute?: string;
   location: string;
-  latitude?: number;
-  longitude?: number;
-  tz_str?: string;
   description?: string;
   notifyEnabled?: boolean;
   notificationSettings?: NotificationToggleSettings;
@@ -177,7 +142,6 @@ export type RegisteredEvent = {
   completeness: number;
   unlockedItems: string[];
   createdAt: string;
-  updatedAt?: string;
 };
 
 export type NotificationToggleSettings = {
