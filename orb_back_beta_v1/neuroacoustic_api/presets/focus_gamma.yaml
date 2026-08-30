@@ -1,0 +1,43 @@
+# Binaural Beat Script for Peak Focus (Gamma Waves)
+# Aims for high-level cognitive processing and problem-solving.
+
+# Global settings
+title: Focus (Gamma)
+base_frequency: 150 # Hz (slightly higher carrier for potentially clearer high freq beats)
+sample_rate: 44100 # Hz
+output_filename: "audio/focus_gamma.flac"
+
+# Sequence (Total Duration: 30 minutes)
+steps:
+  # 1. Start at Alpha for baseline calm (120 seconds)
+  - type: stable
+    frequency: 10 # Hz (Alpha)
+    duration: 120 # seconds
+
+  # 2. Transition up through Beta (300 seconds)
+  - type: transition
+    # start_frequency: 10 (implied)
+    end_frequency: 20 # Hz (Mid-Beta)
+    duration: 300 # seconds
+
+  # 3. Transition further to Gamma (180 seconds)
+  - type: transition
+    # start_frequency: 20 (implied)
+    end_frequency: 40 # Hz (Gamma)
+    duration: 180 # seconds
+
+  # 4. Hold Gamma for peak concentration (900 seconds)
+  - type: stable
+    frequency: 40 # Hz (Gamma)
+    duration: 900 # seconds
+
+  # 5. Gentle ramp down back to Beta (180 seconds)
+  - type: transition
+    # start_frequency: 40 (implied)
+    end_frequency: 15 # Hz (Low Beta)
+    duration: 180 # seconds
+
+  # 6. Hold low Beta to ease out (120 seconds)
+  - type: stable
+    frequency: 15 # Hz (Low Beta)
+    duration: 120 # seconds

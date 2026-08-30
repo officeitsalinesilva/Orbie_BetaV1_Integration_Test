@@ -1,0 +1,26 @@
+[project]
+name = "neuroacoustic-api"
+version = "0.1.0"
+description = "API para geração de áudio neuroacústico"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+    "binaural-generator>=0.6.4",
+    "binaural>=0.1.0",
+    "numpy",
+    "soundfile",
+    "PyYAML",
+    "pydantic",
+    "pydub",
+    "scipy",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
