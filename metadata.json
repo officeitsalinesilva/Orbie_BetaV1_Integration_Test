@@ -1,0 +1,6 @@
+{
+  "name": "Orb",
+  "description": "Personal individual analysis platform featuring daily awareness syntheses, neuroacoustics frequency studio, services and artifacts catalog, logarithmic energy scales, wallet credits, and profile preferences.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
