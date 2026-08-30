@@ -36,6 +36,273 @@ https://app.notion.com/p/Onboarding-Prim-rio-de-Implementa-o-Projeto-Orbie-21b9f
 
 ---
 
+# 1.3 CANONICAL REPOSITORY MIRROR REQUIREMENT
+
+The working environment MUST contain the actual canonical repositories or a verifiable complete checkout of their contents before implementation begins.
+
+A textual reference to a GitHub repository is NOT sufficient.
+
+The agent MUST verify that the workspace contains the canonical source trees.
+
+For the Frontend repository, verify at minimum:
+
+* `orb-web/`
+* `orb-mobile/`
+* root configuration files
+* shared source/assets where applicable
+
+For the Backend repository, verify the actual source tree containing:
+
+* Astra API
+* Neuroacoustic API
+* Orb API
+* Orb SystemBook
+* their configuration;
+* dependencies;
+* engines;
+* services;
+* models;
+* tests;
+* entrypoints.
+
+The agent MUST NOT recreate these structures from memory, screenshots, previews, descriptions or previous reports.
+
+If the canonical repository has directories or modules that are absent from the current workspace, classify the workspace as:
+
+CANONICAL_MIRROR = FALSE
+
+and STOP implementation.
+
+The agent MUST report:
+
+1. canonical repository;
+2. expected canonical path;
+3. actual workspace path;
+4. missing directories/files;
+5. whether the repository was actually imported/cloned;
+6. whether the current workspace is a derived/reconstructed project.
+
+A generated project containing files that resemble the canonical application is NOT considered a canonical repository mirror.
+
+---
+
+# 1.4 CANONICAL TREE DIFF
+
+Before Phase 4 implementation, perform a structural comparison:
+
+CANONICAL REPOSITORY
+↓
+DIRECTORY / FILE INVENTORY
+↓
+CURRENT WORKSPACE
+↓
+TREE DIFF
+
+The agent MUST explicitly identify:
+
+ADDED
+REMOVED
+MISSING
+MODIFIED
+UNCHANGED
+
+Do not infer equivalence from similar filenames.
+
+Do not infer equivalence from similar UI.
+
+Do not infer equivalence from successful compilation.
+
+The following statement is prohibited without structural evidence:
+
+"The canonical frontend/backend has been integrated."
+
+The agent must instead report:
+
+CANONICAL_MIRROR = VERIFIED
+
+only when the canonical source tree has actually been verified.
+
+---
+
+# 1.5 NO RECONSTRUCTION FROM CANONICAL DESCRIPTION
+
+The agent MUST NOT reconstruct a canonical repository by generating files that appear to implement the same functionality.
+
+Examples of prohibited behavior:
+
+* creating a new `server.ts` and calling it the canonical backend;
+* recreating API endpoints without importing the canonical API implementation;
+* recreating Mobile contracts without importing the canonical Mobile application;
+* recreating SystemBook schemas without importing the canonical SystemBook;
+* recreating engines based on documentation;
+* recreating components based on screenshots or preview;
+* copying only selected frontend files while omitting the canonical application structure.
+
+Adapters and integration layers MAY be created, but they must sit on top of the canonical implementation.
+
+The distinction is mandatory:
+
+CANONICAL IMPLEMENTATION
+≠
+INTEGRATION LAYER
+≠
+ADAPTER
+≠
+MOCK
+≠
+RECONSTRUCTION
+
+---
+
+# 1.6 WORKSPACE IDENTITY
+
+Before modifying code, the agent MUST determine what the current workspace actually represents.
+
+Classify it as exactly one of:
+
+CANONICAL_REPOSITORY
+CANONICAL_MIRROR
+INTEGRATION_WORKSPACE
+DERIVED_PROJECT
+RECONSTRUCTED_PROJECT
+UNKNOWN
+
+If classified as:
+
+DERIVED_PROJECT
+RECONSTRUCTED_PROJECT
+UNKNOWN
+
+the agent MUST NOT implement Phase 4+.
+
+It must first establish a verified canonical workspace.
+
+---
+
+# 1.7 BACKEND IMPLEMENTATION PROOF
+
+The existence of a generic backend entrypoint such as:
+
+`server.ts`
+
+does NOT prove the existence of the canonical backend.
+
+Each canonical backend subsystem must have independent evidence:
+
+ASTRA_API
+→ source location
+→ entrypoint
+→ endpoints
+→ engines
+→ dependencies
+→ tests
+
+NEUROACOUSTIC_API
+→ source location
+→ entrypoint
+→ endpoints
+→ generation/processing
+→ dependencies
+→ tests
+
+ORB_API
+→ source location
+→ entrypoint
+→ endpoints
+→ services
+→ agent integration
+→ tests
+
+ORB_SYSTEMBOOK
+→ source location
+→ schemas/knowledge
+→ consumers
+→ integration points
+
+A generic API server containing newly created routes MUST NOT be classified as the canonical backend unless the canonical backend source itself has been verified.
+
+---
+
+# 1.8 MOBILE IMPLEMENTATION PROOF
+
+The existence of shared TypeScript types, API contracts, responsive CSS, or mobile-like components does NOT prove the existence of the canonical Mobile application.
+
+The agent must identify the actual canonical Mobile application tree.
+
+If the canonical repository contains:
+
+`orb-mobile/`
+
+the workspace must contain and preserve that implementation.
+
+"Mobile-ready" is NOT equivalent to "Mobile implementation exists."
+
+"Responsive Web" is NOT equivalent to "Mobile application exists."
+
+"Shared contracts" are NOT equivalent to "Mobile application integration."
+
+---
+
+# 1.9 PHASE 4 GATE
+
+Phase 4A MUST NOT start until all of the following are true:
+
+[ ] CANONICAL frontend repository verified
+[ ] CANONICAL Web implementation verified
+[ ] CANONICAL Mobile implementation verified
+[ ] CANONICAL backend repository verified
+[ ] Astra API verified
+[ ] Neuroacoustic API verified
+[ ] Orb API verified
+[ ] Orb SystemBook verified
+[ ] canonical tree diff completed
+[ ] workspace identity classified
+[ ] no unexplained missing canonical directories
+[ ] no reconstructed subsystem incorrectly classified as canonical
+
+If any item is unchecked:
+
+PHASE 4A = BLOCKED
+
+The agent must diagnose the workspace before implementing.
+
+---
+
+# 1.10 PERSISTENCE REQUIREMENT
+
+"In-memory persistence" MUST NOT be described as production persistence.
+
+The following are distinct:
+
+MEMORY
+≠
+LOCAL STORAGE
+≠
+CACHE
+≠
+DATABASE
+≠
+DURABLE PERSISTENCE
+
+An in-memory store may be used for:
+
+* controlled tests;
+* temporary development;
+* explicit prototypes.
+
+It cannot be declared as production-ready user persistence.
+
+If Phase 4A requires real user persistence and no durable database/storage exists, classify:
+
+PERSISTENCE = MISSING
+
+or:
+
+PERSISTENCE = PARTIAL
+
+Do not classify it as EXISTING merely because multiple users can be represented in memory.
+
+
 # 2. REGRA ZERO — FONTE DE VERDADE
 
 A implementação existente nos repositórios canônicos é a fonte de verdade do ORBIE.
