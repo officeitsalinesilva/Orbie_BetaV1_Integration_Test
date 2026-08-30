@@ -16,8 +16,11 @@ import {
   NotificationToggleSettings,
   AppNotification,
   CouponRedemption,
+  UserIdentity,
 } from '../types';
-import { initAuth, logoutGoogle } from '../lib/googleAuth';
+import { initAuth, logoutGoogle, auth } from '../lib/googleAuth';
+import { authApi, profileApi, eventApi } from '../services/api';
+import { resolveLocationDeterministic } from '../services/geoService';
 
 export type SelectedScope =
   | { type: 'matrix' }
@@ -25,6 +28,8 @@ export type SelectedScope =
   | { type: 'event'; id: string };
 
 interface OrbContextValue {
+  userIdentity: UserIdentity | null;
+  isAdmin: boolean;
   profile: OrbProfile | null;
   preferences: OrbPreferences;
   hydrated: boolean;
@@ -340,6 +345,7 @@ const DEFAULT_NOTIF_SETTINGS: NotificationToggleSettings = {
 const OrbContext = createContext<OrbContextValue | null>(null);
 
 export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [userIdentity, setUserIdentity] = useState<UserIdentity | null>(null);
   const [profile, setProfile] = useState<OrbProfile | null>(null);
   const [preferences, setPreferences] = useState<OrbPreferences>({
     theme: 'light',
@@ -358,6 +364,13 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [notificationSettings, setNotificationSettings] = useState<NotificationToggleSettings>(DEFAULT_NOTIF_SETTINGS);
   const [redeemedCoupons, setRedeemedCoupons] = useState<CouponRedemption[]>([]);
   const [inviteCode] = useState<string>('ALINE-94K8');
+
+  // Compute isAdmin from userIdentity or email
+  const isAdmin = useMemo(() => {
+    if (userIdentity?.role === 'admin') return true;
+    if (profile?.email?.toLowerCase() === 'alinealv.silv@gmail.com') return true;
+    return false;
+  }, [userIdentity, profile?.email]);
 
   // Apply theme to <html> class and data-theme
   useEffect(() => {
@@ -507,9 +520,49 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setHydrated(true);
     }
 
-    // Subscribe to Google Firebase Auth state
-    const unsubscribe = initAuth((googleUser) => {
+    // Subscribe to Google Firebase Auth state & sync with backend
+    const unsubscribe = initAuth(async (googleUser) => {
       if (googleUser) {
+        try {
+          // Establish/verify authenticated session with backend
+          const identity = await authApi.verifySession({
+            uid: googleUser.uid,
+            email: googleUser.email,
+            displayName: googleUser.displayName,
+            photoURL: googleUser.photoURL,
+          });
+          setUserIdentity(identity);
+
+          // Fetch primary profile from backend
+          const serverPrimary = await profileApi.getPrimary();
+          if (serverPrimary) {
+            setProfile(serverPrimary);
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(serverPrimary));
+            } catch {}
+          }
+
+          // Fetch additional profiles
+          const serverProfiles = await profileApi.getAdditional();
+          if (serverProfiles && serverProfiles.length > 0) {
+            setAdditionalProfiles(serverProfiles);
+            try {
+              localStorage.setItem(PROFILES_KEY, JSON.stringify(serverProfiles));
+            } catch {}
+          }
+
+          // Fetch events
+          const serverEvents = await eventApi.getAll();
+          if (serverEvents && serverEvents.length > 0) {
+            setRegisteredEvents(serverEvents);
+            try {
+              localStorage.setItem(EVENTS_KEY, JSON.stringify(serverEvents));
+            } catch {}
+          }
+        } catch (backendErr) {
+          console.warn('[OrbContext] Backend sync fallback to local store:', backendErr);
+        }
+
         setProfile((prev) => {
           if (!prev) return prev;
           const updated = {
@@ -530,6 +583,8 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const value = useMemo<OrbContextValue>(
     () => ({
+      userIdentity,
+      isAdmin,
       profile,
       preferences,
       hydrated,
@@ -569,12 +624,28 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       },
       saveProfile: async (nextProfile) => {
+        // Deterministic geocoding resolution
+        if (!nextProfile.latitude || !nextProfile.longitude || !nextProfile.tz_str) {
+          const geo = resolveLocationDeterministic(
+            nextProfile.birthCity,
+            nextProfile.birthState,
+            nextProfile.birthCountry
+          );
+          nextProfile.latitude = geo.latitude;
+          nextProfile.longitude = geo.longitude;
+          nextProfile.tz_str = geo.timezone;
+        }
+
         setProfile(nextProfile);
         const nextPreferences = { theme: nextProfile.theme, language: nextProfile.language };
         setPreferences(nextPreferences);
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(nextProfile));
           localStorage.setItem(PREFERENCES_KEY, JSON.stringify(nextPreferences));
+          // Async server persistence
+          profileApi.savePrimary(nextProfile).catch((err) => {
+            console.warn('[OrbContext] Async server profile save notice:', err);
+          });
         } catch (e) {
           console.warn('Error writing profile to localStorage', e);
         }
@@ -588,6 +659,7 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             const nextProfile = { ...profile, ...patch };
             setProfile(nextProfile);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(nextProfile));
+            profileApi.savePrimary(nextProfile).catch(() => {});
           }
         } catch (e) {
           console.warn('Error writing preferences to localStorage', e);
@@ -601,16 +673,27 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           console.warn('Error removing profile from localStorage', e);
         }
       },
-      signIn: async () => {
+      signIn: async (email?: string) => {
         setIsSignedIn(true);
         try {
           localStorage.setItem(AUTH_KEY, 'true');
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            const identity = await authApi.verifySession({
+              uid: currentUser.uid,
+              email: email || currentUser.email,
+              displayName: currentUser.displayName,
+              photoURL: currentUser.photoURL,
+            });
+            setUserIdentity(identity);
+          }
         } catch (e) {
           console.warn('Error writing auth to localStorage', e);
         }
       },
       signOut: async () => {
         setIsSignedIn(false);
+        setUserIdentity(null);
         await logoutGoogle();
         try {
           localStorage.setItem(AUTH_KEY, 'false');
@@ -755,9 +838,13 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedScope(scope);
       },
       addAdditionalProfile: (data) => {
+        const geo = resolveLocationDeterministic(data.birthCity, data.birthState, data.birthCountry);
         const newProf: AdditionalProfile = {
           ...data,
           id: `prof-${Date.now()}`,
+          latitude: geo.latitude,
+          longitude: geo.longitude,
+          tz_str: geo.timezone,
           completeness: 75,
           unlockedItems: ['VIB-002'],
           createdAt: new Date().toISOString(),
@@ -766,6 +853,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const next = [...prev, newProf];
           try {
             localStorage.setItem(PROFILES_KEY, JSON.stringify(next));
+            profileApi.createAdditional(newProf).catch((err) => {
+              console.warn('[OrbContext] Async server additional profile notice:', err);
+            });
           } catch {}
           return next;
         });
@@ -776,6 +866,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const next = prev.map((p) => (p.id === id ? { ...p, ...data } : p));
           try {
             localStorage.setItem(PROFILES_KEY, JSON.stringify(next));
+            profileApi.updateAdditional(id, data).catch((err) => {
+              console.warn('[OrbContext] Async server profile update notice:', err);
+            });
           } catch {}
           return next;
         });
@@ -785,6 +878,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const next = prev.filter((p) => p.id !== id);
           try {
             localStorage.setItem(PROFILES_KEY, JSON.stringify(next));
+            profileApi.deleteAdditional(id).catch((err) => {
+              console.warn('[OrbContext] Async server profile delete notice:', err);
+            });
           } catch {}
           return next;
         });
@@ -792,9 +888,13 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
       // Registered Events
       addRegisteredEvent: (data) => {
+        const geo = resolveLocationDeterministic(data.location);
         const newEvt: RegisteredEvent = {
           ...data,
           id: `evt-${Date.now()}`,
+          latitude: geo.latitude,
+          longitude: geo.longitude,
+          tz_str: geo.timezone,
           completeness: 80,
           unlockedItems: ['AST-003'],
           createdAt: new Date().toISOString(),
@@ -803,6 +903,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const next = [...prev, newEvt];
           try {
             localStorage.setItem(EVENTS_KEY, JSON.stringify(next));
+            eventApi.create(newEvt).catch((err) => {
+              console.warn('[OrbContext] Async server event notice:', err);
+            });
           } catch {}
           return next;
         });
@@ -813,6 +916,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const next = prev.map((e) => (e.id === id ? { ...e, ...data } : e));
           try {
             localStorage.setItem(EVENTS_KEY, JSON.stringify(next));
+            eventApi.update(id, data).catch((err) => {
+              console.warn('[OrbContext] Async server event update notice:', err);
+            });
           } catch {}
           return next;
         });
@@ -822,6 +928,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const next = prev.filter((e) => e.id !== id);
           try {
             localStorage.setItem(EVENTS_KEY, JSON.stringify(next));
+            eventApi.delete(id).catch((err) => {
+              console.warn('[OrbContext] Async server event delete notice:', err);
+            });
           } catch {}
           return next;
         });
@@ -1060,6 +1169,8 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
     }),
     [
+      userIdentity,
+      isAdmin,
       profile,
       preferences,
       hydrated,
