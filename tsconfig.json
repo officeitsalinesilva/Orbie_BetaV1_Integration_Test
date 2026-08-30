@@ -17,8 +17,8 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["orb_front_beta_v1/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["orb_front_beta_v1/src"]
 }
