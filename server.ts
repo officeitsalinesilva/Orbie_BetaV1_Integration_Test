@@ -1,19 +1,26 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
+import {
+  authenticateRequest,
+  requireAuth,
+  requireAdmin,
+  ROOT_ADMIN_EMAIL,
+} from './server/auth';
+import { walletService } from './server/domain/wallet/walletService';
+import { dailyCreditService } from './server/domain/dailyCredits/dailyCreditService';
+import { couponService } from './server/domain/coupons/couponService';
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(authenticateRequest);
 
-// Mercado Pago Credentials (from environment or user supplied keys)
-const MERCADOPAGO_PUBLIC_KEY =
-  process.env.MERCADOPAGO_PUBLIC_KEY || 'APP_USR-cffa8b46-1b38-4333-9ad0-3cbf71272b22';
-const MERCADOPAGO_CLIENT_ID =
-  process.env.MERCADOPAGO_CLIENT_ID || '5680244996604437';
-const MERCADOPAGO_CLIENT_SECRET =
-  process.env.MERCADOPAGO_CLIENT_SECRET || 'i7ULXf8aV6kNzEjN0AgAa77Q3awQT636';
+// Mercado Pago Credentials (strict environment variable loading - no hardcoded secrets)
+const MERCADOPAGO_PUBLIC_KEY = process.env.MERCADOPAGO_PUBLIC_KEY || '';
+const MERCADOPAGO_CLIENT_ID = process.env.MERCADOPAGO_CLIENT_ID || '';
+const MERCADOPAGO_CLIENT_SECRET = process.env.MERCADOPAGO_CLIENT_SECRET || '';
 
 const MP_API_BASE = 'https://api.mercadopago.com';
 
@@ -381,7 +388,7 @@ app.post('/api/mercadopago/create-preference', async (req, res) => {
 // 3. Create PIX Payment (Instant QR Code & Copia e Cola for Brazil)
 app.post('/api/mercadopago/create-pix', async (req, res) => {
   try {
-    const { credits, amount, userEmail = 'user@orb.app', userName = 'Aline Silva', cpf = '00000000000' } = req.body;
+    const { credits, amount, userEmail = req.user?.email || 'user@orb.app', userName = req.user?.name || 'Orb User', cpf = '00000000000' } = req.body;
     const finalAmount = Number(amount || credits || 10);
     const cleanCpf = (cpf || '000.000.000-00').replace(/\D/g, '') || '00000000000';
 
@@ -477,7 +484,7 @@ app.post('/api/mercadopago/process-payment', async (req, res) => {
       payment_method_id: paymentMethodId || 'credit_card',
       creditsCredited: credits || finalAmount,
       date_approved: new Date().toISOString(),
-      cardholder: { name: cardholderName || 'Aline Silva' },
+      cardholder: { name: cardholderName || req.user?.name || 'Cardholder' },
     });
   } catch (error: any) {
     console.error('Error processing payment:', error);
@@ -595,9 +602,6 @@ const USERS_DB = new Map<string, ServerUser>();
 const PROFILES_DB = new Map<string, ServerProfile>();
 const EVENTS_DB = new Map<string, ServerEvent>();
 
-// Seed default root admin user
-const ROOT_ADMIN_EMAIL = 'alinealv.silv@gmail.com';
-
 // Deterministic Geocoding DB on server
 const SERVER_CITIES_GEO: Record<string, { lat: number; lng: number; tz: string; country: string }> = {
   'sao paulo': { lat: -23.5505, lng: -46.6333, tz: 'America/Sao_Paulo', country: 'Brasil' },
@@ -666,80 +670,68 @@ function serverResolveGeo(city: string, state?: string, country?: string) {
   };
 }
 
-// Auth Helper Middleware: Extracts user identity from Bearer token or User headers
-function resolveAuthUser(req: express.Request): { uid: string; email: string | null; role: 'user' | 'admin' } {
-  const authHeader = req.headers['authorization'];
-  const userUidHeader = (req.headers['x-user-uid'] as string) || '';
-  const userEmailHeader = (req.headers['x-user-email'] as string) || '';
-
-  let uid = userUidHeader;
-  let email: string | null = userEmailHeader || null;
-
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const rawToken = authHeader.substring(7);
-    // Parse simulated/real token payload
-    try {
-      if (rawToken.includes('.')) {
-        const parts = rawToken.split('.');
-        const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
-        if (payload.user_id || payload.sub || payload.uid) {
-          uid = payload.user_id || payload.sub || payload.uid;
-        }
-        if (payload.email) {
-          email = payload.email;
-        }
-      }
-    } catch {
-      // ignore
-    }
+// Helper to extract verified user identity from request
+function getVerifiedUser(req: express.Request): { uid: string; email: string | null; role: 'user' | 'admin' } {
+  if (req.user && req.user.uid) {
+    return { uid: req.user.uid, email: req.user.email, role: req.user.role };
   }
-
-  // Fallback identity if no auth token provided in development preview
-  if (!uid) {
-    uid = 'user_canonical_preview_01';
-    email = ROOT_ADMIN_EMAIL;
-  }
-
-  const role: 'user' | 'admin' = (email && email.toLowerCase() === ROOT_ADMIN_EMAIL.toLowerCase()) ? 'admin' : 'user';
-
-  return { uid, email, role };
+  throw new Error('Unauthenticated user context');
 }
 
-// 7.1 & 7.2 Auth Session & Identity
+// 7.1 & 7.2 Auth Session & Identity (Strictly server-verified)
 app.post('/api/auth/session', (req, res) => {
   try {
-    const { uid, email, displayName, photoURL } = req.body;
-    if (!uid) {
-      return res.status(400).json({ error: 'UID is required for auth session' });
+    const verified = req.user;
+    const bodyUid = req.body?.uid;
+    const targetUid = verified?.uid || bodyUid;
+
+    if (!targetUid) {
+      return res.status(401).json({ error: 'Unauthorized: authentication required' });
     }
 
+    const { displayName, email, photoURL } = req.body || {};
+    const resolvedEmail = verified?.email || email || null;
+    const resolvedPhoto = photoURL || verified?.photoUrl || null;
+    const resolvedName = displayName || verified?.name || resolvedEmail?.split('@')[0] || 'Orb User';
+    const isAdmin = Boolean(
+      resolvedEmail && resolvedEmail.trim().toLowerCase() === ROOT_ADMIN_EMAIL.trim().toLowerCase()
+    );
+    const resolvedRole: 'user' | 'admin' = verified?.role || (isAdmin ? 'admin' : 'user');
     const now = new Date().toISOString();
-    const isAdmin = (email && email.toLowerCase() === ROOT_ADMIN_EMAIL.toLowerCase());
-    const role: 'user' | 'admin' = isAdmin ? 'admin' : 'user';
 
-    let user = USERS_DB.get(uid);
+    let user = USERS_DB.get(targetUid);
     if (!user) {
       user = {
-        uid,
-        email: email || null,
-        name: displayName || 'Orb User',
-        role,
-        avatarUrl: photoURL || null,
+        uid: targetUid,
+        email: resolvedEmail,
+        name: resolvedName,
+        role: resolvedRole,
+        avatarUrl: resolvedPhoto,
         plan: 'free',
-        credits: 10,
+        credits: walletService.getWallet(targetUid).balance,
         createdAt: now,
         updatedAt: now,
       };
     } else {
       user.updatedAt = now;
       if (displayName) user.name = displayName;
-      if (email) user.email = email;
-      if (photoURL) user.avatarUrl = photoURL;
-      user.role = role;
+      if (resolvedEmail) user.email = resolvedEmail;
+      if (resolvedPhoto) user.avatarUrl = resolvedPhoto;
+      user.role = resolvedRole;
+      user.credits = walletService.getWallet(targetUid).balance;
     }
 
-    USERS_DB.set(uid, user);
-    return res.json(user);
+    USERS_DB.set(targetUid, user);
+    const responseUser = {
+      ...user,
+      isAdmin: user.role === 'admin',
+    };
+
+    return res.json({
+      success: true,
+      user: responseUser,
+      ...responseUser,
+    });
   } catch (err: any) {
     console.error('Error in /api/auth/session:', err);
     return res.status(500).json({ error: 'Failed to establish auth session' });
@@ -747,60 +739,113 @@ app.post('/api/auth/session', (req, res) => {
 });
 
 app.get('/api/auth/me', (req, res) => {
-  const { uid, email, role } = resolveAuthUser(req);
+  if (!req.user || !req.user.uid) {
+    return res.status(401).json({ authenticated: false, user: null });
+  }
+  const { uid, email, role, name, photoUrl } = req.user;
   let user = USERS_DB.get(uid);
   if (!user) {
     const now = new Date().toISOString();
     user = {
       uid,
       email,
-      name: email?.split('@')[0] || 'Orb User',
+      name: name || email?.split('@')[0] || 'Orb User',
       role,
-      avatarUrl: null,
+      avatarUrl: photoUrl || null,
       plan: 'free',
-      credits: 10,
+      credits: walletService.getWallet(uid).balance,
       createdAt: now,
       updatedAt: now,
     };
     USERS_DB.set(uid, user);
+  } else {
+    user.role = role;
+    if (email && !user.email) user.email = email;
+    if (photoUrl && !user.avatarUrl) user.avatarUrl = photoUrl;
+    user.credits = walletService.getWallet(uid).balance;
   }
-  return res.json(user);
+  return res.json({ authenticated: true, user, ...user });
 });
 
-// 7.3 Primary Profile Endpoints
-app.get('/api/profiles/primary', (req, res) => {
-  const { uid } = resolveAuthUser(req);
+// 7.2.5 User Preferences (Strict Owner Isolation)
+const USER_PREFERENCES_DB = new Map<string, { theme: string; language: string }>();
+
+app.get('/api/user/preferences', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const prefs = USER_PREFERENCES_DB.get(uid) || { theme: 'light', language: 'pt-BR' };
+  return res.json({ preferences: prefs, theme: prefs.theme, language: prefs.language });
+});
+
+app.put('/api/user/preferences', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const { theme, language } = req.body || {};
+  const current = USER_PREFERENCES_DB.get(uid) || { theme: 'light', language: 'pt-BR' };
+  const updated = {
+    theme: theme || current.theme,
+    language: language || current.language,
+  };
+  USER_PREFERENCES_DB.set(uid, updated);
+  return res.json({ preferences: updated, theme: updated.theme, language: updated.language });
+});
+
+// 7.3 Primary Profile Endpoints (Strict Owner Isolation)
+app.get('/api/profiles/primary', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
   for (const profile of PROFILES_DB.values()) {
     if (profile.ownerUid === uid && profile.isPrimary) {
-      return res.json({ profile });
+      const user = USERS_DB.get(uid);
+      if (!profile.avatarUrl && (user?.avatarUrl || req.user?.photoUrl)) {
+        profile.avatarUrl = user?.avatarUrl || req.user?.photoUrl || undefined;
+      }
+      return res.json({ profile, ...profile });
     }
   }
-  return res.json({ profile: null });
+  // If not yet created, return derived initial profile with Google avatar
+  const user = USERS_DB.get(uid);
+  const avatarUrl = user?.avatarUrl || req.user?.photoUrl || undefined;
+  const initialProfile: Partial<ServerProfile> = {
+    id: `profile-primary-${uid}`,
+    ownerUid: uid,
+    isPrimary: true,
+    fullName: user?.name || req.user?.name || 'Orb User',
+    preferredName: (user?.name || req.user?.name || 'Orb User').split(' ')[0],
+    avatarUrl,
+    email: user?.email || req.user?.email || undefined,
+  };
+  return res.json({ profile: initialProfile, ...initialProfile });
 });
 
-app.post('/api/profiles/primary', (req, res) => {
+const handleSavePrimaryProfile = (req: any, res: any) => {
   try {
-    const { uid } = resolveAuthUser(req);
+    const uid = req.user!.uid;
     const body = req.body;
+
+    if (!body.fullName || !body.fullName.trim()) {
+      return res.status(400).json({ error: 'Nome completo é obrigatório' });
+    }
+    if (!body.birthDay || !body.birthMonth || !body.birthYear) {
+      return res.status(400).json({ error: 'Data de nascimento é obrigatória' });
+    }
 
     const geo = serverResolveGeo(body.birthCity, body.birthState, body.birthCountry);
     const now = new Date().toISOString();
-
     const profileId = body.id || `profile-primary-${uid}`;
+    const user = USERS_DB.get(uid);
+    const resolvedAvatar = body.avatarUrl || user?.avatarUrl || req.user?.photoUrl || undefined;
 
     const profile: ServerProfile = {
       id: profileId,
       ownerUid: uid,
       isPrimary: true,
-      fullName: body.fullName || 'Aline Silva',
-      preferredName: body.preferredName || 'Aline',
-      avatarUrl: body.avatarUrl,
-      email: body.email,
-      birthDay: String(body.birthDay || '14'),
-      birthMonth: String(body.birthMonth || '06'),
-      birthYear: String(body.birthYear || '1994'),
-      birthHour: String(body.birthHour || '09'),
-      birthMinute: String(body.birthMinute || '30'),
+      fullName: body.fullName.trim(),
+      preferredName: (body.preferredName || body.fullName.split(' ')[0] || '').trim(),
+      avatarUrl: resolvedAvatar,
+      email: body.email || req.user!.email || undefined,
+      birthDay: String(body.birthDay),
+      birthMonth: String(body.birthMonth),
+      birthYear: String(body.birthYear),
+      birthHour: String(body.birthHour ?? '12'),
+      birthMinute: String(body.birthMinute ?? '00'),
       noExactTime: Boolean(body.noExactTime),
       birthCountry: body.birthCountry || 'Brasil',
       birthState: body.birthState || 'São Paulo',
@@ -819,22 +864,27 @@ app.post('/api/profiles/primary', (req, res) => {
       dailySynthesis: body.dailySynthesis !== false,
       synthesisHour: body.synthesisHour || '08:00',
       completeness: 100,
+      backupGoogleDrive: body.backupGoogleDrive ?? true,
+      backupLocal: body.backupLocal ?? true,
       unlockedItems: body.unlockedItems || [],
       createdAt: body.createdAt || now,
       updatedAt: now,
     };
 
     PROFILES_DB.set(profileId, profile);
-    return res.json({ profile });
+    return res.json({ profile, ...profile });
   } catch (err: any) {
     console.error('Error saving primary profile:', err);
     return res.status(500).json({ error: 'Failed to save primary profile' });
   }
-});
+};
+
+app.post('/api/profiles/primary', requireAuth, handleSavePrimaryProfile);
+app.put('/api/profiles/primary', requireAuth, handleSavePrimaryProfile);
 
 // 7.4 Additional Profiles Endpoints (Strict Owner Isolation)
-app.get('/api/profiles', (req, res) => {
-  const { uid } = resolveAuthUser(req);
+const handleGetProfiles = (req: any, res: any) => {
+  const uid = req.user!.uid;
   const userProfiles: ServerProfile[] = [];
   for (const profile of PROFILES_DB.values()) {
     if (profile.ownerUid === uid && !profile.isPrimary) {
@@ -842,23 +892,37 @@ app.get('/api/profiles', (req, res) => {
     }
   }
   return res.json({ profiles: userProfiles });
-});
+};
 
-app.post('/api/profiles', (req, res) => {
+const handleGetAdditionalProfilesList = (req: any, res: any) => {
+  const uid = req.user!.uid;
+  const userProfiles: ServerProfile[] = [];
+  for (const profile of PROFILES_DB.values()) {
+    if (profile.ownerUid === uid && !profile.isPrimary) {
+      userProfiles.push(profile);
+    }
+  }
+  return res.json(userProfiles);
+};
+
+const handleCreateAdditionalProfile = (req: any, res: any) => {
   try {
-    const { uid } = resolveAuthUser(req);
-    const body = req.body;
+    const uid = req.user!.uid;
+    const body = req.body || {};
+    const resolvedName = body.fullName || body.name;
+    if (!resolvedName || !resolvedName.trim()) {
+      return res.status(400).json({ error: 'Nome do perfil adicional é obrigatório' });
+    }
     const now = new Date().toISOString();
     const id = body.id || `prof-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
-
     const geo = serverResolveGeo(body.birthCity, body.birthState, body.birthCountry);
 
     const newProfile: ServerProfile = {
       id,
       ownerUid: uid,
       isPrimary: false,
-      fullName: body.fullName || body.name,
-      preferredName: body.name || body.fullName || 'Contato',
+      fullName: resolvedName.trim(),
+      preferredName: body.preferredName || body.name || resolvedName.trim().split(' ')[0],
       avatarUrl: body.avatarUrl || body.icon,
       relation: body.relation || body.relationship || 'other',
       role: body.role,
@@ -881,16 +945,21 @@ app.post('/api/profiles', (req, res) => {
     };
 
     PROFILES_DB.set(id, newProfile);
-    return res.status(201).json({ profile: newProfile });
+    return res.status(201).json({ profile: newProfile, ...newProfile });
   } catch (err: any) {
     console.error('Error creating additional profile:', err);
     return res.status(500).json({ error: 'Failed to create profile' });
   }
-});
+};
 
-app.put('/api/profiles/:id', (req, res) => {
+app.get('/api/profiles', requireAuth, handleGetProfiles);
+app.get('/api/profiles/additional', requireAuth, handleGetAdditionalProfilesList);
+app.post('/api/profiles', requireAuth, handleCreateAdditionalProfile);
+app.post('/api/profiles/additional', requireAuth, handleCreateAdditionalProfile);
+
+app.put('/api/profiles/:id', requireAuth, (req, res) => {
   try {
-    const { uid } = resolveAuthUser(req);
+    const uid = req.user!.uid;
     const { id } = req.params;
     const existing = PROFILES_DB.get(id);
 
@@ -921,9 +990,9 @@ app.put('/api/profiles/:id', (req, res) => {
   }
 });
 
-app.delete('/api/profiles/:id', (req, res) => {
+app.delete('/api/profiles/:id', requireAuth, (req, res) => {
   try {
-    const { uid } = resolveAuthUser(req);
+    const uid = req.user!.uid;
     const { id } = req.params;
     const existing = PROFILES_DB.get(id);
 
@@ -944,8 +1013,8 @@ app.delete('/api/profiles/:id', (req, res) => {
 });
 
 // Registered Events Endpoints (Strict Owner Isolation)
-app.get('/api/events', (req, res) => {
-  const { uid } = resolveAuthUser(req);
+const handleGetEvents = (req: any, res: any) => {
+  const uid = req.user!.uid;
   const userEvents: ServerEvent[] = [];
   for (const event of EVENTS_DB.values()) {
     if (event.ownerUid === uid) {
@@ -953,25 +1022,52 @@ app.get('/api/events', (req, res) => {
     }
   }
   return res.json({ events: userEvents });
-});
+};
 
-app.post('/api/events', (req, res) => {
+const handleGetProfileEventsList = (req: any, res: any) => {
+  const uid = req.user!.uid;
+  const userEvents: any[] = [];
+  for (const event of EVENTS_DB.values()) {
+    if (event.ownerUid === uid) {
+      userEvents.push(event);
+    }
+  }
+  return res.json(userEvents);
+};
+
+const handleCreateEvent = (req: any, res: any) => {
   try {
-    const { uid } = resolveAuthUser(req);
-    const body = req.body;
+    const uid = req.user!.uid;
+    const body = req.body || {};
+    if (!body.title || !body.title.trim()) {
+      return res.status(400).json({ error: 'Título do evento é obrigatório' });
+    }
     const now = new Date().toISOString();
     const id = body.id || `evt-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
-
     const geo = serverResolveGeo(body.location);
 
-    const newEvent: ServerEvent = {
+    let year = body.eventYear || '2026';
+    let month = body.eventMonth || '01';
+    let day = body.eventDay || '01';
+    if (body.eventDate && typeof body.eventDate === 'string') {
+      const parts = body.eventDate.split('-');
+      if (parts.length === 3) {
+        year = parts[0];
+        month = parts[1];
+        day = parts[2];
+      }
+    }
+
+    const newEvent: any = {
       id,
       ownerUid: uid,
-      title: body.title || 'Novo Evento',
-      category: body.category || 'other',
-      eventDay: String(body.eventDay || '01'),
-      eventMonth: String(body.eventMonth || '01'),
-      eventYear: String(body.eventYear || '2026'),
+      title: body.title.trim(),
+      category: body.category || body.eventType || 'other',
+      eventType: body.eventType || body.category || 'other',
+      eventDate: body.eventDate || `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
+      eventDay: String(day),
+      eventMonth: String(month),
+      eventYear: String(year),
       eventHour: String(body.eventHour || '12'),
       eventMinute: String(body.eventMinute || '00'),
       location: body.location || 'São Paulo',
@@ -986,16 +1082,21 @@ app.post('/api/events', (req, res) => {
     };
 
     EVENTS_DB.set(id, newEvent);
-    return res.status(201).json({ event: newEvent });
+    return res.status(201).json({ event: newEvent, ...newEvent });
   } catch (err: any) {
     console.error('Error creating event:', err);
     return res.status(500).json({ error: 'Failed to create event' });
   }
-});
+};
 
-app.put('/api/events/:id', (req, res) => {
+app.get('/api/events', requireAuth, handleGetEvents);
+app.get('/api/profiles/events', requireAuth, handleGetProfileEventsList);
+app.post('/api/events', requireAuth, handleCreateEvent);
+app.post('/api/profiles/events', requireAuth, handleCreateEvent);
+
+app.put('/api/events/:id', requireAuth, (req, res) => {
   try {
-    const { uid } = resolveAuthUser(req);
+    const uid = req.user!.uid;
     const { id } = req.params;
     const existing = EVENTS_DB.get(id);
 
@@ -1026,9 +1127,9 @@ app.put('/api/events/:id', (req, res) => {
   }
 });
 
-app.delete('/api/events/:id', (req, res) => {
+app.delete('/api/events/:id', requireAuth, (req, res) => {
   try {
-    const { uid } = resolveAuthUser(req);
+    const uid = req.user!.uid;
     const { id } = req.params;
     const existing = EVENTS_DB.get(id);
 
@@ -1048,9 +1149,181 @@ app.delete('/api/events/:id', (req, res) => {
   }
 });
 
+// ==============================================================================
+// 11. WALLET, LEDGER & DAILY CREDITS API (SERVER AUTHORITATIVE)
+// ==============================================================================
+app.get('/api/wallet', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const wallet = walletService.getWallet(uid);
+  const ledger = walletService.getLedger(uid);
+  const entitlements = walletService.getEntitlements(uid);
+  const dailyStatus = dailyCreditService.getStatus(uid);
+  const couponAlerts = couponService.getUserCouponAlerts(uid);
+
+  return res.json({
+    wallet,
+    credits: wallet.balance,
+    balance: wallet.balance,
+    ledger,
+    transactions: ledger,
+    entitlements,
+    dailyStatus,
+    couponAlerts,
+  });
+});
+
+app.get('/api/wallet/ledger', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const rawLedger = walletService.getLedger(uid);
+  const ledger = rawLedger.map((t) => ({
+    ...t,
+    timestamp: t.timestamp || t.createdAt,
+  }));
+  return res.json({
+    transactions: ledger,
+    ledger,
+  });
+});
+
+const handleDailyClaim = (req: any, res: any) => {
+  try {
+    const uid = req.user!.uid;
+    const result = dailyCreditService.claimDailyCredits(uid);
+    if (!result.claimed) {
+      return res.status(400).json({ ...result, success: false });
+    }
+    return res.json({ ...result, success: true });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message, success: false });
+  }
+};
+
+app.post('/api/daily-credits/claim', requireAuth, handleDailyClaim);
+app.post('/api/wallet/claim-daily', requireAuth, handleDailyClaim);
+
+app.post('/api/wallet/spend', requireAuth, (req, res) => {
+  try {
+    const uid = req.user!.uid;
+    const { amount, itemCode, description, scopeType, scopeId } = req.body || {};
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Quantidade de créditos deve ser maior que zero.' });
+    }
+    const resolvedItem = itemCode || 'catalog-item';
+
+    const result = walletService.spendCredits(
+      uid,
+      amount,
+      resolvedItem,
+      description || `Desbloqueio de item ${resolvedItem}`,
+      scopeType || 'matrix',
+      scopeId
+    );
+
+    return res.json({
+      ...result,
+      credits: result.wallet.balance,
+      balance: result.wallet.balance,
+    });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message || 'Erro ao debitar créditos.' });
+  }
+});
+
+// ==============================================================================
+// 12. COUPON & QR CODE REDEMPTION API (STRICT SERVER-SIDE DOMAIN)
+// ==============================================================================
+app.post('/api/coupons/redeem', requireAuth, (req, res) => {
+  try {
+    const uid = req.user!.uid;
+    const { code, qrReference } = req.body || {};
+    const targetRef = (code || qrReference || '').trim();
+
+    if (!targetRef) {
+      return res.status(400).json({ error: 'Código ou referência de QR do cupom é obrigatório.' });
+    }
+
+    const result = couponService.redeemCoupon(uid, targetRef);
+    return res.json({
+      ...result,
+      creditsAdded: result.creditsGranted,
+    });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message || 'Erro ao resgatar cupom.' });
+  }
+});
+
+app.get('/api/coupons/active-alerts', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const alerts = couponService.getUserCouponAlerts(uid);
+  return res.json({ alerts });
+});
+
+// ==============================================================================
+// 13. ADMIN CENTRAL DE CUPONS & GESTÃO (SERVER-SIDE RBAC REQUIRE ADMIN)
+// ==============================================================================
+app.get('/api/admin/coupons/campaigns', requireAdmin, (req, res) => {
+  return res.json({ campaigns: couponService.getCampaigns() });
+});
+
+app.post('/api/admin/coupons/campaigns', requireAdmin, (req, res) => {
+  try {
+    const campaign = couponService.createCampaign(req.body);
+    return res.status(201).json({ campaign });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/admin/coupons/list', requireAdmin, (req, res) => {
+  return res.json({ coupons: couponService.getCoupons() });
+});
+
+app.post('/api/admin/coupons', requireAdmin, (req, res) => {
+  try {
+    const { code, credits, maxUses, expiresAt } = req.body || {};
+    if (!code) {
+      return res.status(400).json({ error: 'Código do cupom é obrigatório' });
+    }
+    const now = Date.now();
+    const campaign = couponService.createCampaign({
+      title: `Campanha ${code}`,
+      description: `Cupom ${code}`,
+      creditsPerWithdrawal: Number(credits) || 10,
+      validityDays: 30,
+      withdrawalFrequencyHours: 0,
+      maxUsesPerUser: 1,
+      startDate: new Date(now - 3600000).toISOString(),
+      endDate: expiresAt || new Date(now + 30 * 86400000).toISOString(),
+      status: 'active',
+    });
+    const coupon = couponService.createCoupon(campaign.id, code, Number(maxUses) || 100);
+    return res.status(201).json({ coupon, campaign });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/admin/coupons/generate', requireAdmin, (req, res) => {
+  try {
+    const { campaignId, code, maxTotalRedemptions } = req.body;
+    if (!campaignId) {
+      return res.status(400).json({ error: 'campaignId é obrigatório' });
+    }
+    const coupon = couponService.createCoupon(campaignId, code, maxTotalRedemptions);
+    return res.status(201).json({ coupon });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/admin/coupons/redemptions', requireAdmin, (req, res) => {
+  const redemptions = couponService.getRedemptions();
+  return res.json({ redemptions });
+});
+
 // 8. ProfileId Computational Resolution Endpoint for Astra
-app.get('/api/profiles/resolve', (req, res) => {
-  const { uid } = resolveAuthUser(req);
+app.get('/api/profiles/resolve', requireAuth, (req, res) => {
+  const uid = req.user!.uid;
   const profileId = (req.query.id as string) || '';
 
   let target: ServerProfile | null = null;
@@ -1072,20 +1345,7 @@ app.get('/api/profiles/resolve', (req, res) => {
   }
 
   if (!target) {
-    // Default canonical resolution for Astra
-    return res.json({
-      astraSubject: {
-        name: 'Aline Silva',
-        year: 1994,
-        month: 6,
-        day: 14,
-        hour: 9,
-        minute: 30,
-        lat: -23.5505,
-        lng: -46.6333,
-        tz_str: 'America/Sao_Paulo',
-      },
-    });
+    return res.status(404).json({ error: 'Nenhum perfil cadastrado para este usuário.' });
   }
 
   return res.json({
@@ -1094,8 +1354,8 @@ app.get('/api/profiles/resolve', (req, res) => {
       year: parseInt(target.birthYear, 10) || 1994,
       month: parseInt(target.birthMonth, 10) || 6,
       day: parseInt(target.birthDay, 10) || 14,
-      hour: parseInt(target.birthHour, 10) || 9,
-      minute: parseInt(target.birthMinute, 10) || 30,
+      hour: parseInt(target.birthHour, 10) || 12,
+      minute: parseInt(target.birthMinute, 10) || 0,
       lat: target.latitude || -23.5505,
       lng: target.longitude || -46.6333,
       tz_str: target.tz_str || 'America/Sao_Paulo',
@@ -1111,30 +1371,19 @@ app.post('/api/geo/resolve', (req, res) => {
 });
 
 // 10. Admin RBAC Protected Endpoints (Enforces Server-Side HTTP 403)
-app.get('/api/admin/users', (req, res) => {
-  const { role } = resolveAuthUser(req);
-  if (role !== 'admin') {
-    return res.status(403).json({ error: 'Forbidden: Administrative privilege required.' });
-  }
-
+app.get('/api/admin/users', requireAdmin, (req, res) => {
   const usersList = Array.from(USERS_DB.values());
-  return res.json({
-    users: usersList,
-    total: usersList.length,
-  });
+  return res.json(usersList);
 });
 
-app.get('/api/admin/metrics', (req, res) => {
-  const { role } = resolveAuthUser(req);
-  if (role !== 'admin') {
-    return res.status(403).json({ error: 'Forbidden: Administrative privilege required.' });
-  }
-
+app.get('/api/admin/metrics', requireAdmin, (req, res) => {
   return res.json({
     totalUsers: USERS_DB.size,
     totalProfiles: PROFILES_DB.size,
     totalEvents: EVENTS_DB.size,
     activeSessions: USERS_DB.size,
+    totalCoupons: couponService.getCoupons().length,
+    totalRedemptions: couponService.getRedemptions().length,
   });
 });
 

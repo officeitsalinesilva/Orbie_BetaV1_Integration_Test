@@ -101,6 +101,34 @@ export const authApi = {
 };
 
 // ==============================================================================
+// USER PREFERENCES API (STRICT OWNER ISOLATION)
+// ==============================================================================
+export const preferencesApi = {
+  async get(): Promise<{ theme: string; language: string } | null> {
+    try {
+      const res = await request<{ preferences: { theme: string; language: string } }>('/user/preferences', {
+        method: 'GET',
+      });
+      return res.preferences;
+    } catch {
+      return null;
+    }
+  },
+
+  async update(patch: { theme?: string; language?: string }): Promise<{ theme: string; language: string } | null> {
+    try {
+      const res = await request<{ preferences: { theme: string; language: string } }>('/user/preferences', {
+        method: 'PUT',
+        body: JSON.stringify(patch),
+      });
+      return res.preferences;
+    } catch {
+      return null;
+    }
+  },
+};
+
+// ==============================================================================
 // PROFILES API (PRIMARY & ADDITIONAL WITH OWNER ISOLATION)
 // ==============================================================================
 export const profileApi = {
@@ -273,13 +301,132 @@ export const geoApi = {
 };
 
 // ==============================================================================
+// WALLET & DAILY CREDITS API
+// ==============================================================================
+export interface WalletData {
+  wallet: {
+    userUid: string;
+    balance: number;
+    plan: 'free' | 'premium';
+    createdAt: string;
+    updatedAt: string;
+  };
+  ledger: Array<{
+    id: string;
+    userUid: string;
+    type: string;
+    category: string;
+    amount: number;
+    balanceBefore: number;
+    balanceAfter: number;
+    referenceId?: string;
+    description: string;
+    createdAt: string;
+  }>;
+  entitlements: Array<{
+    id: string;
+    userUid: string;
+    scopeType: string;
+    scopeId?: string;
+    itemCode: string;
+    source: string;
+    unlockedAt: string;
+  }>;
+  dailyStatus: {
+    canClaimToday: boolean;
+    baseCredits: number;
+    streakBonusCredits: number;
+    totalAvailableToday: number;
+    currentStreakDays: number;
+    lastClaimDate: string | null;
+    lastCheckInDate: string | null;
+  };
+  couponAlerts: Array<{
+    hasAvailableWithdrawal: boolean;
+    couponCode: string;
+    campaignTitle: string;
+    creditsReady: number;
+    currentWithdrawalIndex: number;
+    totalWithdrawals: number;
+    nextAvailableAt: string | null;
+    statusMessage: string;
+  }>;
+}
+
+export interface CouponWithdrawalReceipt {
+  success: boolean;
+  couponCode: string;
+  campaignTitle: string;
+  withdrawalNumber: number;
+  maxWithdrawals: number;
+  creditsGranted: number;
+  newBalance: number;
+  redeemedAt: string;
+  nextAvailableAt: string | null;
+  message: string;
+}
+
+export const walletApi = {
+  async getWallet(): Promise<WalletData> {
+    return request<WalletData>('/wallet', { method: 'GET' });
+  },
+
+  async claimDaily(): Promise<{
+    claimed: boolean;
+    baseCreditsGranted: number;
+    streakBonusGranted: number;
+    totalGranted: number;
+    newBalance: number;
+    streakDays: number;
+    message: string;
+  }> {
+    return request('/wallet/claim-daily', { method: 'POST' });
+  },
+
+  async spendCredits(params: {
+    amount: number;
+    itemCode: string;
+    description?: string;
+    scopeType?: 'matrix' | 'profile' | 'event';
+    scopeId?: string;
+  }) {
+    return request('/wallet/spend', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  },
+};
+
+// ==============================================================================
+// COUPON & QR CODE API
+// ==============================================================================
+export const couponApi = {
+  async redeem(codeOrQr: string): Promise<CouponWithdrawalReceipt> {
+    return request<CouponWithdrawalReceipt>('/coupons/redeem', {
+      method: 'POST',
+      body: JSON.stringify({ code: codeOrQr, qrReference: codeOrQr }),
+    });
+  },
+
+  async getActiveAlerts() {
+    return request<{ alerts: WalletData['couponAlerts'] }>('/coupons/active-alerts', {
+      method: 'GET',
+    });
+  },
+};
+
+// ==============================================================================
 // ADMIN RBAC API (PROTECTED SERVER-SIDE)
 // ==============================================================================
 export const adminApi = {
   async getUsers(): Promise<{ users: UserIdentity[]; total: number }> {
-    return request<{ users: UserIdentity[]; total: number }>('/admin/users', {
+    const res = await request<any>('/admin/users', {
       method: 'GET',
     });
+    if (Array.isArray(res)) {
+      return { users: res, total: res.length };
+    }
+    return res || { users: [], total: 0 };
   },
 
   async getMetrics(): Promise<{
@@ -296,5 +443,31 @@ export const adminApi = {
     }>('/admin/metrics', {
       method: 'GET',
     });
+  },
+
+  async getCampaigns() {
+    return request<{ campaigns: any[] }>('/admin/coupons/campaigns', { method: 'GET' });
+  },
+
+  async createCampaign(data: any) {
+    return request<{ campaign: any }>('/admin/coupons/campaigns', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getCoupons() {
+    return request<{ coupons: any[] }>('/admin/coupons/list', { method: 'GET' });
+  },
+
+  async generateCoupon(data: { campaignId: string; code?: string; maxTotalRedemptions?: number }) {
+    return request<{ coupon: any }>('/admin/coupons/generate', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getRedemptions() {
+    return request<{ redemptions: any[] }>('/admin/coupons/redemptions', { method: 'GET' });
   },
 };

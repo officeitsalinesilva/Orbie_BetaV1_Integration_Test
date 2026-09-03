@@ -57,7 +57,7 @@ export function ChatView({
   onSignOut,
   isEnglish = false,
 }: Props) {
-  const { profile, credits, spendCredits, unlockedItems, isItemUnlocked } = useOrb();
+  const { profile, userIdentity, credits, spendCredits, unlockedItems, isItemUnlocked } = useOrb();
 
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [libraryDrawerOpen, setLibraryDrawerOpen] = useState(false);
@@ -77,7 +77,7 @@ export function ChatView({
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const userName = profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
+  const userName = profile?.preferredName || profile?.fullName?.split(' ')[0] || userIdentity?.name?.split(' ')[0] || (isEnglish ? 'User' : 'Usuário');
 
   // Auto-scroll chat to bottom
   useEffect(() => {

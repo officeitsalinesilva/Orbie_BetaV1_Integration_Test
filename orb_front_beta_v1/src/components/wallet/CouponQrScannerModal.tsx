@@ -27,13 +27,20 @@ export function CouponQrScannerModal({ isOpen, onClose, isEnglish = false }: Pro
 
   if (!isOpen) return null;
 
-  const handleScanCode = (code: string) => {
+  const handleScanCode = async (code: string) => {
     setScanning(false);
-    const result = redeemCoupon(code);
-    setResultMessage({
-      success: result.success,
-      text: result.message,
-    });
+    try {
+      const result = await redeemCoupon(code);
+      setResultMessage({
+        success: result.success,
+        text: result.message,
+      });
+    } catch (e: any) {
+      setResultMessage({
+        success: false,
+        text: e.message || 'Erro ao processar cupom.',
+      });
+    }
   };
 
   return (

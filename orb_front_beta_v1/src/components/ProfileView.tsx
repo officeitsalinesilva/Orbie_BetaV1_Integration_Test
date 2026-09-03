@@ -94,6 +94,7 @@ export function ProfileView({
   const {
     profile,
     preferences,
+    userIdentity,
     journalEntries,
     credits,
     unlockedItems,
@@ -194,8 +195,8 @@ export function ProfileView({
   const [selectedNotifFilter, setSelectedNotifFilter] = useState<'all' | 'alert' | 'promo' | 'system' | 'renewal'>('all');
   const [readNotifIds, setReadNotifIds] = useState<Set<string>>(new Set(['notif-5', 'notif-7']));
 
-  const name = profile?.preferredName || profile?.fullName || 'Aline Silva';
-  const email = profile?.email || 'alinealv.silv@gmail.com';
+  const name = profile?.preferredName || profile?.fullName || userIdentity?.name || (isEnglish ? 'User Profile' : 'Perfil do Usuário');
+  const email = profile?.email || userIdentity?.email || '';
 
   const backupDrive = profile?.backupGoogleDrive ?? true;
   const backupLocal = profile?.backupLocal ?? true;
@@ -564,7 +565,7 @@ export function ProfileView({
         <div className="pt-1 space-y-3">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] truncate">
-              {profile?.preferredName || profile?.fullName || name || 'Aline Silva'}
+              {profile?.preferredName || profile?.fullName || name}
             </h2>
 
             {/* Componente de Créditos na extrema direita alinhado com o nome */}

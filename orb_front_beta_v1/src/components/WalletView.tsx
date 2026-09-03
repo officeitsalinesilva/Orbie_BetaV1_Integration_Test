@@ -46,11 +46,12 @@ export function WalletView({
   onOpenNotifications,
   onSignOut,
 }: Props) {
-  const { profile, preferences, credits, spendCredits, userPlan, upgradeToPlan } = useOrb();
+  const { profile, preferences, userIdentity, credits, spendCredits, userPlan, upgradeToPlan, walletData, claimDailyCredits, refreshWallet } = useOrb();
   const [toastMessage, setToastMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [termsModalType, setTermsModalType] = useState<'terms' | 'privacy' | 'support' | null>(null);
+  const [isClaimingDaily, setIsClaimingDaily] = useState(false);
 
   // Modal de escaneamento de Cupom QR Code
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
@@ -75,10 +76,27 @@ export function WalletView({
   const [isPlanCheckout, setIsPlanCheckout] = useState<boolean>(false);
 
   const isEnglish = preferences.language === 'en';
-  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
+  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || (isEnglish ? 'User' : 'Usuária');
 
   const inviteCode = `${name.toUpperCase().replace(/\s+/g, '')}-7X9K`;
   const inviteLink = `https://orb.app/invite/${inviteCode}`;
+
+  const handleClaimDaily = async () => {
+    setIsClaimingDaily(true);
+    try {
+      const res = await claimDailyCredits();
+      if (res.claimed) {
+        setToastMessage(res.message || (isEnglish ? 'Daily allowance claimed!' : 'Cota diária creditada com sucesso!'));
+      } else {
+        setToastMessage(res.message || (isEnglish ? 'Already claimed today.' : 'Cota já resgatada hoje.'));
+      }
+    } catch (e: any) {
+      setToastMessage(e?.message || (isEnglish ? 'Error claiming daily credits' : 'Erro ao resgatar cota diária'));
+    } finally {
+      setIsClaimingDaily(false);
+      setTimeout(() => setToastMessage(''), 4000);
+    }
+  };
 
   const handleDecrease = () => {
     setRechargeIndex((prev) => Math.max(0, prev - 1));
@@ -215,15 +233,39 @@ export function WalletView({
           </div>
 
           <div className="divide-y divide-[var(--border)] text-xs font-mono">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between py-2.5 gap-1">
-              <span className="text-[var(--text-secondary)]">
-                {isEnglish ? 'Daily Quota Allowance' : 'Cota Diária de Renovação'}
-              </span>
-              <span className="text-[var(--foreground)] font-semibold text-right sm:text-left">
-                {isEnglish
-                  ? '5 credits from platform + 5 credits from daily check-in (up to 10/day)'
-                  : '5 créditos da plataforma + 5 créditos do check-in diário (até 10/dia)'}
-              </span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between py-2.5 gap-2">
+              <div className="space-y-0.5">
+                <span className="text-[var(--text-secondary)] block">
+                  {isEnglish ? 'Daily Quota Allowance' : 'Cota Diária de Renovação'}
+                </span>
+                <span className="text-[11px] text-[var(--text-tertiary)]">
+                  {isEnglish
+                    ? `Streak: ${walletData?.dailyStatus?.currentStreakDays || 0} consecutive days`
+                    : `Sequência: ${walletData?.dailyStatus?.currentStreakDays || 0} dias consecutivos`}
+                </span>
+              </div>
+              <div>
+                {walletData?.dailyStatus?.canClaimToday ? (
+                  <button
+                    type="button"
+                    onClick={handleClaimDaily}
+                    disabled={isClaimingDaily}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent)] text-[var(--accent-foreground)] font-bold text-xs hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
+                  >
+                    <Sparkles size={13} />
+                    <span>
+                      {isClaimingDaily
+                        ? (isEnglish ? 'Claiming...' : 'Resgatando...')
+                        : (isEnglish ? 'Claim Daily Credits (+5 ◎)' : 'Resgatar Cota Diária (+5 ◎)')}
+                    </span>
+                  </button>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">
+                    <Check size={12} />
+                    {isEnglish ? 'Claimed Today' : 'Cota Diária Resgatada Hoje'}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="flex items-center justify-between py-2.5">
               <span className="text-[var(--text-secondary)]">
@@ -588,6 +630,64 @@ export function WalletView({
           </div>
         </section>
 
+        <div className="h-px w-full bg-[var(--border)]" />
+
+        {/* SESSÃO 6: EXTRATO REAL DE TRANSAÇÕES (LEDGER) */}
+        <section className="space-y-3 font-mono text-xs">
+          <div className="flex items-center justify-between">
+            <h2 className="font-bold text-sm text-[var(--foreground)]">
+              {isEnglish ? 'Transaction History & Ledger' : 'Extrato de Movimentações'}
+            </h2>
+            <span className="text-[11px] text-[var(--text-tertiary)]">
+              {walletData?.ledger?.length ? `${walletData.ledger.length} registros` : ''}
+            </span>
+          </div>
+
+          {walletData?.ledger && walletData.ledger.length > 0 ? (
+            <div className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] bg-[var(--surface-1)] overflow-hidden">
+              {walletData.ledger.map((entry) => {
+                const isCredit = entry.type === 'credit';
+                const formattedDate = new Date(entry.createdAt).toLocaleDateString(isEnglish ? 'en-US' : 'pt-BR', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                });
+
+                return (
+                  <div key={entry.id} className="p-3 flex items-center justify-between gap-3 hover:bg-[var(--surface-2)] transition-colors">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-[var(--foreground)]">
+                          {entry.description}
+                        </span>
+                        {entry.referenceId && (
+                          <span className="px-1.5 py-0.5 rounded bg-[var(--surface-3)] text-[10px] text-[var(--text-secondary)]">
+                            {entry.referenceId}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-[var(--text-tertiary)] block">
+                        {formattedDate} • {isEnglish ? `Balance: ◎ ${entry.balanceAfter}` : `Saldo após: ◎ ${entry.balanceAfter}`}
+                      </span>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <span className={`font-bold font-mono text-sm ${isCredit ? 'text-emerald-500' : 'text-rose-500'}`}>
+                        {isCredit ? `+◎ ${entry.amount}` : `-◎ ${entry.amount}`}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-6 text-center rounded-xl border border-dashed border-[var(--border)] text-[var(--text-tertiary)]">
+              {isEnglish ? 'No transactions recorded yet.' : 'Nenhuma movimentação registrada até o momento.'}
+            </div>
+          )}
+        </section>
+
         {/* Toast feedback */}
         {toastMessage && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-xs font-semibold text-[var(--accent-foreground)] shadow-lg animate-in fade-in slide-in-from-bottom-2">
@@ -619,8 +719,8 @@ export function WalletView({
         onClose={() => setIsMercadoPagoModalOpen(false)}
         credits={selectedRechargeCredits}
         country={currentCountry.countryCode}
-        userEmail={profile?.email || 'alinealv.silv@gmail.com'}
-        userName={profile?.fullName || profile?.preferredName || 'Aline Silva'}
+        userEmail={profile?.email || userIdentity?.email || 'user@orb.app'}
+        userName={profile?.fullName || profile?.preferredName || userIdentity?.name || 'Usuário Orb'}
         onPaymentSuccess={handlePaymentCompleted}
         isPlanSubscription={isPlanCheckout}
         planTitle={isPlanCheckout ? (isEnglish ? 'Subscription Plan' : 'Plano Assinatura') : undefined}

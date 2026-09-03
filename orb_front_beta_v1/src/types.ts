@@ -3,6 +3,14 @@ export type OrbLanguage = 'pt-BR' | 'en';
 
 export type UserRole = 'user' | 'admin';
 
+export type AccountState =
+  | 'unauthenticated'
+  | 'authenticating'
+  | 'authenticated'
+  | 'hydrating'
+  | 'ready'
+  | 'error';
+
 export interface UserIdentity {
   uid: string;
   email: string | null;
@@ -50,6 +58,8 @@ export type OrbProfile = {
   backupLocal?: boolean;
   plan?: 'free' | 'premium';
   planActivatedAt?: string;
+  completeness?: number;
+  unlockedItems?: string[];
   createdAt?: string;
   updatedAt?: string;
 };

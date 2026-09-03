@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { OrbProfile } from '../../types';
 import { User } from 'lucide-react';
+import { auth } from '../../lib/googleAuth';
 
 type Props = {
-  profile: OrbProfile | null;
+  profile?: OrbProfile | null;
+  avatarUrl?: string | null;
   name?: string;
   onClick?: () => void;
   size?: 'sm' | 'md' | 'lg';
@@ -13,6 +15,7 @@ type Props = {
 
 export function GoogleProfileAvatar({
   profile,
+  avatarUrl: explicitAvatarUrl,
   name,
   onClick,
   size = 'sm',
@@ -21,9 +24,21 @@ export function GoogleProfileAvatar({
 }: Props) {
   const [imageError, setImageError] = useState(false);
 
-  const displayName = name || profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
-  const avatarLetter = (displayName || 'A').slice(0, 1).toUpperCase();
-  const avatarUrl = profile?.avatarUrl;
+  // Resolution hierarchy: explicit prop -> profile avatar -> Firebase auth currentUser photoURL
+  const avatarUrl = explicitAvatarUrl || profile?.avatarUrl || auth.currentUser?.photoURL || null;
+
+  useEffect(() => {
+    setImageError(false);
+  }, [avatarUrl]);
+
+  const displayName =
+    name ||
+    profile?.preferredName ||
+    profile?.fullName?.split(' ')[0] ||
+    auth.currentUser?.displayName?.split(' ')[0] ||
+    '';
+
+  const avatarLetter = (displayName || 'U').slice(0, 1).toUpperCase();
 
   const sizeClasses = {
     sm: 'h-8 w-8 text-xs',
@@ -50,7 +65,7 @@ export function GoogleProfileAvatar({
     >
       {hasValidPhoto ? (
         <img
-          src={avatarUrl}
+          src={avatarUrl!}
           alt={displayName}
           onError={() => setImageError(true)}
           referrerPolicy="no-referrer"
@@ -58,7 +73,7 @@ export function GoogleProfileAvatar({
         />
       ) : (
         <div className={`w-full h-full flex items-center justify-center bg-[var(--accent)] font-semibold text-[var(--accent-foreground)]`}>
-          {avatarLetter || <User size={size === 'lg' ? 24 : 14} />}
+          {avatarLetter ? <span>{avatarLetter}</span> : <User size={size === 'lg' ? 24 : 14} />}
         </div>
       )}
     </button>

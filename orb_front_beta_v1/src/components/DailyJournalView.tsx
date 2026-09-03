@@ -242,8 +242,8 @@ export function DailyJournalView({
       id: 'init-1',
       sender: 'orb',
       text: preferences.language === 'en'
-        ? 'Good morning, Aline. I am attuned to your day. How can I guide your focus or energy windows today?'
-        : 'Bom dia, Aline. Estou calibrado com seu dia. Como posso assessorar seu foco, decisões ou energia hoje?',
+        ? `Good morning${profile?.preferredName ? `, ${profile.preferredName}` : ''}. I am attuned to your day. How can I guide your focus or energy windows today?`
+        : `Bom dia${profile?.preferredName ? `, ${profile.preferredName}` : ''}. Estou calibrado com seu dia. Como posso assessorar seu foco, decisões ou energia hoje?`,
       time: '08:30',
     },
   ]);
@@ -339,7 +339,7 @@ export function DailyJournalView({
   const activeLevelRef = useRef<HTMLButtonElement | null>(null);
 
   const isEnglish = preferences.language === 'en';
-  const name = profile?.preferredName || profile?.fullName.split(' ')[0] || 'Aline';
+  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || (isEnglish ? 'User' : 'Usuária');
   const avatarLetter = (name || 'O').slice(0, 1).toUpperCase();
 
   const chooseTheme = (theme: OrbTheme) => {

@@ -77,7 +77,7 @@ export function CatalogView({
   onSignOut,
   isEnglish = false,
 }: Props) {
-  const { profile, credits, isItemUnlocked, unlockItem, spendCredits } = useOrb();
+  const { profile, userIdentity, credits, isItemUnlocked, unlockItem, spendCredits } = useOrb();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<TopicFilter>('all');
@@ -94,7 +94,7 @@ export function CatalogView({
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [termsModalType, setTermsModalType] = useState<'terms' | 'privacy' | 'support' | null>(null);
 
-  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
+  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || userIdentity?.name?.split(' ')[0] || (isEnglish ? 'User' : 'Usuário');
 
   // Topic filter configurations with icons
   const TOPICS: { id: TopicFilter; label: string; labelEn: string; icon: React.ReactNode }[] = [

@@ -14,31 +14,31 @@ type Props = {
 };
 
 export function OnboardingView({ onComplete, onBackToLogin }: Props) {
-  const { profile, preferences, saveProfile } = useOrb();
+  const { profile, preferences, saveProfile, userIdentity } = useOrb();
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const [draft, setDraft] = useState<OrbProfile>(
-    profile ?? {
-      fullName: 'Aline Silva',
-      preferredName: 'Aline',
-      birthDay: '14',
-      birthMonth: '06',
-      birthYear: '1994',
-      birthHour: '09',
-      birthMinute: '30',
-      noExactTime: false,
-      birthCountry: 'Brasil',
-      birthState: 'São Paulo',
-      birthCity: 'São Paulo',
-      timezone: 'UTC -3 (Brasília)',
-      theme: preferences.theme,
-      language: preferences.language,
-      dailySynthesis: true,
-      synthesisHour: '08:00',
-    }
-  );
+  const [draft, setDraft] = useState<OrbProfile>(() => ({
+    fullName: profile?.fullName || userIdentity?.name || '',
+    preferredName: profile?.preferredName || userIdentity?.name?.split(' ')[0] || '',
+    avatarUrl: profile?.avatarUrl || userIdentity?.avatarUrl || '',
+    email: profile?.email || userIdentity?.email || '',
+    birthDay: profile?.birthDay || '',
+    birthMonth: profile?.birthMonth || '',
+    birthYear: profile?.birthYear || '',
+    birthHour: profile?.birthHour || '12',
+    birthMinute: profile?.birthMinute || '00',
+    noExactTime: profile?.noExactTime || false,
+    birthCountry: profile?.birthCountry || 'Brasil',
+    birthState: profile?.birthState || '',
+    birthCity: profile?.birthCity || '',
+    timezone: profile?.timezone || 'UTC -3 (Brasília)',
+    theme: preferences.theme,
+    language: preferences.language,
+    dailySynthesis: true,
+    synthesisHour: '08:00',
+  }));
 
   const isEnglish = preferences.language === 'en';
 
@@ -141,7 +141,13 @@ export function OnboardingView({ onComplete, onBackToLogin }: Props) {
       setStep((curr) => curr + 1);
     } else {
       setSaving(true);
-      await saveProfile(draft);
+      const finalProfile: OrbProfile = {
+        ...draft,
+        avatarUrl: draft.avatarUrl || userIdentity?.avatarUrl || profile?.avatarUrl || '',
+        email: draft.email || userIdentity?.email || profile?.email || '',
+        completeness: 100,
+      };
+      await saveProfile(finalProfile);
       await new Promise((r) => setTimeout(r, 400));
       onComplete();
     }
@@ -209,7 +215,7 @@ export function OnboardingView({ onComplete, onBackToLogin }: Props) {
                     {isEnglish ? 'Google Account Connected' : 'Conta Google Vinculada'}
                   </span>
                   <p className="text-[11px] text-[var(--text-secondary)] font-mono">
-                    {draft.email || 'alinealv.silv@gmail.com'}
+                    {draft.email || userIdentity?.email || ''}
                   </p>
                 </div>
               </div>

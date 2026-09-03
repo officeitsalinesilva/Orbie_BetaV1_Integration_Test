@@ -17,9 +17,10 @@ import {
   AppNotification,
   CouponRedemption,
   UserIdentity,
+  AccountState,
 } from '../types';
 import { initAuth, logoutGoogle, auth } from '../lib/googleAuth';
-import { authApi, profileApi, eventApi } from '../services/api';
+import { authApi, profileApi, eventApi, walletApi, couponApi, preferencesApi, WalletData } from '../services/api';
 import { resolveLocationDeterministic } from '../services/geoService';
 
 export type SelectedScope =
@@ -33,9 +34,21 @@ interface OrbContextValue {
   profile: OrbProfile | null;
   preferences: OrbPreferences;
   hydrated: boolean;
+  accountState: AccountState;
   isSignedIn: boolean;
   credits: number;
   unlockedItems: string[];
+  walletData: WalletData | null;
+  refreshWallet: () => Promise<void>;
+  claimDailyCredits: () => Promise<{
+    claimed: boolean;
+    baseCreditsGranted: number;
+    streakBonusGranted: number;
+    totalGranted: number;
+    newBalance: number;
+    streakDays: number;
+    message: string;
+  }>;
   journalEntries: JournalEntry[];
   dailyCheckPoints: DailyCheckPoint[];
   additionalProfiles: AdditionalProfile[];
@@ -53,7 +66,7 @@ interface OrbContextValue {
   signIn: (email?: string) => Promise<void>;
   signOut: () => Promise<void>;
   addCredits: (amount: number) => void;
-  spendCredits: (amount: number) => boolean;
+  spendCredits: (amount: number, itemCode?: string, scopeType?: 'matrix' | 'profile' | 'event', scopeId?: string) => boolean;
   unlockItem: (code: string, targetScope?: SelectedScope) => void;
   isItemUnlocked: (code: string, targetScope?: SelectedScope) => boolean;
   addJournalEntry: (content: string, actionTaken?: string) => Promise<void>;
@@ -75,7 +88,7 @@ interface OrbContextValue {
   markAllNotificationsRead: () => void;
   saveNotificationSettings: (settings: Partial<NotificationToggleSettings>) => void;
   // Coupons & Invites
-  redeemCoupon: (code: string) => { success: boolean; message: string; creditsGranted: number };
+  redeemCoupon: (code: string) => Promise<{ success: boolean; message: string; creditsGranted: number }>;
   simulateInviteSignup: () => void;
   simulateInvitePurchase: () => void;
 }
@@ -93,241 +106,10 @@ const NOTIFICATIONS_KEY = '@orb/notifications';
 const NOTIF_SETTINGS_KEY = '@orb/notif_settings';
 const COUPONS_KEY = '@orb/redeemed_coupons';
 
-const INITIAL_CHECKPOINTS: DailyCheckPoint[] = [
-  {
-    id: 'chk-2026-08-21',
-    date: '2026-08-21',
-    title: 'Integração & Alinhamento Estratégico',
-    color: 'emerald',
-    icon: 'flame',
-    authorComment:
-      'Dia com fluxo extraordinário na janela matinal. Todas as pendências estruturais da semana foram resolvidas antes das 12h. Mantive neutralidade em diálogos difíceis à tarde.',
-    attachedComponentKeys: ['consciousness_level', 'daily_synthesis', 'alchemy_metrics', 'day_windows'],
-    attachedSnapshot: [
-      {
-        key: 'consciousness_level',
-        title: 'Nível 350 — Aceitação',
-        summary: 'Perdão, harmonia e transcendência operacional.',
-        tag: 'CALIBRAÇÃO',
-        category: 'consciousness',
-      },
-      {
-        key: 'daily_synthesis',
-        title: 'Síntese Diária',
-        summary: 'Condições ótimas para decisões estruturantes e fechamento de backlog.',
-        tag: 'SÍNTESE',
-        category: 'synthesis',
-      },
-      {
-        key: 'alchemy_metrics',
-        title: 'Terra (71%) & Vontade',
-        summary: 'Execução e disciplina prática dominaram o dia.',
-        tag: 'ALQUIMIA',
-        category: 'alchemy',
-      },
-    ],
-    habitsCompleted: ['deep_work', 'hydration', 'active_listening'],
-    createdAt: '2026-08-21T21:40:00.000Z',
-    updatedAt: '2026-08-21T21:40:00.000Z',
-  },
-  {
-    id: 'chk-2026-08-20',
-    date: '2026-08-20',
-    title: 'Imersão Analítica & Foco Único',
-    color: 'indigo',
-    icon: 'target',
-    authorComment:
-      'Bloco de 25 min de foco executado sem interrupções. Reduzi ruídos externos e priorizei planejamento do ciclo trimestral.',
-    attachedComponentKeys: ['daily_synthesis', 'sound_frequency'],
-    attachedSnapshot: [
-      {
-        key: 'daily_synthesis',
-        title: 'Síntese Diária',
-        summary: 'Foco analítico sustentado na janela solar ascendente.',
-        tag: 'SÍNTESE',
-        category: 'synthesis',
-      },
-      {
-        key: 'sound_frequency',
-        title: 'Frequência 528 Hz',
-        summary: 'Ondas binaurais de regeneração e clareza cognitiva.',
-        tag: 'ÁUDIO',
-        category: 'frequency',
-      },
-    ],
-    habitsCompleted: ['deep_work', 'meditation'],
-    createdAt: '2026-08-20T22:15:00.000Z',
-    updatedAt: '2026-08-20T22:15:00.000Z',
-  },
-  {
-    id: 'chk-2026-08-18',
-    date: '2026-08-18',
-    title: 'Desbloqueio Criativo & Alinhamento',
-    color: 'amber',
-    icon: 'sparkles',
-    authorComment:
-      'Excelente ressonância com os 4 elementos. O elemento Ar trouxe agilidade mental para fechar a proposta com o time.',
-    attachedComponentKeys: ['consciousness_level', 'alchemy_metrics'],
-    attachedSnapshot: [
-      {
-        key: 'consciousness_level',
-        title: 'Nível 350 — Aceitação',
-        summary: 'Harmonia e ausência de atrito no trabalho em equipe.',
-        tag: 'CALIBRAÇÃO',
-        category: 'consciousness',
-      },
-    ],
-    habitsCompleted: ['active_listening', 'hydration'],
-    createdAt: '2026-08-18T20:10:00.000Z',
-    updatedAt: '2026-08-18T20:10:00.000Z',
-  },
-  {
-    id: 'chk-2026-08-15',
-    date: '2026-08-15',
-    title: 'Pausa Restaurativa & Equilíbrio',
-    color: 'purple',
-    icon: 'moon',
-    authorComment:
-      'Dia voltado para descompressão fisiológica e caminhada ao ar livre. Sono restaurador de alta qualidade.',
-    attachedComponentKeys: ['day_windows'],
-    attachedSnapshot: [
-      {
-        key: 'day_windows',
-        title: 'Janela da Tarde',
-        summary: 'Ritmo suave e proteção de vigor somático.',
-        tag: 'RITMO',
-        category: 'windows',
-      },
-    ],
-    habitsCompleted: ['hydration', 'rest'],
-    createdAt: '2026-08-15T19:30:00.000Z',
-    updatedAt: '2026-08-15T19:30:00.000Z',
-  },
-  {
-    id: 'chk-2026-08-14',
-    date: '2026-08-14',
-    title: 'Direcionamento & Clareza Mental',
-    color: 'cyan',
-    icon: 'compass',
-    authorComment:
-      'Definição dos três pilares estratégicos do mês. Alinhamento consciente e segurança nas escolhas tomadas.',
-    attachedComponentKeys: ['daily_synthesis', 'spheres'],
-    attachedSnapshot: [
-      {
-        key: 'spheres',
-        title: 'Esfera Carreira & Estudos',
-        summary: 'Decisões arquiteturais sólidas e sem hesitação.',
-        tag: 'ESFERAS',
-        category: 'spheres',
-      },
-    ],
-    habitsCompleted: ['deep_work', 'active_listening'],
-    createdAt: '2026-08-14T21:00:00.000Z',
-    updatedAt: '2026-08-14T21:00:00.000Z',
-  },
-];
-
-const DEFAULT_NOTIFICATIONS: AppNotification[] = [
-  {
-    id: 'notif-1',
-    title: 'O Daily Panel está disponível',
-    description: 'O panorama completo de alquimia diária e horas planetárias foi calculado para hoje.',
-    time: 'Agora',
-    type: 'system',
-    quickActionLabel: 'Ver Daily Panel',
-    read: false,
-  },
-  {
-    id: 'notif-2',
-    title: 'Janelas do dia virando: Período Tarde iniciou',
-    description: 'Transição da janela solar. Ritmo metabólico desacelerando. Veja recomendações.',
-    time: '12:00',
-    type: 'alert',
-    quickActionLabel: 'Ver Janela Atual',
-    read: false,
-  },
-  {
-    id: 'notif-3',
-    title: 'Alertas e riscos do dia: Lembrete de risco da janela atual',
-    description: 'Evite conversas tensas ou negociações precipitadas na janela das 14h às 16h.',
-    time: 'Há 1 hora',
-    type: 'alert',
-    quickActionLabel: 'Ver Alerta de Risco',
-    read: false,
-  },
-  {
-    id: 'notif-4',
-    title: 'Síntese do dia disponível',
-    description: 'Seus 3 pontos essenciais para alinhamento consciente estão prontos para leitura.',
-    time: 'Há 2 horas',
-    type: 'system',
-    quickActionLabel: 'Ver Síntese do Dia',
-    read: false,
-  },
-  {
-    id: 'notif-5',
-    title: 'Créditos diários renovaram (+10 ◎)',
-    description: 'Sua cota diária do plano Guardião Prime foi creditada com sucesso.',
-    time: '00:00',
-    type: 'renewal',
-    quickActionLabel: 'Ver Carteira',
-    read: true,
-  },
-  {
-    id: 'notif-6',
-    title: 'Bônus de Indicação: Amigo se cadastrou (+5 ◎)',
-    description: 'Seu convidado completou o cadastro na plataforma com seu link. +5 créditos adicionados!',
-    time: 'Ontem',
-    type: 'invite',
-    quickActionLabel: 'Ver Carteira',
-    read: false,
-    bonusCredits: 5,
-  },
-  {
-    id: 'notif-7',
-    title: 'Promoção Especial: Pacote Matriz 20% Off',
-    description: 'Desbloqueie 500 créditos bônus e 2 mapas de arquétipos com condição especial.',
-    time: 'Há 2 dias',
-    type: 'promo',
-    quickActionLabel: 'Ver Oferta',
-    read: true,
-  },
-];
-
-const DEFAULT_ADDITIONAL_PROFILES: AdditionalProfile[] = [
-  {
-    id: 'prof-lucas',
-    name: 'Lucas Silva',
-    relation: 'child',
-    birthDay: '20',
-    birthMonth: '11',
-    birthYear: '2018',
-    birthHour: '14',
-    birthMinute: '20',
-    birthCity: 'São Paulo',
-    completeness: 85,
-    unlockedItems: ['VIB-002', 'AST-001'],
-    createdAt: '2026-08-01T10:00:00.000Z',
-  },
-];
-
-const DEFAULT_REGISTERED_EVENTS: RegisteredEvent[] = [
-  {
-    id: 'evt-empresa',
-    title: 'Fundação da Empresa Orb Tech',
-    category: 'business',
-    eventDay: '15',
-    eventMonth: '01',
-    eventYear: '2024',
-    eventHour: '10',
-    eventMinute: '00',
-    location: 'São Paulo, SP',
-    description: 'Data de registro do contrato social e lançamento operacional da marca.',
-    completeness: 90,
-    unlockedItems: ['AST-003', 'SRV-001'],
-    createdAt: '2026-08-05T12:00:00.000Z',
-  },
-];
+const INITIAL_CHECKPOINTS: DailyCheckPoint[] = [];
+const DEFAULT_NOTIFICATIONS: AppNotification[] = [];
+const DEFAULT_ADDITIONAL_PROFILES: AdditionalProfile[] = [];
+const DEFAULT_REGISTERED_EVENTS: RegisteredEvent[] = [];
 
 const DEFAULT_NOTIF_SETTINGS: NotificationToggleSettings = {
   dailyWindows: true,
@@ -351,10 +133,12 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     theme: 'light',
     language: 'pt-BR',
   });
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(true);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [accountState, setAccountState] = useState<AccountState>('unauthenticated');
   const [hydrated, setHydrated] = useState<boolean>(false);
-  const [credits, setCredits] = useState<number>(240);
-  const [unlockedItems, setUnlockedItems] = useState<string[]>(['VIB-002', 'SRV-001']);
+  const [credits, setCredits] = useState<number>(0);
+  const [unlockedItems, setUnlockedItems] = useState<string[]>([]);
+  const [walletData, setWalletData] = useState<WalletData | null>(null);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
   const [dailyCheckPoints, setDailyCheckPoints] = useState<DailyCheckPoint[]>(INITIAL_CHECKPOINTS);
   const [additionalProfiles, setAdditionalProfiles] = useState<AdditionalProfile[]>(DEFAULT_ADDITIONAL_PROFILES);
@@ -363,14 +147,41 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [notifications, setNotifications] = useState<AppNotification[]>(DEFAULT_NOTIFICATIONS);
   const [notificationSettings, setNotificationSettings] = useState<NotificationToggleSettings>(DEFAULT_NOTIF_SETTINGS);
   const [redeemedCoupons, setRedeemedCoupons] = useState<CouponRedemption[]>([]);
-  const [inviteCode] = useState<string>('ALINE-94K8');
+  const [inviteCode] = useState<string>('ORB-94K8');
 
-  // Compute isAdmin from userIdentity or email
+  const refreshWallet = async () => {
+    try {
+      const data = await walletApi.getWallet();
+      if (data) {
+        setWalletData(data);
+        if (data.wallet?.balance !== undefined) {
+          setCredits(data.wallet.balance);
+          try {
+            localStorage.setItem(CREDITS_KEY, data.wallet.balance.toString());
+          } catch {}
+        }
+        if (data.entitlements && data.entitlements.length > 0) {
+          const codes = data.entitlements.map((e) => e.itemCode);
+          setUnlockedItems((prev) => Array.from(new Set([...prev, ...codes])));
+        }
+      }
+    } catch (err) {
+      console.warn('[OrbContext] refreshWallet error:', err);
+    }
+  };
+
+  const claimDailyCredits = async () => {
+    const result = await walletApi.claimDaily();
+    await refreshWallet();
+    return result;
+  };
+
+  // Compute isAdmin strictly from server-verified userIdentity
   const isAdmin = useMemo(() => {
     if (userIdentity?.role === 'admin') return true;
-    if (profile?.email?.toLowerCase() === 'alinealv.silv@gmail.com') return true;
+    if (userIdentity?.email && userIdentity.email.trim().toLowerCase() === 'alinealv.silv@gmail.com') return true;
     return false;
-  }, [userIdentity, profile?.email]);
+  }, [userIdentity]);
 
   // Apply theme to <html> class and data-theme
   useEffect(() => {
@@ -415,18 +226,10 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (checkPointsValue) {
         try {
           const parsedCheckPoints = JSON.parse(checkPointsValue);
-          if (Array.isArray(parsedCheckPoints) && parsedCheckPoints.length > 0) {
+          if (Array.isArray(parsedCheckPoints)) {
             setDailyCheckPoints(parsedCheckPoints);
-          } else {
-            setDailyCheckPoints(INITIAL_CHECKPOINTS);
-            localStorage.setItem(CHECKPOINTS_KEY, JSON.stringify(INITIAL_CHECKPOINTS));
           }
-        } catch {
-          setDailyCheckPoints(INITIAL_CHECKPOINTS);
-        }
-      } else {
-        setDailyCheckPoints(INITIAL_CHECKPOINTS);
-        localStorage.setItem(CHECKPOINTS_KEY, JSON.stringify(INITIAL_CHECKPOINTS));
+        } catch {}
       }
 
       if (profilesValue) {
@@ -434,8 +237,6 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const parsed = JSON.parse(profilesValue);
           if (Array.isArray(parsed)) setAdditionalProfiles(parsed);
         } catch {}
-      } else {
-        localStorage.setItem(PROFILES_KEY, JSON.stringify(DEFAULT_ADDITIONAL_PROFILES));
       }
 
       if (eventsValue) {
@@ -443,8 +244,6 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const parsed = JSON.parse(eventsValue);
           if (Array.isArray(parsed)) setRegisteredEvents(parsed);
         } catch {}
-      } else {
-        localStorage.setItem(EVENTS_KEY, JSON.stringify(DEFAULT_REGISTERED_EVENTS));
       }
 
       if (notifsValue) {
@@ -452,8 +251,6 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const parsed = JSON.parse(notifsValue);
           if (Array.isArray(parsed)) setNotifications(parsed);
         } catch {}
-      } else {
-        localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(DEFAULT_NOTIFICATIONS));
       }
 
       if (notifSettingsValue) {
@@ -476,31 +273,7 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const parsed = JSON.parse(profileValue) as OrbProfile;
         setProfile(parsed);
       } else {
-        const defaultProfile: OrbProfile = {
-          fullName: 'Aline Silva',
-          preferredName: 'Aline',
-          avatarUrl: '',
-          email: 'alinealv.silv@gmail.com',
-          birthDay: '14',
-          birthMonth: '06',
-          birthYear: '1994',
-          birthHour: '09',
-          birthMinute: '30',
-          noExactTime: false,
-          birthCountry: 'Brasil',
-          birthState: 'São Paulo',
-          birthCity: 'São Paulo',
-          timezone: 'UTC -3 (Brasília)',
-          theme: 'light',
-          language: 'pt-BR',
-          dailySynthesis: true,
-          synthesisHour: '08:00',
-          backupGoogleDrive: true,
-          backupEmail: true,
-          backupLocal: true,
-        };
-        setProfile(defaultProfile);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProfile));
+        setProfile(null);
       }
 
       if (preferencesValue) {
@@ -523,6 +296,8 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Subscribe to Google Firebase Auth state & sync with backend
     const unsubscribe = initAuth(async (googleUser) => {
       if (googleUser) {
+        setAccountState('authenticating');
+        setIsSignedIn(true);
         try {
           // Establish/verify authenticated session with backend
           const identity = await authApi.verifySession({
@@ -532,14 +307,70 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             photoURL: googleUser.photoURL,
           });
           setUserIdentity(identity);
+          setAccountState('hydrating');
 
           // Fetch primary profile from backend
           const serverPrimary = await profileApi.getPrimary();
           if (serverPrimary) {
+            // Propagate avatarUrl from Google user if primary profile does not have one
+            if (!serverPrimary.avatarUrl && googleUser.photoURL) {
+              serverPrimary.avatarUrl = googleUser.photoURL;
+              profileApi.savePrimary(serverPrimary).catch(() => {});
+            }
             setProfile(serverPrimary);
             try {
               localStorage.setItem(STORAGE_KEY, JSON.stringify(serverPrimary));
             } catch {}
+          } else {
+            // No profile on backend yet - create draft with real Google user info
+            const draftProfile: OrbProfile = {
+              fullName: googleUser.displayName || 'Novo Usuário',
+              preferredName: googleUser.displayName?.split(' ')[0] || 'Usuário',
+              avatarUrl: googleUser.photoURL || undefined,
+              email: googleUser.email || undefined,
+              birthDay: '',
+              birthMonth: '',
+              birthYear: '',
+              birthHour: '12',
+              birthMinute: '00',
+              birthCountry: 'Brasil',
+              birthState: 'São Paulo',
+              birthCity: 'São Paulo',
+              timezone: 'UTC -3 (Brasília)',
+              houseSystem: 'Placidus',
+              zodiac: 'Tropical',
+              theme: 'dark',
+              language: 'pt-BR',
+              noExactTime: false,
+              dailySynthesis: true,
+              synthesisHour: '08:00',
+              completeness: 0,
+              unlockedItems: [],
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+            setProfile(draftProfile);
+          }
+
+          // Fetch user preferences from backend
+          try {
+            const prefs = await preferencesApi.get();
+            if (prefs) {
+              setPreferences((prev) => ({
+                ...prev,
+                theme: (prefs.theme as OrbTheme) || prev.theme,
+                language: (prefs.language as any) || prev.language,
+              }));
+            }
+          } catch (pErr) {
+            console.warn('[OrbContext] Preferences sync error:', pErr);
+          }
+
+          // Fetch wallet & ledger data from backend
+          try {
+            await refreshWallet();
+          } catch (wErr) {
+            console.warn('[OrbContext] Wallet initial sync error:', wErr);
           }
 
           // Fetch additional profiles
@@ -559,22 +390,21 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               localStorage.setItem(EVENTS_KEY, JSON.stringify(serverEvents));
             } catch {}
           }
+          setAccountState('ready');
         } catch (backendErr) {
           console.warn('[OrbContext] Backend sync fallback to local store:', backendErr);
+          setAccountState('error');
         }
-
-        setProfile((prev) => {
-          if (!prev) return prev;
-          const updated = {
-            ...prev,
-            avatarUrl: googleUser.photoURL || prev.avatarUrl || '',
-            email: googleUser.email || prev.email || 'alinealv.silv@gmail.com',
-          };
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-          } catch (e) {}
-          return updated;
-        });
+      } else {
+        // User is not signed in
+        setIsSignedIn(false);
+        setUserIdentity(null);
+        setAccountState('unauthenticated');
+        // Clear previous user's data so nothing leaks
+        setProfile(null);
+        setWalletData(null);
+        setCredits(0);
+        setUnlockedItems([]);
       }
     });
 
@@ -588,9 +418,13 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       profile,
       preferences,
       hydrated,
+      accountState,
       isSignedIn,
       credits,
       unlockedItems,
+      walletData,
+      refreshWallet,
+      claimDailyCredits,
       journalEntries,
       dailyCheckPoints,
       additionalProfiles,
@@ -636,18 +470,24 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           nextProfile.tz_str = geo.timezone;
         }
 
+        if (!nextProfile.avatarUrl && (userIdentity?.avatarUrl || auth.currentUser?.photoURL)) {
+          nextProfile.avatarUrl = userIdentity?.avatarUrl || auth.currentUser?.photoURL || undefined;
+        }
+
         setProfile(nextProfile);
         const nextPreferences = { theme: nextProfile.theme, language: nextProfile.language };
         setPreferences(nextPreferences);
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(nextProfile));
           localStorage.setItem(PREFERENCES_KEY, JSON.stringify(nextPreferences));
-          // Async server persistence
-          profileApi.savePrimary(nextProfile).catch((err) => {
-            console.warn('[OrbContext] Async server profile save notice:', err);
-          });
+          // Async server persistence with owner-isolation
+          const saved = await profileApi.savePrimary(nextProfile);
+          if (saved) {
+            setProfile(saved);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+          }
         } catch (e) {
-          console.warn('Error writing profile to localStorage', e);
+          console.warn('Error writing profile to server/localStorage', e);
         }
       },
       savePreferences: async (patch) => {
@@ -655,6 +495,9 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setPreferences(nextPreferences);
         try {
           localStorage.setItem(PREFERENCES_KEY, JSON.stringify(nextPreferences));
+          preferencesApi.update(patch).catch((err) => {
+            console.warn('[OrbContext] Async server preferences save error:', err);
+          });
           if (profile) {
             const nextProfile = { ...profile, ...patch };
             setProfile(nextProfile);
@@ -675,6 +518,7 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
       signIn: async (email?: string) => {
         setIsSignedIn(true);
+        setAccountState('authenticating');
         try {
           localStorage.setItem(AUTH_KEY, 'true');
           const currentUser = auth.currentUser;
@@ -686,19 +530,31 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               photoURL: currentUser.photoURL,
             });
             setUserIdentity(identity);
+            setAccountState('ready');
           }
         } catch (e) {
           console.warn('Error writing auth to localStorage', e);
+          setAccountState('error');
         }
       },
       signOut: async () => {
         setIsSignedIn(false);
         setUserIdentity(null);
+        setProfile(null);
+        setWalletData(null);
+        setCredits(0);
+        setUnlockedItems([]);
+        setAccountState('unauthenticated');
         await logoutGoogle();
         try {
           localStorage.setItem(AUTH_KEY, 'false');
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(CREDITS_KEY);
+          localStorage.removeItem(UNLOCKED_ITEMS_KEY);
+          localStorage.removeItem(PROFILES_KEY);
+          localStorage.removeItem(EVENTS_KEY);
         } catch (e) {
-          console.warn('Error removing auth to localStorage', e);
+          console.warn('Error clearing storage on signOut', e);
         }
       },
       addCredits: (amount: number) => {
@@ -710,7 +566,7 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           return next;
         });
       },
-      spendCredits: (amount: number) => {
+      spendCredits: (amount: number, itemCode?: string, scopeType?: 'matrix' | 'profile' | 'event', scopeId?: string) => {
         if (credits < amount) {
           return false;
         }
@@ -721,6 +577,11 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           } catch {}
           return next;
         });
+        if (amount > 0 && itemCode) {
+          walletApi.spendCredits({ amount, itemCode, scopeType, scopeId })
+            .then(() => refreshWallet())
+            .catch((e) => console.warn('[OrbContext] spendCredits sync error:', e));
+        }
         return true;
       },
       unlockItem: (code: string, targetScope?: SelectedScope) => {
@@ -980,8 +841,30 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
       },
       // Coupon Redemption
-      redeemCoupon: (rawCode: string) => {
+      redeemCoupon: async (rawCode: string) => {
         const code = rawCode.trim().toUpperCase();
+        try {
+          // Attempt server-side coupon validation first
+          const serverRes = await couponApi.redeem(code);
+          if (serverRes && serverRes.success) {
+            await refreshWallet();
+            return {
+              success: true,
+              message: serverRes.message || `Cupom ${code} resgatado! +${serverRes.creditsGranted} ◎ adicionados à sua carteira.`,
+              creditsGranted: serverRes.creditsGranted || 0,
+            };
+          }
+        } catch (serverErr: any) {
+          // If server returned a structured business rejection message, return it directly
+          if (serverErr?.message && !serverErr.message.includes('fetch') && !serverErr.message.includes('Failed')) {
+            return {
+              success: false,
+              message: serverErr.message,
+              creditsGranted: 0,
+            };
+          }
+        }
+
         const today = new Date();
         const todayStr = today.toISOString().slice(0, 10);
         const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`; // e.g. '2026-08'
@@ -1177,6 +1060,7 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       isSignedIn,
       credits,
       unlockedItems,
+      walletData,
       journalEntries,
       dailyCheckPoints,
       additionalProfiles,

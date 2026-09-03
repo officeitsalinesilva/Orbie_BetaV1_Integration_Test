@@ -17,8 +17,8 @@ type Message = {
 };
 
 export function ChatModal({ initialPrompt, onClose, isEnglish }: Props) {
-  const { profile } = useOrb();
-  const userName = profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
+  const { profile, userIdentity } = useOrb();
+  const userName = profile?.preferredName || profile?.fullName?.split(' ')[0] || userIdentity?.name?.split(' ')[0] || (isEnglish ? 'User' : 'Usuário');
 
   const [input, setInput] = useState('');
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);

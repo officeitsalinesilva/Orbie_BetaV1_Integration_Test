@@ -45,11 +45,11 @@ export function SystemSlideDrawer({
   activeScreen,
   isEnglish = false,
 }: Props) {
-  const { profile, preferences, savePreferences, credits } = useOrb();
+  const { profile, userIdentity, preferences, savePreferences, credits } = useOrb();
 
   if (!isOpen) return null;
 
-  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
+  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || userIdentity?.name?.split(' ')[0] || (isEnglish ? 'User' : 'Usuário');
 
   const chooseTheme = (theme: OrbTheme) => {
     void savePreferences({ theme });

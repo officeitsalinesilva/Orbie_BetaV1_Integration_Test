@@ -55,7 +55,7 @@ export function NeuroacusticaView({
   onSignOut,
   isEnglish,
 }: Props) {
-  const { profile, preferences, savePreferences } = useOrb();
+  const { profile, userIdentity, preferences, savePreferences } = useOrb();
   const {
     pureToneActive,
     pureToneMuted,
@@ -78,7 +78,7 @@ export function NeuroacusticaView({
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisualEditOpen, setIsVisualEditOpen] = useState(false);
 
-  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || 'Aline';
+  const name = profile?.preferredName || profile?.fullName?.split(' ')[0] || userIdentity?.name?.split(' ')[0] || (isEnglish ? 'User' : 'Usuário');
   const avatarLetter = (name || 'O').slice(0, 1).toUpperCase();
 
   const chooseTheme = (theme: OrbTheme) => {

@@ -45,47 +45,22 @@ export function LoginView({ onSuccess }: Props) {
         throw new Error('Autenticação com Google não concluída.');
       }
 
-      const googleEmail = authResult.email || authResult.user.email || 'alinealv.silv@gmail.com';
-      const googleDisplayName = authResult.displayName || authResult.user.displayName || 'Aline Silva';
+      const googleEmail = authResult.email || authResult.user.email || '';
+      const googleDisplayName = authResult.displayName || authResult.user.displayName || 'Usuário Orb';
       const googlePhotoUrl = authResult.photoUrl || authResult.user.photoURL || '';
 
-      const firstName = googleDisplayName.split(' ')[0] || googleDisplayName;
+      await signIn(googleEmail);
 
-      if (authMode === 'register' || !profile) {
-        const newProfile: OrbProfile = {
-          fullName: googleDisplayName,
-          preferredName: firstName,
-          avatarUrl: googlePhotoUrl,
-          email: googleEmail,
-          birthDay: '14',
-          birthMonth: '06',
-          birthYear: '1994',
-          birthHour: '09',
-          birthMinute: '30',
-          noExactTime: false,
-          birthCountry: 'Brasil',
-          birthState: 'São Paulo',
-          birthCity: 'São Paulo',
-          timezone: 'UTC -3 (Brasília)',
-          theme: preferences.theme,
-          language: preferences.language,
-          dailySynthesis: true,
-          synthesisHour: '08:00',
-          backupGoogleDrive: true,
-          backupEmail: true,
-          backupLocal: true,
-        };
-        await saveProfile(newProfile);
-        await signIn(googleEmail);
+      if (!profile || !profile.fullName || (profile.completeness ?? 0) === 0) {
+        // Direct to onboarding so real birth parameters can be entered by the user
         onSuccess(true);
       } else {
-        // Retain avatarUrl and email
+        // Update user avatar and email in existing profile
         await saveProfile({
           ...profile,
           avatarUrl: googlePhotoUrl || profile.avatarUrl,
           email: googleEmail || profile.email,
         });
-        await signIn(googleEmail);
         onSuccess(false);
       }
     } catch (err: any) {
