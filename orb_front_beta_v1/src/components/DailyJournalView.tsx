@@ -213,6 +213,7 @@ type Props = {
   onOpenNeuroacustica?: () => void;
   onOpenCatalog?: () => void;
   onOpenChat?: () => void;
+  onOpenAdminCouponCenter?: () => void;
   onSignOut: () => void;
 };
 
@@ -223,6 +224,7 @@ export function DailyJournalView({
   onOpenNeuroacustica,
   onOpenCatalog,
   onOpenChat,
+  onOpenAdminCouponCenter,
   onSignOut,
 }: Props) {
   const { profile, preferences, savePreferences, dailyCheckPoints, credits } = useOrb();
@@ -1541,6 +1543,7 @@ export function DailyJournalView({
         onOpenNeuroacustica={onOpenNeuroacustica}
         onOpenCatalog={onOpenCatalog}
         onOpenChat={onOpenChat}
+        onOpenAdminCouponCenter={onOpenAdminCouponCenter}
         onSignOut={onSignOut}
         activeScreen="daily-journal"
         isEnglish={isEnglish}

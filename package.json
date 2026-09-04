@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "test": "tsx tests/phase4b_identity_persistence.test.ts",
+    "test": "tsx tests/phase4b_identity_persistence.test.ts && tsx tests/phase4c_persistence_durable.test.ts && tsx tests/phase4e_admin_coupons_distribution.test.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "lint": "tsc --noEmit",

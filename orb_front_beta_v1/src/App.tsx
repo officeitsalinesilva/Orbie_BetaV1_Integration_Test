@@ -11,6 +11,7 @@ import { NeuroacusticaView } from './components/neuroacustica/NeuroacusticaView'
 import { CatalogView } from './components/catalog/CatalogView';
 import { ChatView } from './components/chat/ChatView';
 import { FloatingAudioBar } from './components/neuroacustica/FloatingAudioBar';
+import { AdminCouponCenterModal } from './components/admin/AdminCouponCenterModal';
 
 type Screen =
   | 'login'
@@ -28,6 +29,7 @@ function MainApp() {
   const { stopAll } = useNeuroAudio();
   const [currentScreen, setCurrentScreen] = useState<Screen>('daily-journal');
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isAdminCouponCenterOpen, setIsAdminCouponCenterOpen] = useState(false);
   const isEnglish = preferences.language === 'en';
 
   useEffect(() => {
@@ -109,6 +111,7 @@ function MainApp() {
                 onOpenNeuroacustica={() => setCurrentScreen('neuroacustica')}
                 onOpenChat={() => setCurrentScreen('chat')}
                 onOpenNotifications={() => setIsNotificationsOpen(true)}
+                onOpenAdminCouponCenter={() => setIsAdminCouponCenterOpen(true)}
                 onSignOut={handleSignOut}
               />
             );
@@ -167,6 +170,7 @@ function MainApp() {
                 onOpenNeuroacustica={() => setCurrentScreen('neuroacustica')}
                 onOpenCatalog={() => setCurrentScreen('catalog')}
                 onOpenChat={() => setCurrentScreen('chat')}
+                onOpenAdminCouponCenter={() => setIsAdminCouponCenterOpen(true)}
                 onSignOut={handleSignOut}
               />
             );
@@ -195,6 +199,12 @@ function MainApp() {
           setCurrentScreen('catalog');
         }}
         isEnglish={isEnglish}
+      />
+
+      {/* Central Admin Modal for Coupons, Campaigns, QR and Notifications (Admin Web) */}
+      <AdminCouponCenterModal
+        isOpen={isAdminCouponCenterOpen}
+        onClose={() => setIsAdminCouponCenterOpen(false)}
       />
 
       {/* Apple-Style Floating Mini Player Dock (Persistent background audio control across all screens except inside the studio itself) */}

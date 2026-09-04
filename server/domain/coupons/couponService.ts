@@ -1,123 +1,273 @@
+/**
+ * ORBIE — Canonical Coupon, Campaign & Distribution Domain Service
+ * Server-authoritative, durable persistence, no hardcoded production seeds.
+ */
+
 import { Campaign, Coupon, CouponRedemption, CouponWithdrawalReceipt, UserCouponAlert } from './types';
 import { walletService } from '../wallet/walletService';
+import { couponRepo, notificationRepo, userRepo } from '../../persistence';
+import { DistributionEntity, AdminAuditLogEntity, NotificationEntity } from '../../persistence/types';
 
 export class CouponService {
-  private campaigns: Map<string, Campaign> = new Map();
-  private coupons: Map<string, Coupon> = new Map();
-  private redemptions: CouponRedemption[] = [];
-
-  constructor() {
-    this.seedDefaultCampaignAndCoupon();
-  }
-
   /**
-   * Seed the official canonical campaign and coupon:
-   * 5 credits per withdrawal, 7 days validity, 1 withdrawal per 24 hours (max 7 withdrawals = 35 total credits distributed over 7 days)
+   * Create a new promotional campaign.
    */
-  public seedDefaultCampaignAndCoupon(): void {
-    const now = new Date();
-    const startDate = new Date(now.getTime() - 24 * 3600 * 1000).toISOString();
-    const endDate = new Date(now.getTime() + 365 * 24 * 3600 * 1000).toISOString();
-
-    const campaignId = 'camp-orb-welcome-7d';
-    if (!this.campaigns.has(campaignId)) {
-      const campaign: Campaign = {
-        id: campaignId,
-        title: 'Campanha de Boas-Vindas ORBIE 7 Dias',
-        description: 'Receba 5 créditos por dia durante 7 dias (1 saque a cada 24 horas)',
-        creditsPerWithdrawal: 5,
-        validityDays: 7,
-        withdrawalFrequencyHours: 24,
-        maxUsesPerUser: 7,
-        startDate,
-        endDate,
-        status: 'active',
-        createdAt: new Date().toISOString(),
-      };
-      this.campaigns.set(campaignId, campaign);
-
-      const couponCode = 'ORB-WELCOME-7D';
-      const coupon: Coupon = {
-        code: couponCode,
-        campaignId,
-        qrReference: 'qr_ref_orb_7d_welcome_sec99a',
-        maxTotalRedemptions: 100000,
-        currentTotalRedemptions: 0,
-        status: 'active',
-        createdAt: new Date().toISOString(),
-      };
-      this.coupons.set(couponCode.toUpperCase(), coupon);
-    }
-  }
-
-  public createCampaign(data: Omit<Campaign, 'id' | 'createdAt'>): Campaign {
+  public async createCampaign(
+    data: Omit<Campaign, 'id' | 'createdAt'>,
+    adminUid?: string
+  ): Promise<Campaign> {
     const id = `camp-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const campaign: Campaign = {
       ...data,
       id,
+      creditsPerWithdrawal: Number(data.creditsPerWithdrawal) || 5,
+      validityDays: Number(data.validityDays) || 7,
+      withdrawalFrequencyHours: Number(data.withdrawalFrequencyHours) || 24,
+      maxUsesPerUser: Number(data.maxUsesPerUser) || 7,
+      status: data.status || 'active',
       createdAt: new Date().toISOString(),
     };
-    this.campaigns.set(id, campaign);
+
+    await couponRepo.saveCampaign(campaign as any);
+
+    if (adminUid) {
+      await this.logAudit({
+        id: `audit-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        adminUid,
+        action: 'CREATE_CAMPAIGN',
+        targetType: 'campaign',
+        targetId: campaign.id,
+        details: { title: campaign.title, creditsPerWithdrawal: campaign.creditsPerWithdrawal },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     return campaign;
   }
 
-  public getCampaigns(): Campaign[] {
-    return Array.from(this.campaigns.values());
+  public async getCampaigns(): Promise<Campaign[]> {
+    const list = await couponRepo.listCampaigns();
+    return list as unknown as Campaign[];
   }
 
-  public getCampaign(id: string): Campaign | undefined {
-    return this.campaigns.get(id);
+  public async getCampaign(id: string): Promise<Campaign | null> {
+    const camp = await couponRepo.getCampaign(id);
+    return (camp as unknown as Campaign) || null;
   }
 
-  public createCoupon(
+  public async updateCampaignStatus(id: string, status: 'active' | 'draft' | 'expired' | 'archived', adminUid?: string): Promise<Campaign | null> {
+    const camp = await this.getCampaign(id);
+    if (!camp) return null;
+    camp.status = status;
+    await couponRepo.saveCampaign(camp as any);
+
+    if (adminUid) {
+      await this.logAudit({
+        id: `audit-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        adminUid,
+        action: 'UPDATE_CAMPAIGN_STATUS',
+        targetType: 'campaign',
+        targetId: id,
+        details: { newStatus: status },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    return camp;
+  }
+
+  /**
+   * Create a coupon linked to a campaign with unique cryptographic QR token.
+   */
+  public async createCoupon(
     campaignId: string,
     customCode?: string,
-    maxTotalRedemptions?: number
-  ): Coupon {
-    const campaign = this.campaigns.get(campaignId);
+    maxTotalRedemptions?: number,
+    adminUid?: string
+  ): Promise<Coupon> {
+    const campaign = await this.getCampaign(campaignId);
     if (!campaign) {
       throw new Error(`Campaign ${campaignId} not found`);
     }
 
-    const code = (customCode || `ORB-${Math.random().toString(36).substring(2, 8)}`).toUpperCase();
+    const code = (customCode || `ORB-${Math.random().toString(36).substring(2, 8)}`).toUpperCase().trim();
+    const token = `tok_${Math.random().toString(36).substring(2, 12)}_${Date.now().toString(36)}`;
     const qrReference = `qr_ref_${Math.random().toString(36).substring(2, 10)}_${Date.now()}`;
+
+    // Verify code uniqueness
+    const existing = await couponRepo.getCoupon(code);
+    if (existing) {
+      throw new Error(`Cupom com código "${code}" já existe.`);
+    }
 
     const coupon: Coupon = {
       code,
       campaignId,
       qrReference,
-      maxTotalRedemptions,
+      maxTotalRedemptions: maxTotalRedemptions ? Number(maxTotalRedemptions) : undefined,
       currentTotalRedemptions: 0,
       status: 'active',
       createdAt: new Date().toISOString(),
     };
 
-    this.coupons.set(code, coupon);
+    await couponRepo.saveCoupon({
+      ...coupon,
+      token,
+    } as any);
+
+    if (adminUid) {
+      await this.logAudit({
+        id: `audit-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        adminUid,
+        action: 'CREATE_COUPON',
+        targetType: 'coupon',
+        targetId: coupon.code,
+        details: { campaignId, code: coupon.code, maxTotalRedemptions },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     return coupon;
   }
 
-  public getCoupons(): Coupon[] {
-    return Array.from(this.coupons.values());
+  public async getCoupons(): Promise<Coupon[]> {
+    const list = await couponRepo.listCoupons();
+    return list as unknown as Coupon[];
   }
 
-  public findCouponByCodeOrQR(input: string): Coupon | null {
+  public async getCoupon(code: string): Promise<Coupon | null> {
+    const c = await couponRepo.getCoupon(code.toUpperCase().trim());
+    return (c as unknown as Coupon) || null;
+  }
+
+  public async updateCouponStatus(code: string, status: 'active' | 'disabled' | 'exhausted', adminUid?: string): Promise<Coupon | null> {
+    const coupon = await this.getCoupon(code);
+    if (!coupon) return null;
+    coupon.status = status;
+    await couponRepo.saveCoupon(coupon as any);
+
+    if (adminUid) {
+      await this.logAudit({
+        id: `audit-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        adminUid,
+        action: 'UPDATE_COUPON_STATUS',
+        targetType: 'coupon',
+        targetId: code,
+        details: { newStatus: status },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    return coupon;
+  }
+
+  public async findCouponByCodeOrQR(input: string): Promise<Coupon | null> {
     const cleanInput = (input || '').trim();
     if (!cleanInput) return null;
 
     // Search by code (case-insensitive)
     const upperCode = cleanInput.toUpperCase();
-    if (this.coupons.has(upperCode)) {
-      return this.coupons.get(upperCode)!;
+    const byCode = await couponRepo.getCoupon(upperCode);
+    if (byCode) return byCode as unknown as Coupon;
+
+    // Search by token or QR reference
+    const byToken = await couponRepo.getCouponByToken(cleanInput);
+    if (byToken) return byToken as unknown as Coupon;
+
+    // Fallback: scan all coupons for qrReference
+    const all = await couponRepo.listCoupons();
+    const found = all.find((c) => c.qrReference === cleanInput || c.token === cleanInput);
+    return (found as unknown as Coupon) || null;
+  }
+
+  /**
+   * Distribute a coupon to target users with optional notification dispatch.
+   */
+  public async distributeCoupon(params: {
+    adminUid: string;
+    couponCode: string;
+    targetUserUids?: string[];
+    sendNotification?: boolean;
+    customNotificationMessage?: string;
+  }): Promise<DistributionEntity> {
+    const { adminUid, couponCode, targetUserUids, sendNotification, customNotificationMessage } = params;
+    const coupon = await this.getCoupon(couponCode);
+    if (!coupon) {
+      throw new Error(`Cupom ${couponCode} não encontrado.`);
     }
 
-    // Search by QR reference token
-    for (const coupon of this.coupons.values()) {
-      if (coupon.qrReference === cleanInput) {
-        return coupon;
+    const campaign = await this.getCampaign(coupon.campaignId);
+    const campaignTitle = campaign?.title || 'Campanha Especial';
+    const creditsPerWithdrawal = campaign?.creditsPerWithdrawal || 5;
+
+    // Determine target recipients
+    let recipients: string[] = [];
+    if (targetUserUids && targetUserUids.length > 0) {
+      recipients = targetUserUids;
+    } else {
+      // Broadcast to all registered users
+      const allUsers = await userRepo.list();
+      recipients = allUsers.map((u) => u.uid);
+    }
+
+    const distributionId = `dist-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    const distribution: DistributionEntity = {
+      id: distributionId,
+      campaignId: coupon.campaignId,
+      couponCode: coupon.code,
+      channel: 'push',
+      status: 'completed',
+      targetCount: recipients.length,
+      sentCount: recipients.length,
+      failedCount: 0,
+      scheduledAt: new Date().toISOString(),
+      sentAt: new Date().toISOString(),
+      createdAdminUid: adminUid,
+      createdAt: new Date().toISOString(),
+    };
+
+    await couponRepo.saveDistribution(distribution);
+
+    // If notifications requested, dispatch in-app notification to each recipient
+    if (sendNotification && recipients.length > 0) {
+      const title = `🎁 Você recebeu o cupom ${coupon.code}!`;
+      const body = customNotificationMessage ||
+        `Use o cupom ${coupon.code} para resgatar ${creditsPerWithdrawal} créditos por dia na campanha "${campaignTitle}".`;
+
+      for (const uid of recipients) {
+        const notif: NotificationEntity = {
+          id: `notif-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          ownerUid: uid,
+          channel: 'push',
+          title,
+          body,
+          status: 'sent',
+          payload: {
+            couponCode: coupon.code,
+            campaignId: coupon.campaignId,
+            type: 'COUPON_DISTRIBUTION',
+          },
+          createdAt: new Date().toISOString(),
+          sentAt: new Date().toISOString(),
+        };
+        await notificationRepo.save(notif);
       }
     }
 
-    return null;
+    await this.logAudit({
+      id: `audit-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      adminUid,
+      action: 'DISTRIBUTE_COUPON',
+      targetType: 'coupon',
+      targetId: couponCode,
+      details: {
+        recipientsCount: recipients.length,
+        sendNotification: !!sendNotification,
+      },
+      timestamp: new Date().toISOString(),
+    });
+
+    return distribution;
   }
 
   /**
@@ -130,12 +280,12 @@ export class CouponService {
    * 5. Total withdrawal limit (e.g. max 7 withdrawals)
    * 6. 24-hour window between withdrawals (never adds all days at once!)
    */
-  public redeemCoupon(userUid: string, codeOrQrRef: string): CouponWithdrawalReceipt {
+  public async redeemCoupon(userUid: string, codeOrQrRef: string): Promise<CouponWithdrawalReceipt> {
     if (!userUid) {
       throw new Error('User authentication required for coupon redemption');
     }
 
-    const coupon = this.findCouponByCodeOrQR(codeOrQrRef);
+    const coupon = await this.findCouponByCodeOrQR(codeOrQrRef);
     if (!coupon) {
       throw new Error('Cupom inválido ou não encontrado.');
     }
@@ -148,7 +298,7 @@ export class CouponService {
       throw new Error('Este cupom atingiu o limite máximo global de utilizações.');
     }
 
-    const campaign = this.campaigns.get(coupon.campaignId);
+    const campaign = await this.getCampaign(coupon.campaignId);
     if (!campaign || campaign.status !== 'active') {
       throw new Error('A campanha deste cupom não está mais ativa.');
     }
@@ -166,9 +316,10 @@ export class CouponService {
       }
     }
 
-    // Check user's redemption history for this specific coupon
-    const userRedemptions = this.redemptions
-      .filter((r) => r.userUid === userUid && r.couponCode === coupon.code)
+    // Check user's redemption history for this specific coupon from durable repository
+    const allUserRedemptions = await couponRepo.getRedemptionsByUser(userUid);
+    const userRedemptions = allUserRedemptions
+      .filter((r) => r.couponCode === coupon.code)
       .sort((a, b) => new Date(a.redeemedAt).getTime() - new Date(b.redeemedAt).getTime());
 
     if (userRedemptions.length >= campaign.maxUsesPerUser) {
@@ -201,7 +352,7 @@ export class CouponService {
 
     // Grant credits authoritatively through the Wallet & Ledger
     const description = `Benefício Cupom ${coupon.code} (Saque ${withdrawalNumber}/${campaign.maxUsesPerUser})`;
-    const grantResult = walletService.grantCredits(
+    const grantResult = await walletService.grantCredits(
       userUid,
       campaign.creditsPerWithdrawal,
       'COUPON_BENEFIT',
@@ -209,7 +360,7 @@ export class CouponService {
       coupon.code
     );
 
-    // Record the redemption
+    // Record the redemption in durable store
     const redemption: CouponRedemption = {
       id: `redm-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       couponCode: coupon.code,
@@ -220,8 +371,10 @@ export class CouponService {
       redeemedAt: new Date(now).toISOString(),
       nextAvailableAt: nextAvailableAt || '',
     };
-    this.redemptions.push(redemption);
+
     coupon.currentTotalRedemptions += 1;
+    await couponRepo.addRedemption(redemption as any);
+    await couponRepo.saveCoupon(coupon as any);
 
     return {
       success: true,
@@ -238,28 +391,26 @@ export class CouponService {
   }
 
   /**
-   * Retrieves active coupon alerts for a user:
+   * Retrieves active coupon alerts for a user from durable store:
    * Returns whether a withdrawal is available right now for an active user coupon
    */
-  public getUserCouponAlerts(userUid: string): UserCouponAlert[] {
+  public async getUserCouponAlerts(userUid: string): Promise<UserCouponAlert[]> {
     const alerts: UserCouponAlert[] = [];
     const now = Date.now();
 
-    // Group user's redemptions by couponCode
-    const userRedemptionsByCoupon = new Map<string, CouponRedemption[]>();
-    for (const r of this.redemptions) {
-      if (r.userUid === userUid) {
-        const list = userRedemptionsByCoupon.get(r.couponCode) || [];
-        list.push(r);
-        userRedemptionsByCoupon.set(r.couponCode, list);
-      }
+    const userRedemptions = await couponRepo.getRedemptionsByUser(userUid);
+    const userRedemptionsByCoupon = new Map<string, typeof userRedemptions>();
+    for (const r of userRedemptions) {
+      const list = userRedemptionsByCoupon.get(r.couponCode) || [];
+      list.push(r);
+      userRedemptionsByCoupon.set(r.couponCode, list);
     }
 
     for (const [code, redemptions] of userRedemptionsByCoupon.entries()) {
-      const coupon = this.coupons.get(code);
+      const coupon = await this.getCoupon(code);
       if (!coupon || coupon.status !== 'active') continue;
 
-      const campaign = this.campaigns.get(coupon.campaignId);
+      const campaign = await this.getCampaign(coupon.campaignId);
       if (!campaign || campaign.status !== 'active') continue;
 
       redemptions.sort((a, b) => new Date(a.redeemedAt).getTime() - new Date(b.redeemedAt).getTime());
@@ -287,20 +438,32 @@ export class CouponService {
     return alerts;
   }
 
-  public getRedemptions(filter?: { campaignId?: string; couponCode?: string; userUid?: string }): CouponRedemption[] {
-    return this.redemptions.filter((r) => {
-      if (filter?.campaignId && r.campaignId !== filter.campaignId) return false;
-      if (filter?.couponCode && r.couponCode !== filter.couponCode) return false;
-      if (filter?.userUid && r.userUid !== filter.userUid) return false;
-      return true;
-    });
+  public async getRedemptions(filter?: { campaignId?: string; couponCode?: string; userUid?: string }): Promise<CouponRedemption[]> {
+    let list = await couponRepo.getAllRedemptions();
+    if (filter?.campaignId) list = list.filter((r) => r.campaignId === filter.campaignId);
+    if (filter?.couponCode) list = list.filter((r) => r.couponCode === filter.couponCode);
+    if (filter?.userUid) list = list.filter((r) => r.userUid === filter.userUid);
+    return list as unknown as CouponRedemption[];
   }
 
-  public resetForTest(): void {
-    this.campaigns.clear();
-    this.coupons.clear();
-    this.redemptions = [];
-    this.seedDefaultCampaignAndCoupon();
+  public async getDistributions(): Promise<DistributionEntity[]> {
+    return couponRepo.listDistributions();
+  }
+
+  public async getAuditLogs(): Promise<AdminAuditLogEntity[]> {
+    return couponRepo.listAuditLogs?.() || [];
+  }
+
+  private async logAudit(log: AdminAuditLogEntity): Promise<void> {
+    try {
+      await couponRepo.addAuditLog?.(log);
+    } catch {
+      // Non-blocking audit log catch
+    }
+  }
+
+  public async resetForTest(): Promise<void> {
+    // Used in tests if needed
   }
 }
 

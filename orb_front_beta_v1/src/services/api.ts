@@ -144,16 +144,20 @@ export const profileApi = {
   },
 
   async savePrimary(profile: OrbProfile): Promise<OrbProfile> {
-    // Automatically enrich with deterministic coordinates if missing
+    // Automatically enrich with deterministic coordinates if missing and birthCity is present
     if (!profile.latitude || !profile.longitude || !profile.tz_str) {
-      const geo = resolveLocationDeterministic(
-        profile.birthCity,
-        profile.birthState,
-        profile.birthCountry
-      );
-      profile.latitude = geo.latitude;
-      profile.longitude = geo.longitude;
-      profile.tz_str = geo.timezone;
+      if (profile.birthCity) {
+        const geo = resolveLocationDeterministic(
+          profile.birthCity,
+          profile.birthState,
+          profile.birthCountry
+        );
+        if (geo) {
+          profile.latitude = geo.latitude;
+          profile.longitude = geo.longitude;
+          profile.tz_str = geo.timezone;
+        }
+      }
     }
 
     const res = await request<{ profile: OrbProfile }>('/profiles/primary', {
@@ -177,14 +181,18 @@ export const profileApi = {
   async createAdditional(data: Omit<AdditionalProfile, 'id' | 'createdAt'>): Promise<AdditionalProfile> {
     // Enrich with deterministic coordinates
     if (!data.latitude || !data.longitude || !data.tz_str) {
-      const geo = resolveLocationDeterministic(
-        data.birthCity,
-        data.birthState,
-        data.birthCountry
-      );
-      data.latitude = geo.latitude;
-      data.longitude = geo.longitude;
-      data.tz_str = geo.timezone;
+      if (data.birthCity) {
+        const geo = resolveLocationDeterministic(
+          data.birthCity,
+          data.birthState,
+          data.birthCountry
+        );
+        if (geo) {
+          data.latitude = geo.latitude;
+          data.longitude = geo.longitude;
+          data.tz_str = geo.timezone;
+        }
+      }
     }
 
     const res = await request<{ profile: AdditionalProfile }>('/profiles', {
@@ -255,10 +263,14 @@ export const eventApi = {
 
   async create(data: Omit<RegisteredEvent, 'id' | 'createdAt'>): Promise<RegisteredEvent> {
     if (!data.latitude || !data.longitude || !data.tz_str) {
-      const geo = resolveLocationDeterministic(data.location);
-      data.latitude = geo.latitude;
-      data.longitude = geo.longitude;
-      data.tz_str = geo.timezone;
+      if (data.location) {
+        const geo = resolveLocationDeterministic(data.location);
+        if (geo) {
+          data.latitude = geo.latitude;
+          data.longitude = geo.longitude;
+          data.tz_str = geo.timezone;
+        }
+      }
     }
 
     const res = await request<{ event: RegisteredEvent }>('/events', {
@@ -287,7 +299,7 @@ export const eventApi = {
 // DETERMINISTIC GEOCODING API
 // ==============================================================================
 export const geoApi = {
-  async resolve(city: string, state?: string, country?: string): Promise<GeoLocationResult> {
+  async resolve(city: string, state?: string, country?: string): Promise<GeoLocationResult | null> {
     try {
       const res = await request<GeoLocationResult>('/geo/resolve', {
         method: 'POST',
@@ -337,9 +349,16 @@ export interface WalletData {
     baseCredits: number;
     streakBonusCredits: number;
     totalAvailableToday: number;
+    currentStreak?: number;
     currentStreakDays: number;
+    streakActive?: boolean;
+    streakStartedAt?: string | null;
+    lastClaimAt?: string | null;
+    lastClaimPeriod?: string | null;
     lastClaimDate: string | null;
     lastCheckInDate: string | null;
+    periodDate?: string;
+    timezone?: string;
   };
   couponAlerts: Array<{
     hasAvailableWithdrawal: boolean;
@@ -456,6 +475,13 @@ export const adminApi = {
     });
   },
 
+  async updateCampaignStatus(id: string, status: string) {
+    return request<{ campaign: any }>(`/admin/coupons/campaigns/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
+
   async getCoupons() {
     return request<{ coupons: any[] }>('/admin/coupons/list', { method: 'GET' });
   },
@@ -467,7 +493,62 @@ export const adminApi = {
     });
   },
 
+  async updateCouponStatus(code: string, status: string) {
+    return request<{ coupon: any }>(`/admin/coupons/${code}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
+
+  async distributeCoupon(data: {
+    couponCode: string;
+    targetUserUids?: string[];
+    sendNotification?: boolean;
+    customNotificationMessage?: string;
+  }) {
+    return request<{ distribution: any }>('/admin/coupons/distribute', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getDistributions() {
+    return request<{ distributions: any[] }>('/admin/coupons/distributions', { method: 'GET' });
+  },
+
   async getRedemptions() {
     return request<{ redemptions: any[] }>('/admin/coupons/redemptions', { method: 'GET' });
+  },
+
+  async getNotifications() {
+    return request<{ notifications: any[] }>('/admin/notifications', { method: 'GET' });
+  },
+
+  async sendNotification(data: {
+    title: string;
+    body: string;
+    targetUserUid?: string;
+    broadcast?: boolean;
+    channel?: string;
+  }) {
+    return request<{ success: boolean; count: number }>('/admin/notifications', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getCommunicationDrafts() {
+    return request<{ drafts: any[] }>('/admin/communications/drafts', { method: 'GET' });
+  },
+
+  async saveCommunicationDraft(draft: any) {
+    return request<{ draft: any }>('/admin/communications/drafts', {
+      method: 'POST',
+      body: JSON.stringify(draft),
+    });
+  },
+
+  async getAuditLogs() {
+    return request<{ logs: any[] }>('/admin/audit-logs', { method: 'GET' });
   },
 };

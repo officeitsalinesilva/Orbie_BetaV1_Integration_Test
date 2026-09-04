@@ -11,6 +11,7 @@ import {
   Newspaper,
   ShoppingBag,
   Bot,
+  Shield,
 } from 'lucide-react';
 import { useOrb } from '../../context/OrbContext';
 import { GoogleProfileAvatar } from './GoogleProfileAvatar';
@@ -26,6 +27,7 @@ type Props = {
   onOpenNeuroacustica?: () => void;
   onOpenCatalog?: () => void;
   onOpenChat?: () => void;
+  onOpenAdminCouponCenter?: () => void;
   onSignOut?: () => void;
   activeScreen?: 'daily-journal' | 'neuroacustica' | 'catalog' | 'chat' | 'profile' | 'wallet' | 'notifications';
   isEnglish?: boolean;
@@ -41,11 +43,12 @@ export function SystemSlideDrawer({
   onOpenNeuroacustica,
   onOpenCatalog,
   onOpenChat,
+  onOpenAdminCouponCenter,
   onSignOut,
   activeScreen,
   isEnglish = false,
 }: Props) {
-  const { profile, userIdentity, preferences, savePreferences, credits } = useOrb();
+  const { profile, userIdentity, preferences, savePreferences, credits, isAdmin } = useOrb();
 
   if (!isOpen) return null;
 
@@ -267,6 +270,23 @@ export function SystemSlideDrawer({
               </button>
             </div>
           </div>
+
+          {/* Central Admin (Only visible if isAdmin) */}
+          {isAdmin && (
+            <div className="mt-6 w-full border-t border-[var(--border)] pt-4 px-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenAdminCouponCenter?.();
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-xl py-2 px-3 text-xs font-mono font-bold bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90 transition-all cursor-pointer shadow-2xs active:scale-98"
+              >
+                <Shield size={14} />
+                <span>{isEnglish ? 'Central Admin' : 'Central Admin'}</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Bottom Sign Out Button */}

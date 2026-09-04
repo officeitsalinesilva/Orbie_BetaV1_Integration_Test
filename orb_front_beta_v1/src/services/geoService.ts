@@ -91,21 +91,26 @@ export function resolveLocationDeterministic(
   city: string,
   state?: string,
   country?: string
-): GeoLocationResult {
-  const normCity = normalizeString(city || 'sao paulo');
-  const normCountry = normalizeString(country || 'brasil');
+): GeoLocationResult | null {
+  if (!city || !city.trim()) {
+    return null;
+  }
+  const cleanCity = city.trim();
+  const cleanCountry = country?.trim() || 'Brasil';
+  const normCity = normalizeString(cleanCity);
+  const normCountry = normalizeString(cleanCountry);
 
   // Direct DB hit
   if (CANONICAL_CITIES_DB[normCity]) {
     const entry = CANONICAL_CITIES_DB[normCity];
     return {
-      city: city || 'São Paulo',
-      state: state || 'SP',
+      city: cleanCity,
+      state: state || (entry.country === 'Brasil' ? 'SP' : undefined),
       country: entry.country,
       latitude: entry.lat,
       longitude: entry.lng,
       timezone: entry.tz,
-      formattedLocation: `${city || 'São Paulo'}, ${state || 'SP'} - ${entry.country}`,
+      formattedLocation: `${cleanCity}${state ? ', ' + state : ''} - ${entry.country}`,
     };
   }
 
@@ -113,13 +118,13 @@ export function resolveLocationDeterministic(
   for (const [key, entry] of Object.entries(CANONICAL_CITIES_DB)) {
     if (normCity.includes(key) || key.includes(normCity)) {
       return {
-        city: city,
+        city: cleanCity,
         state: state,
         country: entry.country,
         latitude: entry.lat,
         longitude: entry.lng,
         timezone: entry.tz,
-        formattedLocation: `${city}${state ? ', ' + state : ''} - ${entry.country}`,
+        formattedLocation: `${cleanCity}${state ? ', ' + state : ''} - ${entry.country}`,
       };
     }
   }
@@ -132,7 +137,7 @@ export function resolveLocationDeterministic(
     hash |= 0;
   }
 
-  const isBrazil = normCountry.includes('brasil') || normCountry.includes('brazil') || !country;
+  const isBrazil = normCountry.includes('brasil') || normCountry.includes('brazil');
   
   let lat: number;
   let lng: number;
@@ -152,18 +157,18 @@ export function resolveLocationDeterministic(
     lng = -97.0 + (((hash >> 2) % 1000) / 1000) * 20;
     tz = 'America/New_York';
   } else {
-    lat = -23.5505;
-    lng = -46.6333;
-    tz = 'America/Sao_Paulo';
+    lat = 0.0 + ((hash % 1000) / 1000) * 20;
+    lng = 0.0 + (((hash >> 2) % 1000) / 1000) * 20;
+    tz = 'UTC';
   }
 
   return {
-    city: city || 'São Paulo',
+    city: cleanCity,
     state: state,
-    country: country || 'Brasil',
+    country: cleanCountry,
     latitude: Number(lat.toFixed(4)),
     longitude: Number(lng.toFixed(4)),
     timezone: tz,
-    formattedLocation: `${city || 'São Paulo'}${state ? ', ' + state : ''} - ${country || 'Brasil'}`,
+    formattedLocation: `${cleanCity}${state ? ', ' + state : ''} - ${cleanCountry}`,
   };
 }

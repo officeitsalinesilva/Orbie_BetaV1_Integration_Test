@@ -11,6 +11,7 @@ import {
   Plus,
   Minus,
   QrCode,
+  Shield,
 } from 'lucide-react';
 import { OrbBrand } from './OrbBrand';
 import { GoogleProfileAvatar } from './common/GoogleProfileAvatar';
@@ -30,6 +31,7 @@ type Props = {
   onOpenNeuroacustica?: () => void;
   onOpenChat?: () => void;
   onOpenNotifications?: () => void;
+  onOpenAdminCouponCenter?: () => void;
   onSignOut?: () => void;
 };
 
@@ -44,9 +46,10 @@ export function WalletView({
   onOpenNeuroacustica,
   onOpenChat,
   onOpenNotifications,
+  onOpenAdminCouponCenter,
   onSignOut,
 }: Props) {
-  const { profile, preferences, userIdentity, credits, spendCredits, userPlan, upgradeToPlan, walletData, claimDailyCredits, refreshWallet } = useOrb();
+  const { profile, preferences, userIdentity, credits, spendCredits, userPlan, upgradeToPlan, walletData, claimDailyCredits, refreshWallet, isAdmin } = useOrb();
   const [toastMessage, setToastMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -238,10 +241,17 @@ export function WalletView({
                 <span className="text-[var(--text-secondary)] block">
                   {isEnglish ? 'Daily Quota Allowance' : 'Cota Diária de Renovação'}
                 </span>
-                <span className="text-[11px] text-[var(--text-tertiary)]">
-                  {isEnglish
-                    ? `Streak: ${walletData?.dailyStatus?.currentStreakDays || 0} consecutive days`
-                    : `Sequência: ${walletData?.dailyStatus?.currentStreakDays || 0} dias consecutivos`}
+                <span className="text-[11px] text-[var(--text-tertiary)] flex items-center gap-1.5">
+                  <span>
+                    {isEnglish
+                      ? `Streak: ${walletData?.dailyStatus?.currentStreak ?? walletData?.dailyStatus?.currentStreakDays ?? 0} consecutive days`
+                      : `Sequência: ${walletData?.dailyStatus?.currentStreak ?? walletData?.dailyStatus?.currentStreakDays ?? 0} dias consecutivos`}
+                  </span>
+                  {walletData?.dailyStatus?.streakActive && (
+                    <span className="px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-500 font-bold text-[10px]">
+                      {isEnglish ? '+5 ◎ Streak Active' : '+5 ◎ Streak Ativo'}
+                    </span>
+                  )}
                 </span>
               </div>
               <div>
@@ -256,7 +266,9 @@ export function WalletView({
                     <span>
                       {isClaimingDaily
                         ? (isEnglish ? 'Claiming...' : 'Resgatando...')
-                        : (isEnglish ? 'Claim Daily Credits (+5 ◎)' : 'Resgatar Cota Diária (+5 ◎)')}
+                        : (walletData?.dailyStatus?.totalAvailableToday
+                            ? (isEnglish ? `Claim Daily Credits (+${walletData.dailyStatus.totalAvailableToday} ◎)` : `Resgatar Cota Diária (+${walletData.dailyStatus.totalAvailableToday} ◎)`)
+                            : (isEnglish ? 'Claim Daily Credits (+5 ◎)' : 'Resgatar Cota Diária (+5 ◎)'))}
                     </span>
                   </button>
                 ) : (
@@ -559,6 +571,17 @@ export function WalletView({
                 {isEnglish ? 'COUPONS & QR CODE' : 'CUPONS & LEITURA QR CODE'}
               </h2>
             </div>
+
+            {isAdmin && onOpenAdminCouponCenter && (
+              <button
+                type="button"
+                onClick={onOpenAdminCouponCenter}
+                className="flex items-center gap-1.5 px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--surface-2)] text-[var(--foreground)] text-[11px] font-mono font-bold hover:bg-[var(--surface)] transition-all cursor-pointer shadow-2xs"
+              >
+                <Shield size={13} className="text-[var(--accent)]" />
+                <span>{isEnglish ? 'Central Admin' : 'Central Admin'}</span>
+              </button>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-[var(--surface-2)]">
@@ -646,7 +669,7 @@ export function WalletView({
           {walletData?.ledger && walletData.ledger.length > 0 ? (
             <div className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] bg-[var(--surface-1)] overflow-hidden">
               {walletData.ledger.map((entry) => {
-                const isCredit = entry.type === 'credit';
+                const isCredit = entry.type?.toLowerCase() === 'credit';
                 const formattedDate = new Date(entry.createdAt).toLocaleDateString(isEnglish ? 'en-US' : 'pt-BR', {
                   day: '2-digit',
                   month: '2-digit',
@@ -740,6 +763,7 @@ export function WalletView({
         onOpenNeuroacustica={onOpenNeuroacustica}
         onOpenCatalog={onOpenCatalog}
         onOpenChat={onOpenChat}
+        onOpenAdminCouponCenter={onOpenAdminCouponCenter}
         activeScreen="wallet"
         onSignOut={onSignOut || (() => {})}
         isEnglish={isEnglish}

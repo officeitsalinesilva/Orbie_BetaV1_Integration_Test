@@ -322,21 +322,21 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               localStorage.setItem(STORAGE_KEY, JSON.stringify(serverPrimary));
             } catch {}
           } else {
-            // No profile on backend yet - create draft with real Google user info
+            // No profile on backend yet - create clean draft requiring onboarding
             const draftProfile: OrbProfile = {
-              fullName: googleUser.displayName || 'Novo Usuário',
-              preferredName: googleUser.displayName?.split(' ')[0] || 'Usuário',
+              fullName: googleUser.displayName || '',
+              preferredName: googleUser.displayName?.split(' ')[0] || '',
               avatarUrl: googleUser.photoURL || undefined,
               email: googleUser.email || undefined,
               birthDay: '',
               birthMonth: '',
               birthYear: '',
-              birthHour: '12',
-              birthMinute: '00',
+              birthHour: '',
+              birthMinute: '',
               birthCountry: 'Brasil',
-              birthState: 'São Paulo',
-              birthCity: 'São Paulo',
-              timezone: 'UTC -3 (Brasília)',
+              birthState: '',
+              birthCity: '',
+              timezone: '',
               houseSystem: 'Placidus',
               zodiac: 'Tropical',
               theme: 'dark',
@@ -458,16 +458,20 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       },
       saveProfile: async (nextProfile) => {
-        // Deterministic geocoding resolution
+        // Deterministic geocoding resolution if birthCity is present
         if (!nextProfile.latitude || !nextProfile.longitude || !nextProfile.tz_str) {
-          const geo = resolveLocationDeterministic(
-            nextProfile.birthCity,
-            nextProfile.birthState,
-            nextProfile.birthCountry
-          );
-          nextProfile.latitude = geo.latitude;
-          nextProfile.longitude = geo.longitude;
-          nextProfile.tz_str = geo.timezone;
+          if (nextProfile.birthCity) {
+            const geo = resolveLocationDeterministic(
+              nextProfile.birthCity,
+              nextProfile.birthState,
+              nextProfile.birthCountry
+            );
+            if (geo) {
+              nextProfile.latitude = geo.latitude;
+              nextProfile.longitude = geo.longitude;
+              nextProfile.tz_str = geo.timezone;
+            }
+          }
         }
 
         if (!nextProfile.avatarUrl && (userIdentity?.avatarUrl || auth.currentUser?.photoURL)) {
@@ -699,13 +703,13 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedScope(scope);
       },
       addAdditionalProfile: (data) => {
-        const geo = resolveLocationDeterministic(data.birthCity, data.birthState, data.birthCountry);
+        const geo = data.birthCity ? resolveLocationDeterministic(data.birthCity, data.birthState, data.birthCountry) : null;
         const newProf: AdditionalProfile = {
           ...data,
           id: `prof-${Date.now()}`,
-          latitude: geo.latitude,
-          longitude: geo.longitude,
-          tz_str: geo.timezone,
+          latitude: geo?.latitude,
+          longitude: geo?.longitude,
+          tz_str: geo?.timezone,
           completeness: 75,
           unlockedItems: ['VIB-002'],
           createdAt: new Date().toISOString(),
@@ -749,13 +753,13 @@ export const OrbProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
       // Registered Events
       addRegisteredEvent: (data) => {
-        const geo = resolveLocationDeterministic(data.location);
+        const geo = data.location ? resolveLocationDeterministic(data.location) : null;
         const newEvt: RegisteredEvent = {
           ...data,
           id: `evt-${Date.now()}`,
-          latitude: geo.latitude,
-          longitude: geo.longitude,
-          tz_str: geo.timezone,
+          latitude: geo?.latitude,
+          longitude: geo?.longitude,
+          tz_str: geo?.timezone,
           completeness: 80,
           unlockedItems: ['AST-003'],
           createdAt: new Date().toISOString(),

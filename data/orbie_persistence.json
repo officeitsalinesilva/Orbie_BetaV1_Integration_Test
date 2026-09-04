@@ -1,0 +1,3019 @@
+{
+  "users": {
+    "test_uid_alpha": {
+      "uid": "test_uid_alpha",
+      "email": "user_alpha@example.com",
+      "name": "Alpha Real User",
+      "role": "user",
+      "avatarUrl": "https://lh3.googleusercontent.com/a/photo-alpha",
+      "accountStatus": "active",
+      "plan": "free",
+      "credits": 52,
+      "createdAt": "2026-09-03T14:34:54.091Z",
+      "updatedAt": "2026-09-04T10:19:38.975Z"
+    }
+  },
+  "profiles": {
+    "profile-primary-test_uid_alpha": {
+      "id": "profile-primary-test_uid_alpha",
+      "ownerUid": "test_uid_alpha",
+      "isPrimary": true,
+      "fullName": "Alpha User Real Name",
+      "preferredName": "Alpha",
+      "avatarUrl": "https://lh3.googleusercontent.com/a/photo-alpha",
+      "email": "user_alpha@example.com",
+      "birthDay": "15",
+      "birthMonth": "08",
+      "birthYear": "1992",
+      "birthHour": "14",
+      "birthMinute": "30",
+      "noExactTime": false,
+      "birthCountry": "Brasil",
+      "birthState": "",
+      "birthCity": "Campinas",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -22.9099,
+      "longitude": -47.0626,
+      "tz_str": "America/Sao_Paulo",
+      "houseSystem": "Placidus",
+      "zodiac": "Tropical",
+      "theme": "dark",
+      "language": "pt-BR",
+      "dailySynthesis": true,
+      "synthesisHour": "08:00",
+      "completeness": 100,
+      "backupGoogleDrive": true,
+      "backupLocal": true,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:19:38.975Z",
+      "updatedAt": "2026-09-04T10:19:38.975Z"
+    },
+    "prof-1788446094364-kmja": {
+      "id": "prof-1788446094364-kmja",
+      "ownerUid": "test_uid_alpha",
+      "isPrimary": false,
+      "fullName": "Partner Alpha",
+      "preferredName": "Partner",
+      "relation": "partner",
+      "birthDay": "20",
+      "birthMonth": "05",
+      "birthYear": "1995",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCountry": "Brasil",
+      "birthState": "",
+      "birthCity": "",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-03T14:34:54.364Z",
+      "updatedAt": "2026-09-03T14:34:54.364Z"
+    },
+    "prof-1788516446363-vgx5": {
+      "id": "prof-1788516446363-vgx5",
+      "ownerUid": "test_uid_alpha",
+      "isPrimary": false,
+      "fullName": "Partner Alpha",
+      "preferredName": "Partner",
+      "relation": "partner",
+      "birthDay": "20",
+      "birthMonth": "05",
+      "birthYear": "1995",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCountry": "Brasil",
+      "birthState": "",
+      "birthCity": "",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:07:26.363Z",
+      "updatedAt": "2026-09-04T10:07:26.363Z"
+    },
+    "prof-1788516745135-4ezu": {
+      "id": "prof-1788516745135-4ezu",
+      "ownerUid": "test_uid_alpha",
+      "isPrimary": false,
+      "fullName": "Partner Alpha",
+      "preferredName": "Partner",
+      "relation": "partner",
+      "birthDay": "20",
+      "birthMonth": "05",
+      "birthYear": "1995",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCountry": "Brasil",
+      "birthState": "",
+      "birthCity": "",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:12:25.135Z",
+      "updatedAt": "2026-09-04T10:12:25.135Z"
+    },
+    "prof-1788517179058-p5z4": {
+      "id": "prof-1788517179058-p5z4",
+      "ownerUid": "test_uid_alpha",
+      "isPrimary": false,
+      "fullName": "Partner Alpha",
+      "preferredName": "Partner",
+      "relation": "partner",
+      "birthDay": "20",
+      "birthMonth": "05",
+      "birthYear": "1995",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCountry": "Brasil",
+      "birthState": "",
+      "birthCity": "",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:19:39.058Z",
+      "updatedAt": "2026-09-04T10:19:39.058Z"
+    }
+  },
+  "events": {
+    "evt-1788446094383-ctlk": {
+      "id": "evt-1788446094383-ctlk",
+      "ownerUid": "test_uid_alpha",
+      "title": "Alpha Wedding",
+      "category": "milestone",
+      "eventType": "milestone",
+      "eventDate": "2022-09-15",
+      "eventDay": "15",
+      "eventMonth": "09",
+      "eventYear": "2022",
+      "eventHour": "12",
+      "eventMinute": "00",
+      "location": "",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-03T14:34:54.383Z",
+      "updatedAt": "2026-09-03T14:34:54.383Z"
+    },
+    "evt-1788516446378-pon0": {
+      "id": "evt-1788516446378-pon0",
+      "ownerUid": "test_uid_alpha",
+      "title": "Alpha Wedding",
+      "category": "milestone",
+      "eventType": "milestone",
+      "eventDate": "2022-09-15",
+      "eventDay": "15",
+      "eventMonth": "09",
+      "eventYear": "2022",
+      "eventHour": "12",
+      "eventMinute": "00",
+      "location": "",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:07:26.378Z",
+      "updatedAt": "2026-09-04T10:07:26.378Z"
+    },
+    "evt-1788516745146-o3b9": {
+      "id": "evt-1788516745146-o3b9",
+      "ownerUid": "test_uid_alpha",
+      "title": "Alpha Wedding",
+      "category": "milestone",
+      "eventType": "milestone",
+      "eventDate": "2022-09-15",
+      "eventDay": "15",
+      "eventMonth": "09",
+      "eventYear": "2022",
+      "eventHour": "12",
+      "eventMinute": "00",
+      "location": "",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:12:25.146Z",
+      "updatedAt": "2026-09-04T10:12:25.146Z"
+    },
+    "evt-1788517179072-8kif": {
+      "id": "evt-1788517179072-8kif",
+      "ownerUid": "test_uid_alpha",
+      "title": "Alpha Wedding",
+      "category": "milestone",
+      "eventType": "milestone",
+      "eventDate": "2022-09-15",
+      "eventDay": "15",
+      "eventMonth": "09",
+      "eventYear": "2022",
+      "eventHour": "12",
+      "eventMinute": "00",
+      "location": "",
+      "latitude": -15.7975,
+      "longitude": -47.8919,
+      "tz_str": "America/Sao_Paulo",
+      "completeness": 100,
+      "unlockedItems": [],
+      "createdAt": "2026-09-04T10:19:39.072Z",
+      "updatedAt": "2026-09-04T10:19:39.072Z"
+    }
+  },
+  "preferences": {
+    "test_uid_alpha": {
+      "ownerUid": "test_uid_alpha",
+      "theme": "sepia",
+      "language": "en",
+      "updatedAt": "2026-09-04T10:19:38.997Z"
+    }
+  },
+  "wallets": {
+    "test_uid_alpha": {
+      "ownerUid": "test_uid_alpha",
+      "userUid": "test_uid_alpha",
+      "balance": 66,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:34:54.092Z",
+      "updatedAt": "2026-09-04T10:19:39.031Z"
+    },
+    "test_uid_fresh_1788446094347": {
+      "userUid": "test_uid_fresh_1788446094347",
+      "balance": 15,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:34:54.351Z",
+      "updatedAt": "2026-09-03T14:34:54.351Z"
+    },
+    "user-test-zero-1788447139119": {
+      "ownerUid": "user-test-zero-1788447139119",
+      "userUid": "user-test-zero-1788447139119",
+      "balance": 0,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.119Z",
+      "updatedAt": "2026-09-03T14:52:19.119Z"
+    },
+    "user-claim-1-1788447139122": {
+      "ownerUid": "user-claim-1-1788447139122",
+      "userUid": "user-claim-1-1788447139122",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.125Z",
+      "updatedAt": "2026-09-03T14:52:19.125Z"
+    },
+    "user-dup-claim-1788447139126": {
+      "ownerUid": "user-dup-claim-1788447139126",
+      "userUid": "user-dup-claim-1788447139126",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.126Z",
+      "updatedAt": "2026-09-03T14:52:19.126Z"
+    },
+    "user-concurrent-1788447139127": {
+      "ownerUid": "user-concurrent-1788447139127",
+      "userUid": "user-concurrent-1788447139127",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.127Z",
+      "updatedAt": "2026-09-03T14:52:19.127Z"
+    },
+    "user-streak-1788447139129": {
+      "ownerUid": "user-streak-1788447139129",
+      "userUid": "user-streak-1788447139129",
+      "balance": 30,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.129Z",
+      "updatedAt": "2026-09-03T14:52:19.132Z"
+    },
+    "user-streak-break-1788447139140": {
+      "ownerUid": "user-streak-break-1788447139140",
+      "userUid": "user-streak-break-1788447139140",
+      "balance": 25,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.140Z",
+      "updatedAt": "2026-09-03T14:52:19.144Z"
+    },
+    "user-spend-1788447139145": {
+      "ownerUid": "user-spend-1788447139145",
+      "userUid": "user-spend-1788447139145",
+      "balance": 10,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.145Z",
+      "updatedAt": "2026-09-03T14:52:19.146Z"
+    },
+    "user-audit-chain-1788447139147": {
+      "ownerUid": "user-audit-chain-1788447139147",
+      "userUid": "user-audit-chain-1788447139147",
+      "balance": 10,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.147Z",
+      "updatedAt": "2026-09-03T14:52:19.153Z"
+    },
+    "user-persist-1788447139155": {
+      "ownerUid": "user-persist-1788447139155",
+      "userUid": "user-persist-1788447139155",
+      "balance": 20,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:19.155Z",
+      "updatedAt": "2026-09-03T14:52:19.157Z"
+    },
+    "user-test-zero-1788447173294": {
+      "ownerUid": "user-test-zero-1788447173294",
+      "userUid": "user-test-zero-1788447173294",
+      "balance": 0,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.295Z",
+      "updatedAt": "2026-09-03T14:52:53.295Z"
+    },
+    "user-claim-1-1788447173297": {
+      "ownerUid": "user-claim-1-1788447173297",
+      "userUid": "user-claim-1-1788447173297",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.297Z",
+      "updatedAt": "2026-09-03T14:52:53.297Z"
+    },
+    "user-dup-claim-1788447173300": {
+      "ownerUid": "user-dup-claim-1788447173300",
+      "userUid": "user-dup-claim-1788447173300",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.300Z",
+      "updatedAt": "2026-09-03T14:52:53.300Z"
+    },
+    "user-concurrent-1788447173301": {
+      "ownerUid": "user-concurrent-1788447173301",
+      "userUid": "user-concurrent-1788447173301",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.302Z",
+      "updatedAt": "2026-09-03T14:52:53.302Z"
+    },
+    "user-streak-1788447173304": {
+      "ownerUid": "user-streak-1788447173304",
+      "userUid": "user-streak-1788447173304",
+      "balance": 30,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.305Z",
+      "updatedAt": "2026-09-03T14:52:53.310Z"
+    },
+    "user-streak-break-1788447173313": {
+      "ownerUid": "user-streak-break-1788447173313",
+      "userUid": "user-streak-break-1788447173313",
+      "balance": 25,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.313Z",
+      "updatedAt": "2026-09-03T14:52:53.318Z"
+    },
+    "user-spend-1788447173320": {
+      "ownerUid": "user-spend-1788447173320",
+      "userUid": "user-spend-1788447173320",
+      "balance": 6,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.320Z",
+      "updatedAt": "2026-09-03T14:52:53.324Z"
+    },
+    "user-audit-chain-1788447173327": {
+      "ownerUid": "user-audit-chain-1788447173327",
+      "userUid": "user-audit-chain-1788447173327",
+      "balance": 10,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.327Z",
+      "updatedAt": "2026-09-03T14:52:53.334Z"
+    },
+    "user-persist-1788447173335": {
+      "ownerUid": "user-persist-1788447173335",
+      "userUid": "user-persist-1788447173335",
+      "balance": 20,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:52:53.335Z",
+      "updatedAt": "2026-09-03T14:52:53.339Z"
+    },
+    "user-test-zero-1788447187923": {
+      "ownerUid": "user-test-zero-1788447187923",
+      "userUid": "user-test-zero-1788447187923",
+      "balance": 0,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.925Z",
+      "updatedAt": "2026-09-03T14:53:07.925Z"
+    },
+    "user-claim-1-1788447187926": {
+      "ownerUid": "user-claim-1-1788447187926",
+      "userUid": "user-claim-1-1788447187926",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.927Z",
+      "updatedAt": "2026-09-03T14:53:07.927Z"
+    },
+    "user-dup-claim-1788447187930": {
+      "ownerUid": "user-dup-claim-1788447187930",
+      "userUid": "user-dup-claim-1788447187930",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.930Z",
+      "updatedAt": "2026-09-03T14:53:07.930Z"
+    },
+    "user-concurrent-1788447187932": {
+      "ownerUid": "user-concurrent-1788447187932",
+      "userUid": "user-concurrent-1788447187932",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.933Z",
+      "updatedAt": "2026-09-03T14:53:07.933Z"
+    },
+    "user-streak-1788447187935": {
+      "ownerUid": "user-streak-1788447187935",
+      "userUid": "user-streak-1788447187935",
+      "balance": 30,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.935Z",
+      "updatedAt": "2026-09-03T14:53:07.946Z"
+    },
+    "user-streak-break-1788447187950": {
+      "ownerUid": "user-streak-break-1788447187950",
+      "userUid": "user-streak-break-1788447187950",
+      "balance": 25,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.950Z",
+      "updatedAt": "2026-09-03T14:53:07.960Z"
+    },
+    "user-spend-1788447187963": {
+      "ownerUid": "user-spend-1788447187963",
+      "userUid": "user-spend-1788447187963",
+      "balance": 6,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.963Z",
+      "updatedAt": "2026-09-03T14:53:07.971Z"
+    },
+    "user-audit-chain-1788447187974": {
+      "ownerUid": "user-audit-chain-1788447187974",
+      "userUid": "user-audit-chain-1788447187974",
+      "balance": 10,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.974Z",
+      "updatedAt": "2026-09-03T14:53:07.989Z"
+    },
+    "user-persist-1788447187993": {
+      "ownerUid": "user-persist-1788447187993",
+      "userUid": "user-persist-1788447187993",
+      "balance": 20,
+      "plan": "free",
+      "createdAt": "2026-09-03T14:53:07.993Z",
+      "updatedAt": "2026-09-03T14:53:08.000Z"
+    },
+    "test_uid_fresh_1788516446328": {
+      "ownerUid": "test_uid_fresh_1788516446328",
+      "userUid": "test_uid_fresh_1788516446328",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-04T10:07:26.338Z",
+      "updatedAt": "2026-09-04T10:07:26.338Z"
+    },
+    "test_uid_fresh_1788516745119": {
+      "ownerUid": "test_uid_fresh_1788516745119",
+      "userUid": "test_uid_fresh_1788516745119",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-04T10:12:25.121Z",
+      "updatedAt": "2026-09-04T10:12:25.121Z"
+    },
+    "test_uid_fresh_1788517179039": {
+      "ownerUid": "test_uid_fresh_1788517179039",
+      "userUid": "test_uid_fresh_1788517179039",
+      "balance": 5,
+      "plan": "free",
+      "createdAt": "2026-09-04T10:19:39.042Z",
+      "updatedAt": "2026-09-04T10:19:39.042Z"
+    }
+  },
+  "ledger": {
+    "test_uid_alpha": [
+      {
+        "id": "ledg-1788517179031-1krjh",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "type": "credit",
+        "category": "COUPON_BENEFIT",
+        "source": "ADJUSTMENT",
+        "amount": 15,
+        "balanceBefore": 51,
+        "balanceAfter": 66,
+        "referenceId": "ORB-TEST-1788517179023",
+        "description": "Benefício Cupom ORB-TEST-1788517179023 (Saque 1/1)",
+        "createdAt": "2026-09-04T10:19:39.031Z",
+        "timestamp": "2026-09-04T10:19:39.031Z"
+      },
+      {
+        "id": "ledg-1788517179016-0ziuv",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 1,
+        "balanceBefore": 52,
+        "balanceAfter": 51,
+        "referenceId": "catalog-item",
+        "description": "Test catalog access",
+        "createdAt": "2026-09-04T10:19:39.016Z",
+        "timestamp": "2026-09-04T10:19:39.016Z"
+      },
+      {
+        "id": "ledg-1788516745110-88i2o",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "type": "credit",
+        "category": "COUPON_BENEFIT",
+        "source": "ADJUSTMENT",
+        "amount": 15,
+        "balanceBefore": 37,
+        "balanceAfter": 52,
+        "referenceId": "ORB-TEST-1788516745102",
+        "description": "Benefício Cupom ORB-TEST-1788516745102 (Saque 1/1)",
+        "createdAt": "2026-09-04T10:12:25.110Z",
+        "timestamp": "2026-09-04T10:12:25.110Z"
+      },
+      {
+        "id": "ledg-1788516745093-mr3cg",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 1,
+        "balanceBefore": 38,
+        "balanceAfter": 37,
+        "referenceId": "catalog-item",
+        "description": "Test catalog access",
+        "createdAt": "2026-09-04T10:12:25.093Z",
+        "timestamp": "2026-09-04T10:12:25.093Z"
+      },
+      {
+        "id": "ledg-1788516446314-vwza7",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "type": "credit",
+        "category": "COUPON_BENEFIT",
+        "source": "ADJUSTMENT",
+        "amount": 15,
+        "balanceBefore": 23,
+        "balanceAfter": 38,
+        "referenceId": "ORB-TEST-1788516446302",
+        "description": "Benefício Cupom ORB-TEST-1788516446302 (Saque 1/1)",
+        "createdAt": "2026-09-04T10:07:26.314Z",
+        "timestamp": "2026-09-04T10:07:26.314Z"
+      },
+      {
+        "id": "ledg-1788516446285-j9v9i",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 1,
+        "balanceBefore": 24,
+        "balanceAfter": 23,
+        "referenceId": "catalog-item",
+        "description": "Test catalog access",
+        "createdAt": "2026-09-04T10:07:26.285Z",
+        "timestamp": "2026-09-04T10:07:26.285Z"
+      },
+      {
+        "id": "ledg-1788446094341-qut75",
+        "userUid": "test_uid_alpha",
+        "type": "CREDIT_GRANT",
+        "category": "COUPON_BENEFIT",
+        "amount": 15,
+        "balanceBefore": 9,
+        "balanceAfter": 24,
+        "referenceId": "ORB-TEST-1788446094332",
+        "description": "Benefício Cupom ORB-TEST-1788446094332 (Saque 1/1)",
+        "createdAt": "2026-09-03T14:34:54.341Z",
+        "timestamp": "2026-09-03T14:34:54.341Z"
+      },
+      {
+        "id": "ledg-1788446094326-1c98g",
+        "userUid": "test_uid_alpha",
+        "type": "CREDIT_CONSUMPTION",
+        "category": "ITEM_UNLOCK",
+        "amount": -1,
+        "balanceBefore": 10,
+        "balanceAfter": 9,
+        "referenceId": "catalog-item",
+        "description": "Test catalog access",
+        "createdAt": "2026-09-03T14:34:54.326Z",
+        "timestamp": "2026-09-03T14:34:54.326Z"
+      },
+      {
+        "id": "tx-init-1788446094092-8j2a",
+        "userUid": "test_uid_alpha",
+        "amount": 10,
+        "balanceAfter": 10,
+        "type": "CREDIT",
+        "category": "INITIAL_ONBOARDING",
+        "description": "Créditos iniciais de boas-vindas ORBIE",
+        "timestamp": "2026-09-03T14:34:54.092Z"
+      }
+    ],
+    "test_uid_fresh_1788446094347": [
+      {
+        "id": "ledg-1788446094351-rc6u5",
+        "userUid": "test_uid_fresh_1788446094347",
+        "type": "CREDIT_GRANT",
+        "category": "DAILY_BASE",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "2026-09-03",
+        "description": "Créditos diários base (2026-09-03)",
+        "createdAt": "2026-09-03T14:34:54.351Z",
+        "timestamp": "2026-09-03T14:34:54.351Z"
+      },
+      {
+        "id": "tx-init-1788446094351-rrst",
+        "userUid": "test_uid_fresh_1788446094347",
+        "amount": 10,
+        "balanceAfter": 10,
+        "type": "CREDIT",
+        "category": "INITIAL_ONBOARDING",
+        "description": "Créditos iniciais de boas-vindas ORBIE",
+        "timestamp": "2026-09-03T14:34:54.351Z"
+      }
+    ],
+    "user-claim-1-1788447139122": [
+      {
+        "id": "ledg-1788447139125-ot32j",
+        "ownerUid": "user-claim-1-1788447139122",
+        "userUid": "user-claim-1-1788447139122",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.125Z",
+        "timestamp": "2026-09-03T14:52:19.125Z"
+      }
+    ],
+    "user-dup-claim-1788447139126": [
+      {
+        "id": "ledg-1788447139126-grjg3",
+        "ownerUid": "user-dup-claim-1788447139126",
+        "userUid": "user-dup-claim-1788447139126",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.126Z",
+        "timestamp": "2026-09-03T14:52:19.126Z"
+      }
+    ],
+    "user-concurrent-1788447139127": [
+      {
+        "id": "ledg-1788447139127-4fcnh",
+        "ownerUid": "user-concurrent-1788447139127",
+        "userUid": "user-concurrent-1788447139127",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "idempotencyKey": "req-0-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.127Z",
+        "timestamp": "2026-09-03T14:52:19.127Z"
+      }
+    ],
+    "user-streak-1788447139129": [
+      {
+        "id": "ledg-1788447139132-odxi8",
+        "ownerUid": "user-streak-1788447139129",
+        "userUid": "user-streak-1788447139129",
+        "type": "CREDIT",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 25,
+        "balanceAfter": 30,
+        "referenceId": "claim-2026-09-04-streak",
+        "description": "Bônus de streak (4 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 4,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:19.132Z",
+        "timestamp": "2026-09-03T14:52:19.132Z"
+      },
+      {
+        "id": "ledg-1788447139132-3a8cu",
+        "ownerUid": "user-streak-1788447139129",
+        "userUid": "user-streak-1788447139129",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 20,
+        "balanceAfter": 25,
+        "referenceId": "claim-2026-09-04-base",
+        "description": "Crédito diário da plataforma (2026-09-04)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.132Z",
+        "timestamp": "2026-09-03T14:52:19.132Z"
+      },
+      {
+        "id": "ledg-1788447139131-1y0gz",
+        "ownerUid": "user-streak-1788447139129",
+        "userUid": "user-streak-1788447139129",
+        "type": "CREDIT",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:19.131Z",
+        "timestamp": "2026-09-03T14:52:19.131Z"
+      },
+      {
+        "id": "ledg-1788447139131-816xb",
+        "ownerUid": "user-streak-1788447139129",
+        "userUid": "user-streak-1788447139129",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.131Z",
+        "timestamp": "2026-09-03T14:52:19.131Z"
+      },
+      {
+        "id": "ledg-1788447139130-0zal5",
+        "ownerUid": "user-streak-1788447139129",
+        "userUid": "user-streak-1788447139129",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.130Z",
+        "timestamp": "2026-09-03T14:52:19.130Z"
+      },
+      {
+        "id": "ledg-1788447139129-stmvo",
+        "ownerUid": "user-streak-1788447139129",
+        "userUid": "user-streak-1788447139129",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.129Z",
+        "timestamp": "2026-09-03T14:52:19.129Z"
+      }
+    ],
+    "user-streak-break-1788447139140": [
+      {
+        "id": "ledg-1788447139144-avnzo",
+        "ownerUid": "user-streak-break-1788447139140",
+        "userUid": "user-streak-break-1788447139140",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 20,
+        "balanceAfter": 25,
+        "referenceId": "claim-2026-09-05-base",
+        "description": "Crédito diário da plataforma (2026-09-05)",
+        "metadata": {
+          "periodDate": "2026-09-05",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.144Z",
+        "timestamp": "2026-09-03T14:52:19.144Z"
+      },
+      {
+        "id": "ledg-1788447139143-t97ug",
+        "ownerUid": "user-streak-break-1788447139140",
+        "userUid": "user-streak-break-1788447139140",
+        "type": "CREDIT",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:19.143Z",
+        "timestamp": "2026-09-03T14:52:19.143Z"
+      },
+      {
+        "id": "ledg-1788447139143-hpnqt",
+        "ownerUid": "user-streak-break-1788447139140",
+        "userUid": "user-streak-break-1788447139140",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.143Z",
+        "timestamp": "2026-09-03T14:52:19.143Z"
+      },
+      {
+        "id": "ledg-1788447139142-0ihsi",
+        "ownerUid": "user-streak-break-1788447139140",
+        "userUid": "user-streak-break-1788447139140",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.142Z",
+        "timestamp": "2026-09-03T14:52:19.142Z"
+      },
+      {
+        "id": "ledg-1788447139140-unlrg",
+        "ownerUid": "user-streak-break-1788447139140",
+        "userUid": "user-streak-break-1788447139140",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.140Z",
+        "timestamp": "2026-09-03T14:52:19.140Z"
+      }
+    ],
+    "user-spend-1788447139145": [
+      {
+        "id": "ledg-1788447139146-seh7e",
+        "ownerUid": "user-spend-1788447139145",
+        "userUid": "user-spend-1788447139145",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.146Z",
+        "timestamp": "2026-09-03T14:52:19.146Z"
+      },
+      {
+        "id": "ledg-1788447139145-mpm7d",
+        "ownerUid": "user-spend-1788447139145",
+        "userUid": "user-spend-1788447139145",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.145Z",
+        "timestamp": "2026-09-03T14:52:19.145Z"
+      }
+    ],
+    "user-audit-chain-1788447139147": [
+      {
+        "id": "ledg-1788447139154-7az5i",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "type": "DEBIT",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": -7,
+        "balanceBefore": 17,
+        "balanceAfter": 10,
+        "referenceId": "neuro-soundscape",
+        "description": "Neuroacústica",
+        "createdAt": "2026-09-03T14:52:19.153Z",
+        "timestamp": "2026-09-03T14:52:19.153Z"
+      },
+      {
+        "id": "ledg-1788447139150-fpkx9",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "type": "CREDIT",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 12,
+        "balanceAfter": 17,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:19.150Z",
+        "timestamp": "2026-09-03T14:52:19.150Z"
+      },
+      {
+        "id": "ledg-1788447139150-s1s74",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 7,
+        "balanceAfter": 12,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.150Z",
+        "timestamp": "2026-09-03T14:52:19.150Z"
+      },
+      {
+        "id": "ledg-1788447139149-om3wc",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "type": "DEBIT",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": -3,
+        "balanceBefore": 10,
+        "balanceAfter": 7,
+        "referenceId": "synastry-item",
+        "description": "Sinastria",
+        "createdAt": "2026-09-03T14:52:19.149Z",
+        "timestamp": "2026-09-03T14:52:19.149Z"
+      },
+      {
+        "id": "ledg-1788447139149-y46j3",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.149Z",
+        "timestamp": "2026-09-03T14:52:19.149Z"
+      },
+      {
+        "id": "ledg-1788447139147-6g6r8",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.147Z",
+        "timestamp": "2026-09-03T14:52:19.147Z"
+      }
+    ],
+    "user-persist-1788447139155": [
+      {
+        "id": "ledg-1788447139157-abkff",
+        "ownerUid": "user-persist-1788447139155",
+        "userUid": "user-persist-1788447139155",
+        "type": "CREDIT",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:19.157Z",
+        "timestamp": "2026-09-03T14:52:19.157Z"
+      },
+      {
+        "id": "ledg-1788447139157-5ge82",
+        "ownerUid": "user-persist-1788447139155",
+        "userUid": "user-persist-1788447139155",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.157Z",
+        "timestamp": "2026-09-03T14:52:19.157Z"
+      },
+      {
+        "id": "ledg-1788447139156-36wdr",
+        "ownerUid": "user-persist-1788447139155",
+        "userUid": "user-persist-1788447139155",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.156Z",
+        "timestamp": "2026-09-03T14:52:19.156Z"
+      },
+      {
+        "id": "ledg-1788447139155-77bxb",
+        "ownerUid": "user-persist-1788447139155",
+        "userUid": "user-persist-1788447139155",
+        "type": "CREDIT",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:19.155Z",
+        "timestamp": "2026-09-03T14:52:19.155Z"
+      }
+    ],
+    "user-claim-1-1788447173297": [
+      {
+        "id": "ledg-1788447173297-8jnh5",
+        "ownerUid": "user-claim-1-1788447173297",
+        "userUid": "user-claim-1-1788447173297",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.297Z",
+        "timestamp": "2026-09-03T14:52:53.297Z"
+      }
+    ],
+    "user-dup-claim-1788447173300": [
+      {
+        "id": "ledg-1788447173300-7n9do",
+        "ownerUid": "user-dup-claim-1788447173300",
+        "userUid": "user-dup-claim-1788447173300",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.300Z",
+        "timestamp": "2026-09-03T14:52:53.300Z"
+      }
+    ],
+    "user-concurrent-1788447173301": [
+      {
+        "id": "ledg-1788447173302-qfovg",
+        "ownerUid": "user-concurrent-1788447173301",
+        "userUid": "user-concurrent-1788447173301",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "idempotencyKey": "req-0-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.302Z",
+        "timestamp": "2026-09-03T14:52:53.302Z"
+      }
+    ],
+    "user-streak-1788447173304": [
+      {
+        "id": "ledg-1788447173310-w8z52",
+        "ownerUid": "user-streak-1788447173304",
+        "userUid": "user-streak-1788447173304",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 25,
+        "balanceAfter": 30,
+        "referenceId": "claim-2026-09-04-streak",
+        "description": "Bônus de streak (4 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 4,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:53.310Z",
+        "timestamp": "2026-09-03T14:52:53.310Z"
+      },
+      {
+        "id": "ledg-1788447173310-oqw7m",
+        "ownerUid": "user-streak-1788447173304",
+        "userUid": "user-streak-1788447173304",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 20,
+        "balanceAfter": 25,
+        "referenceId": "claim-2026-09-04-base",
+        "description": "Crédito diário da plataforma (2026-09-04)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.310Z",
+        "timestamp": "2026-09-03T14:52:53.310Z"
+      },
+      {
+        "id": "ledg-1788447173308-gs6ws",
+        "ownerUid": "user-streak-1788447173304",
+        "userUid": "user-streak-1788447173304",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:53.308Z",
+        "timestamp": "2026-09-03T14:52:53.308Z"
+      },
+      {
+        "id": "ledg-1788447173308-20ojh",
+        "ownerUid": "user-streak-1788447173304",
+        "userUid": "user-streak-1788447173304",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.308Z",
+        "timestamp": "2026-09-03T14:52:53.308Z"
+      },
+      {
+        "id": "ledg-1788447173307-bkets",
+        "ownerUid": "user-streak-1788447173304",
+        "userUid": "user-streak-1788447173304",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.306Z",
+        "timestamp": "2026-09-03T14:52:53.306Z"
+      },
+      {
+        "id": "ledg-1788447173305-ejb14",
+        "ownerUid": "user-streak-1788447173304",
+        "userUid": "user-streak-1788447173304",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.305Z",
+        "timestamp": "2026-09-03T14:52:53.305Z"
+      }
+    ],
+    "user-streak-break-1788447173313": [
+      {
+        "id": "ledg-1788447173318-6fko2",
+        "ownerUid": "user-streak-break-1788447173313",
+        "userUid": "user-streak-break-1788447173313",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 20,
+        "balanceAfter": 25,
+        "referenceId": "claim-2026-09-05-base",
+        "description": "Crédito diário da plataforma (2026-09-05)",
+        "metadata": {
+          "periodDate": "2026-09-05",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.318Z",
+        "timestamp": "2026-09-03T14:52:53.318Z"
+      },
+      {
+        "id": "ledg-1788447173317-vgfzx",
+        "ownerUid": "user-streak-break-1788447173313",
+        "userUid": "user-streak-break-1788447173313",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:53.317Z",
+        "timestamp": "2026-09-03T14:52:53.317Z"
+      },
+      {
+        "id": "ledg-1788447173317-4oo0e",
+        "ownerUid": "user-streak-break-1788447173313",
+        "userUid": "user-streak-break-1788447173313",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.317Z",
+        "timestamp": "2026-09-03T14:52:53.317Z"
+      },
+      {
+        "id": "ledg-1788447173315-0sxxe",
+        "ownerUid": "user-streak-break-1788447173313",
+        "userUid": "user-streak-break-1788447173313",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.315Z",
+        "timestamp": "2026-09-03T14:52:53.315Z"
+      },
+      {
+        "id": "ledg-1788447173313-eiel1",
+        "ownerUid": "user-streak-break-1788447173313",
+        "userUid": "user-streak-break-1788447173313",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.313Z",
+        "timestamp": "2026-09-03T14:52:53.313Z"
+      }
+    ],
+    "user-spend-1788447173320": [
+      {
+        "id": "ledg-1788447173324-41wob",
+        "ownerUid": "user-spend-1788447173320",
+        "userUid": "user-spend-1788447173320",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 4,
+        "balanceBefore": 10,
+        "balanceAfter": 6,
+        "referenceId": "astrological-chart-deep",
+        "description": "Mapa Astral Profundo",
+        "createdAt": "2026-09-03T14:52:53.324Z",
+        "timestamp": "2026-09-03T14:52:53.324Z"
+      },
+      {
+        "id": "ledg-1788447173323-9po95",
+        "ownerUid": "user-spend-1788447173320",
+        "userUid": "user-spend-1788447173320",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.323Z",
+        "timestamp": "2026-09-03T14:52:53.323Z"
+      },
+      {
+        "id": "ledg-1788447173320-g59wr",
+        "ownerUid": "user-spend-1788447173320",
+        "userUid": "user-spend-1788447173320",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.320Z",
+        "timestamp": "2026-09-03T14:52:53.320Z"
+      }
+    ],
+    "user-audit-chain-1788447173327": [
+      {
+        "id": "ledg-1788447173334-750g6",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 7,
+        "balanceBefore": 17,
+        "balanceAfter": 10,
+        "referenceId": "neuro-soundscape",
+        "description": "Neuroacústica",
+        "createdAt": "2026-09-03T14:52:53.334Z",
+        "timestamp": "2026-09-03T14:52:53.334Z"
+      },
+      {
+        "id": "ledg-1788447173332-2m3gl",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 12,
+        "balanceAfter": 17,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:53.332Z",
+        "timestamp": "2026-09-03T14:52:53.332Z"
+      },
+      {
+        "id": "ledg-1788447173332-odf2e",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 7,
+        "balanceAfter": 12,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.332Z",
+        "timestamp": "2026-09-03T14:52:53.332Z"
+      },
+      {
+        "id": "ledg-1788447173331-3x75c",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 3,
+        "balanceBefore": 10,
+        "balanceAfter": 7,
+        "referenceId": "synastry-item",
+        "description": "Sinastria",
+        "createdAt": "2026-09-03T14:52:53.331Z",
+        "timestamp": "2026-09-03T14:52:53.331Z"
+      },
+      {
+        "id": "ledg-1788447173329-lusb4",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.329Z",
+        "timestamp": "2026-09-03T14:52:53.329Z"
+      },
+      {
+        "id": "ledg-1788447173327-b87bs",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.327Z",
+        "timestamp": "2026-09-03T14:52:53.327Z"
+      }
+    ],
+    "user-persist-1788447173335": [
+      {
+        "id": "ledg-1788447173339-1ptn7",
+        "ownerUid": "user-persist-1788447173335",
+        "userUid": "user-persist-1788447173335",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:52:53.339Z",
+        "timestamp": "2026-09-03T14:52:53.339Z"
+      },
+      {
+        "id": "ledg-1788447173339-cboj9",
+        "ownerUid": "user-persist-1788447173335",
+        "userUid": "user-persist-1788447173335",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.339Z",
+        "timestamp": "2026-09-03T14:52:53.339Z"
+      },
+      {
+        "id": "ledg-1788447173337-3ukxz",
+        "ownerUid": "user-persist-1788447173335",
+        "userUid": "user-persist-1788447173335",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.337Z",
+        "timestamp": "2026-09-03T14:52:53.337Z"
+      },
+      {
+        "id": "ledg-1788447173335-ugj08",
+        "ownerUid": "user-persist-1788447173335",
+        "userUid": "user-persist-1788447173335",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:52:53.335Z",
+        "timestamp": "2026-09-03T14:52:53.335Z"
+      }
+    ],
+    "user-claim-1-1788447187926": [
+      {
+        "id": "ledg-1788447187927-3num2",
+        "ownerUid": "user-claim-1-1788447187926",
+        "userUid": "user-claim-1-1788447187926",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.927Z",
+        "timestamp": "2026-09-03T14:53:07.927Z"
+      }
+    ],
+    "user-dup-claim-1788447187930": [
+      {
+        "id": "ledg-1788447187930-80lhy",
+        "ownerUid": "user-dup-claim-1788447187930",
+        "userUid": "user-dup-claim-1788447187930",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.930Z",
+        "timestamp": "2026-09-03T14:53:07.930Z"
+      }
+    ],
+    "user-concurrent-1788447187932": [
+      {
+        "id": "ledg-1788447187933-2ox5i",
+        "ownerUid": "user-concurrent-1788447187932",
+        "userUid": "user-concurrent-1788447187932",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "idempotencyKey": "req-0-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.933Z",
+        "timestamp": "2026-09-03T14:53:07.933Z"
+      }
+    ],
+    "user-streak-1788447187935": [
+      {
+        "id": "ledg-1788447187946-6k4tp",
+        "ownerUid": "user-streak-1788447187935",
+        "userUid": "user-streak-1788447187935",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 25,
+        "balanceAfter": 30,
+        "referenceId": "claim-2026-09-04-streak",
+        "description": "Bônus de streak (4 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 4,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:53:07.946Z",
+        "timestamp": "2026-09-03T14:53:07.946Z"
+      },
+      {
+        "id": "ledg-1788447187946-bc5jb",
+        "ownerUid": "user-streak-1788447187935",
+        "userUid": "user-streak-1788447187935",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 20,
+        "balanceAfter": 25,
+        "referenceId": "claim-2026-09-04-base",
+        "description": "Crédito diário da plataforma (2026-09-04)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.946Z",
+        "timestamp": "2026-09-03T14:53:07.946Z"
+      },
+      {
+        "id": "ledg-1788447187942-q9klu",
+        "ownerUid": "user-streak-1788447187935",
+        "userUid": "user-streak-1788447187935",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:53:07.942Z",
+        "timestamp": "2026-09-03T14:53:07.942Z"
+      },
+      {
+        "id": "ledg-1788447187942-f49j0",
+        "ownerUid": "user-streak-1788447187935",
+        "userUid": "user-streak-1788447187935",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.942Z",
+        "timestamp": "2026-09-03T14:53:07.942Z"
+      },
+      {
+        "id": "ledg-1788447187939-jpphf",
+        "ownerUid": "user-streak-1788447187935",
+        "userUid": "user-streak-1788447187935",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.939Z",
+        "timestamp": "2026-09-03T14:53:07.939Z"
+      },
+      {
+        "id": "ledg-1788447187935-o3baa",
+        "ownerUid": "user-streak-1788447187935",
+        "userUid": "user-streak-1788447187935",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.935Z",
+        "timestamp": "2026-09-03T14:53:07.935Z"
+      }
+    ],
+    "user-streak-break-1788447187950": [
+      {
+        "id": "ledg-1788447187960-vxwm6",
+        "ownerUid": "user-streak-break-1788447187950",
+        "userUid": "user-streak-break-1788447187950",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 20,
+        "balanceAfter": 25,
+        "referenceId": "claim-2026-09-05-base",
+        "description": "Crédito diário da plataforma (2026-09-05)",
+        "metadata": {
+          "periodDate": "2026-09-05",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.960Z",
+        "timestamp": "2026-09-03T14:53:07.960Z"
+      },
+      {
+        "id": "ledg-1788447187956-y4zwd",
+        "ownerUid": "user-streak-break-1788447187950",
+        "userUid": "user-streak-break-1788447187950",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:53:07.956Z",
+        "timestamp": "2026-09-03T14:53:07.956Z"
+      },
+      {
+        "id": "ledg-1788447187956-iy3et",
+        "ownerUid": "user-streak-break-1788447187950",
+        "userUid": "user-streak-break-1788447187950",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.956Z",
+        "timestamp": "2026-09-03T14:53:07.956Z"
+      },
+      {
+        "id": "ledg-1788447187954-whjnu",
+        "ownerUid": "user-streak-break-1788447187950",
+        "userUid": "user-streak-break-1788447187950",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.954Z",
+        "timestamp": "2026-09-03T14:53:07.954Z"
+      },
+      {
+        "id": "ledg-1788447187950-qtdno",
+        "ownerUid": "user-streak-break-1788447187950",
+        "userUid": "user-streak-break-1788447187950",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.950Z",
+        "timestamp": "2026-09-03T14:53:07.950Z"
+      }
+    ],
+    "user-spend-1788447187963": [
+      {
+        "id": "ledg-1788447187971-4r9ai",
+        "ownerUid": "user-spend-1788447187963",
+        "userUid": "user-spend-1788447187963",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 4,
+        "balanceBefore": 10,
+        "balanceAfter": 6,
+        "referenceId": "astrological-chart-deep",
+        "description": "Mapa Astral Profundo",
+        "createdAt": "2026-09-03T14:53:07.971Z",
+        "timestamp": "2026-09-03T14:53:07.971Z"
+      },
+      {
+        "id": "ledg-1788447187968-0cs8q",
+        "ownerUid": "user-spend-1788447187963",
+        "userUid": "user-spend-1788447187963",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.968Z",
+        "timestamp": "2026-09-03T14:53:07.968Z"
+      },
+      {
+        "id": "ledg-1788447187963-u0vah",
+        "ownerUid": "user-spend-1788447187963",
+        "userUid": "user-spend-1788447187963",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.963Z",
+        "timestamp": "2026-09-03T14:53:07.963Z"
+      }
+    ],
+    "user-audit-chain-1788447187974": [
+      {
+        "id": "ledg-1788447187989-7w3yq",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 7,
+        "balanceBefore": 17,
+        "balanceAfter": 10,
+        "referenceId": "neuro-soundscape",
+        "description": "Neuroacústica",
+        "createdAt": "2026-09-03T14:53:07.989Z",
+        "timestamp": "2026-09-03T14:53:07.989Z"
+      },
+      {
+        "id": "ledg-1788447187984-dydh8",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 12,
+        "balanceAfter": 17,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:53:07.984Z",
+        "timestamp": "2026-09-03T14:53:07.984Z"
+      },
+      {
+        "id": "ledg-1788447187984-ed9yf",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 7,
+        "balanceAfter": 12,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.984Z",
+        "timestamp": "2026-09-03T14:53:07.984Z"
+      },
+      {
+        "id": "ledg-1788447187981-jpypr",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "type": "debit",
+        "category": "ITEM_UNLOCK",
+        "source": "PURCHASE",
+        "amount": 3,
+        "balanceBefore": 10,
+        "balanceAfter": 7,
+        "referenceId": "synastry-item",
+        "description": "Sinastria",
+        "createdAt": "2026-09-03T14:53:07.981Z",
+        "timestamp": "2026-09-03T14:53:07.981Z"
+      },
+      {
+        "id": "ledg-1788447187979-8v5zv",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.979Z",
+        "timestamp": "2026-09-03T14:53:07.979Z"
+      },
+      {
+        "id": "ledg-1788447187974-oxf6b",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.974Z",
+        "timestamp": "2026-09-03T14:53:07.974Z"
+      }
+    ],
+    "user-persist-1788447187993": [
+      {
+        "id": "ledg-1788447188000-azb2i",
+        "ownerUid": "user-persist-1788447187993",
+        "userUid": "user-persist-1788447187993",
+        "type": "credit",
+        "category": "CHECKIN_STREAK_BONUS",
+        "source": "STREAK",
+        "amount": 5,
+        "balanceBefore": 15,
+        "balanceAfter": 20,
+        "referenceId": "claim-2026-09-03-streak",
+        "description": "Bônus de streak (3 dias consecutivos: +5 ◎)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "currentStreak": 3,
+          "type": "streak"
+        },
+        "createdAt": "2026-09-03T14:53:08.000Z",
+        "timestamp": "2026-09-03T14:53:08.000Z"
+      },
+      {
+        "id": "ledg-1788447188000-bcj3y",
+        "ownerUid": "user-persist-1788447187993",
+        "userUid": "user-persist-1788447187993",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 10,
+        "balanceAfter": 15,
+        "referenceId": "claim-2026-09-03-base",
+        "description": "Crédito diário da plataforma (2026-09-03)",
+        "metadata": {
+          "periodDate": "2026-09-03",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:08.000Z",
+        "timestamp": "2026-09-03T14:53:08.000Z"
+      },
+      {
+        "id": "ledg-1788447187997-f4pbt",
+        "ownerUid": "user-persist-1788447187993",
+        "userUid": "user-persist-1788447187993",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 5,
+        "balanceAfter": 10,
+        "referenceId": "claim-2026-09-02-base",
+        "description": "Crédito diário da plataforma (2026-09-02)",
+        "metadata": {
+          "periodDate": "2026-09-02",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.997Z",
+        "timestamp": "2026-09-03T14:53:07.997Z"
+      },
+      {
+        "id": "ledg-1788447187993-r610a",
+        "ownerUid": "user-persist-1788447187993",
+        "userUid": "user-persist-1788447187993",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-01-base",
+        "description": "Crédito diário da plataforma (2026-09-01)",
+        "metadata": {
+          "periodDate": "2026-09-01",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-03T14:53:07.993Z",
+        "timestamp": "2026-09-03T14:53:07.993Z"
+      }
+    ],
+    "test_uid_fresh_1788516446328": [
+      {
+        "id": "ledg-1788516446338-0yaor",
+        "ownerUid": "test_uid_fresh_1788516446328",
+        "userUid": "test_uid_fresh_1788516446328",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-04-base",
+        "description": "Crédito diário da plataforma (2026-09-04)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-04T10:07:26.338Z",
+        "timestamp": "2026-09-04T10:07:26.338Z"
+      }
+    ],
+    "test_uid_fresh_1788516745119": [
+      {
+        "id": "ledg-1788516745121-ob0en",
+        "ownerUid": "test_uid_fresh_1788516745119",
+        "userUid": "test_uid_fresh_1788516745119",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-04-base",
+        "description": "Crédito diário da plataforma (2026-09-04)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-04T10:12:25.121Z",
+        "timestamp": "2026-09-04T10:12:25.121Z"
+      }
+    ],
+    "test_uid_fresh_1788517179039": [
+      {
+        "id": "ledg-1788517179042-src5h",
+        "ownerUid": "test_uid_fresh_1788517179039",
+        "userUid": "test_uid_fresh_1788517179039",
+        "type": "credit",
+        "category": "DAILY_BASE",
+        "source": "PLATFORM_DAILY",
+        "amount": 5,
+        "balanceBefore": 0,
+        "balanceAfter": 5,
+        "referenceId": "claim-2026-09-04-base",
+        "description": "Crédito diário da plataforma (2026-09-04)",
+        "metadata": {
+          "periodDate": "2026-09-04",
+          "timezone": "America/Sao_Paulo",
+          "type": "base"
+        },
+        "createdAt": "2026-09-04T10:19:39.042Z",
+        "timestamp": "2026-09-04T10:19:39.042Z"
+      }
+    ]
+  },
+  "entitlements": {
+    "test_uid_alpha": [
+      {
+        "id": "ent-1788446094326-kle91",
+        "userUid": "test_uid_alpha",
+        "scopeType": "matrix",
+        "itemCode": "catalog-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:34:54.326Z"
+      },
+      {
+        "id": "ent-1788516446285-tpj9v",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "scopeType": "matrix",
+        "itemCode": "catalog-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-04T10:07:26.285Z"
+      },
+      {
+        "id": "ent-1788516745093-bwg1x",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "scopeType": "matrix",
+        "itemCode": "catalog-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-04T10:12:25.093Z"
+      },
+      {
+        "id": "ent-1788517179016-1gwr2",
+        "ownerUid": "test_uid_alpha",
+        "userUid": "test_uid_alpha",
+        "scopeType": "matrix",
+        "itemCode": "catalog-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-04T10:19:39.016Z"
+      }
+    ],
+    "user-audit-chain-1788447139147": [
+      {
+        "id": "ent-1788447139149-35dpz",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "scopeType": "matrix",
+        "itemCode": "synastry-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:52:19.149Z"
+      },
+      {
+        "id": "ent-1788447139154-754h4",
+        "ownerUid": "user-audit-chain-1788447139147",
+        "userUid": "user-audit-chain-1788447139147",
+        "scopeType": "matrix",
+        "itemCode": "neuro-soundscape",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:52:19.153Z"
+      }
+    ],
+    "user-spend-1788447173320": [
+      {
+        "id": "ent-1788447173324-koj2g",
+        "ownerUid": "user-spend-1788447173320",
+        "userUid": "user-spend-1788447173320",
+        "scopeType": "profile",
+        "scopeId": "prof-123",
+        "itemCode": "astrological-chart-deep",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:52:53.324Z"
+      }
+    ],
+    "user-audit-chain-1788447173327": [
+      {
+        "id": "ent-1788447173331-yhdv2",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "scopeType": "matrix",
+        "itemCode": "synastry-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:52:53.331Z"
+      },
+      {
+        "id": "ent-1788447173334-vuoxw",
+        "ownerUid": "user-audit-chain-1788447173327",
+        "userUid": "user-audit-chain-1788447173327",
+        "scopeType": "matrix",
+        "itemCode": "neuro-soundscape",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:52:53.334Z"
+      }
+    ],
+    "user-spend-1788447187963": [
+      {
+        "id": "ent-1788447187971-60ozj",
+        "ownerUid": "user-spend-1788447187963",
+        "userUid": "user-spend-1788447187963",
+        "scopeType": "profile",
+        "scopeId": "prof-123",
+        "itemCode": "astrological-chart-deep",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:53:07.971Z"
+      }
+    ],
+    "user-audit-chain-1788447187974": [
+      {
+        "id": "ent-1788447187981-l1cr9",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "scopeType": "matrix",
+        "itemCode": "synastry-item",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:53:07.981Z"
+      },
+      {
+        "id": "ent-1788447187989-mwbq4",
+        "ownerUid": "user-audit-chain-1788447187974",
+        "userUid": "user-audit-chain-1788447187974",
+        "scopeType": "matrix",
+        "itemCode": "neuro-soundscape",
+        "source": "CREDIT_REDEMPTION",
+        "unlockedAt": "2026-09-03T14:53:07.989Z"
+      }
+    ]
+  },
+  "campaigns": {
+    "camp-orb-welcome-7d": {
+      "id": "camp-orb-welcome-7d",
+      "title": "Campanha de Boas-Vindas ORBIE 7 Dias",
+      "description": "Receba 5 créditos por dia durante 7 dias (1 saque a cada 24 horas)",
+      "creditsPerWithdrawal": 5,
+      "validityDays": 7,
+      "withdrawalFrequencyHours": 24,
+      "maxUsesPerUser": 7,
+      "startDate": "2026-09-03T10:01:46.825Z",
+      "endDate": "2027-09-04T10:01:46.825Z",
+      "status": "active",
+      "createdAt": "2026-09-04T10:01:46.825Z"
+    },
+    "camp-1788446094336-1yjo": {
+      "title": "Campanha ORB-TEST-1788446094332",
+      "description": "Cupom ORB-TEST-1788446094332",
+      "creditsPerWithdrawal": 15,
+      "validityDays": 30,
+      "withdrawalFrequencyHours": 0,
+      "maxUsesPerUser": 1,
+      "startDate": "2026-09-03T13:34:54.336Z",
+      "endDate": "2026-09-04T14:34:54.332Z",
+      "status": "active",
+      "id": "camp-1788446094336-1yjo",
+      "createdAt": "2026-09-03T14:34:54.336Z"
+    },
+    "camp-1788516446309-x519": {
+      "title": "Campanha ORB-TEST-1788516446302",
+      "description": "Cupom ORB-TEST-1788516446302",
+      "creditsPerWithdrawal": 15,
+      "validityDays": 30,
+      "withdrawalFrequencyHours": 0,
+      "maxUsesPerUser": 1,
+      "startDate": "2026-09-04T09:07:26.308Z",
+      "endDate": "2026-09-05T10:07:26.302Z",
+      "status": "active",
+      "id": "camp-1788516446309-x519",
+      "createdAt": "2026-09-04T10:07:26.309Z"
+    },
+    "camp-1788516745105-wmr1": {
+      "title": "Campanha ORB-TEST-1788516745102",
+      "description": "Cupom ORB-TEST-1788516745102",
+      "creditsPerWithdrawal": 15,
+      "validityDays": 30,
+      "withdrawalFrequencyHours": 0,
+      "maxUsesPerUser": 1,
+      "startDate": "2026-09-04T09:12:25.105Z",
+      "endDate": "2026-09-05T10:12:25.102Z",
+      "status": "active",
+      "id": "camp-1788516745105-wmr1",
+      "createdAt": "2026-09-04T10:12:25.105Z"
+    },
+    "camp-1788517179025-298l": {
+      "title": "Campanha ORB-TEST-1788517179023",
+      "description": "Cupom ORB-TEST-1788517179023",
+      "creditsPerWithdrawal": 15,
+      "validityDays": 30,
+      "withdrawalFrequencyHours": 0,
+      "maxUsesPerUser": 1,
+      "startDate": "2026-09-04T09:19:39.025Z",
+      "endDate": "2026-09-05T10:19:39.023Z",
+      "status": "active",
+      "id": "camp-1788517179025-298l",
+      "createdAt": "2026-09-04T10:19:39.025Z"
+    }
+  },
+  "coupons": {
+    "ORB-WELCOME-7D": {
+      "code": "ORB-WELCOME-7D",
+      "campaignId": "camp-orb-welcome-7d",
+      "qrReference": "qr_ref_orb_7d_welcome_sec99a",
+      "maxTotalRedemptions": 100000,
+      "currentTotalRedemptions": 0,
+      "status": "active",
+      "createdAt": "2026-09-04T10:01:46.827Z"
+    },
+    "ORB-TEST-1788446094332": {
+      "code": "ORB-TEST-1788446094332",
+      "campaignId": "camp-1788446094336-1yjo",
+      "qrReference": "qr_ref_0l72i6gj_1788446094336",
+      "maxTotalRedemptions": 5,
+      "currentTotalRedemptions": 1,
+      "status": "active",
+      "createdAt": "2026-09-03T14:34:54.336Z"
+    },
+    "ORB-TEST-1788516446302": {
+      "code": "ORB-TEST-1788516446302",
+      "campaignId": "camp-1788516446309-x519",
+      "qrReference": "qr_ref_if5zwxlz_1788516446309",
+      "maxTotalRedemptions": 5,
+      "currentTotalRedemptions": 1,
+      "status": "active",
+      "createdAt": "2026-09-04T10:07:26.309Z"
+    },
+    "ORB-TEST-1788516745102": {
+      "code": "ORB-TEST-1788516745102",
+      "campaignId": "camp-1788516745105-wmr1",
+      "qrReference": "qr_ref_izw4iezb_1788516745105",
+      "maxTotalRedemptions": 5,
+      "currentTotalRedemptions": 1,
+      "status": "active",
+      "createdAt": "2026-09-04T10:12:25.105Z"
+    },
+    "ORB-TEST-1788517179023": {
+      "code": "ORB-TEST-1788517179023",
+      "campaignId": "camp-1788517179025-298l",
+      "qrReference": "qr_ref_m6xgq2d0_1788517179025",
+      "maxTotalRedemptions": 5,
+      "currentTotalRedemptions": 1,
+      "status": "active",
+      "createdAt": "2026-09-04T10:19:39.025Z"
+    }
+  },
+  "redemptions": [
+    {
+      "id": "redm-1788446094341-os0f",
+      "couponCode": "ORB-TEST-1788446094332",
+      "campaignId": "camp-1788446094336-1yjo",
+      "userUid": "test_uid_alpha",
+      "withdrawalNumber": 1,
+      "creditsGranted": 15,
+      "redeemedAt": "2026-09-03T14:34:54.341Z",
+      "nextAvailableAt": ""
+    },
+    {
+      "id": "redm-1788516446314-sl3k",
+      "couponCode": "ORB-TEST-1788516446302",
+      "campaignId": "camp-1788516446309-x519",
+      "userUid": "test_uid_alpha",
+      "withdrawalNumber": 1,
+      "creditsGranted": 15,
+      "redeemedAt": "2026-09-04T10:07:26.314Z",
+      "nextAvailableAt": ""
+    },
+    {
+      "id": "redm-1788516745110-p7qg",
+      "couponCode": "ORB-TEST-1788516745102",
+      "campaignId": "camp-1788516745105-wmr1",
+      "userUid": "test_uid_alpha",
+      "withdrawalNumber": 1,
+      "creditsGranted": 15,
+      "redeemedAt": "2026-09-04T10:12:25.110Z",
+      "nextAvailableAt": ""
+    },
+    {
+      "id": "redm-1788517179031-b2k1",
+      "couponCode": "ORB-TEST-1788517179023",
+      "campaignId": "camp-1788517179025-298l",
+      "userUid": "test_uid_alpha",
+      "withdrawalNumber": 1,
+      "creditsGranted": 15,
+      "redeemedAt": "2026-09-04T10:19:39.031Z",
+      "nextAvailableAt": ""
+    }
+  ],
+  "dailyCredits": {
+    "test_uid_alpha": {
+      "userUid": "test_uid_alpha",
+      "lastClaimDate": null,
+      "streakDays": 0,
+      "totalClaimed": 0
+    },
+    "test_uid_fresh_1788446094347": {
+      "userUid": "test_uid_fresh_1788446094347",
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-claim-1-1788447139122": {
+      "userUid": "user-claim-1-1788447139122",
+      "ownerUid": "user-claim-1-1788447139122",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:19.124Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:52:19.124Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-dup-claim-1788447139126": {
+      "userUid": "user-dup-claim-1788447139126",
+      "ownerUid": "user-dup-claim-1788447139126",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:19.126Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:52:19.126Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-concurrent-1788447139127": {
+      "userUid": "user-concurrent-1788447139127",
+      "ownerUid": "user-concurrent-1788447139127",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:19.127Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:52:19.127Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-streak-1788447139129": {
+      "userUid": "user-streak-1788447139129",
+      "ownerUid": "user-streak-1788447139129",
+      "currentStreak": 4,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:52:19.132Z",
+      "lastClaimPeriod": "2026-09-04",
+      "streakStartedAt": "2026-09-03T14:52:19.129Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 30,
+      "lastClaimDate": "2026-09-04",
+      "streakDays": 4,
+      "totalClaimed": 30
+    },
+    "user-streak-break-1788447139140": {
+      "userUid": "user-streak-break-1788447139140",
+      "ownerUid": "user-streak-break-1788447139140",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:19.144Z",
+      "lastClaimPeriod": "2026-09-05",
+      "streakStartedAt": "2026-09-03T14:52:19.144Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 25,
+      "lastClaimDate": "2026-09-05",
+      "streakDays": 1,
+      "totalClaimed": 25
+    },
+    "user-spend-1788447139145": {
+      "userUid": "user-spend-1788447139145",
+      "ownerUid": "user-spend-1788447139145",
+      "currentStreak": 2,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:19.146Z",
+      "lastClaimPeriod": "2026-09-02",
+      "streakStartedAt": "2026-09-03T14:52:19.145Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 10,
+      "lastClaimDate": "2026-09-02",
+      "streakDays": 2,
+      "totalClaimed": 10
+    },
+    "user-audit-chain-1788447139147": {
+      "userUid": "user-audit-chain-1788447139147",
+      "ownerUid": "user-audit-chain-1788447139147",
+      "currentStreak": 3,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:52:19.150Z",
+      "lastClaimPeriod": "2026-09-03",
+      "streakStartedAt": "2026-09-03T14:52:19.147Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 20,
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 3,
+      "totalClaimed": 20
+    },
+    "user-persist-1788447139155": {
+      "userUid": "user-persist-1788447139155",
+      "ownerUid": "user-persist-1788447139155",
+      "currentStreak": 3,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:52:19.157Z",
+      "lastClaimPeriod": "2026-09-03",
+      "streakStartedAt": "2026-09-03T14:52:19.155Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 20,
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 3,
+      "totalClaimed": 20
+    },
+    "user-claim-1-1788447173297": {
+      "userUid": "user-claim-1-1788447173297",
+      "ownerUid": "user-claim-1-1788447173297",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:53.297Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:52:53.297Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-dup-claim-1788447173300": {
+      "userUid": "user-dup-claim-1788447173300",
+      "ownerUid": "user-dup-claim-1788447173300",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:53.300Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:52:53.300Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-concurrent-1788447173301": {
+      "userUid": "user-concurrent-1788447173301",
+      "ownerUid": "user-concurrent-1788447173301",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:53.301Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:52:53.301Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-streak-1788447173304": {
+      "userUid": "user-streak-1788447173304",
+      "ownerUid": "user-streak-1788447173304",
+      "currentStreak": 4,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:52:53.310Z",
+      "lastClaimPeriod": "2026-09-04",
+      "streakStartedAt": "2026-09-03T14:52:53.304Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 30,
+      "lastClaimDate": "2026-09-04",
+      "streakDays": 4,
+      "totalClaimed": 30
+    },
+    "user-streak-break-1788447173313": {
+      "userUid": "user-streak-break-1788447173313",
+      "ownerUid": "user-streak-break-1788447173313",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:53.318Z",
+      "lastClaimPeriod": "2026-09-05",
+      "streakStartedAt": "2026-09-03T14:52:53.318Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 25,
+      "lastClaimDate": "2026-09-05",
+      "streakDays": 1,
+      "totalClaimed": 25
+    },
+    "user-spend-1788447173320": {
+      "userUid": "user-spend-1788447173320",
+      "ownerUid": "user-spend-1788447173320",
+      "currentStreak": 2,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:52:53.322Z",
+      "lastClaimPeriod": "2026-09-02",
+      "streakStartedAt": "2026-09-03T14:52:53.320Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 10,
+      "lastClaimDate": "2026-09-02",
+      "streakDays": 2,
+      "totalClaimed": 10
+    },
+    "user-audit-chain-1788447173327": {
+      "userUid": "user-audit-chain-1788447173327",
+      "ownerUid": "user-audit-chain-1788447173327",
+      "currentStreak": 3,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:52:53.332Z",
+      "lastClaimPeriod": "2026-09-03",
+      "streakStartedAt": "2026-09-03T14:52:53.327Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 20,
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 3,
+      "totalClaimed": 20
+    },
+    "user-persist-1788447173335": {
+      "userUid": "user-persist-1788447173335",
+      "ownerUid": "user-persist-1788447173335",
+      "currentStreak": 3,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:52:53.339Z",
+      "lastClaimPeriod": "2026-09-03",
+      "streakStartedAt": "2026-09-03T14:52:53.335Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 20,
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 3,
+      "totalClaimed": 20
+    },
+    "user-claim-1-1788447187926": {
+      "userUid": "user-claim-1-1788447187926",
+      "ownerUid": "user-claim-1-1788447187926",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:53:07.927Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:53:07.927Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-dup-claim-1788447187930": {
+      "userUid": "user-dup-claim-1788447187930",
+      "ownerUid": "user-dup-claim-1788447187930",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:53:07.930Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:53:07.930Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-concurrent-1788447187932": {
+      "userUid": "user-concurrent-1788447187932",
+      "ownerUid": "user-concurrent-1788447187932",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:53:07.933Z",
+      "lastClaimPeriod": "2026-09-01",
+      "streakStartedAt": "2026-09-03T14:53:07.933Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-01",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "user-streak-1788447187935": {
+      "userUid": "user-streak-1788447187935",
+      "ownerUid": "user-streak-1788447187935",
+      "currentStreak": 4,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:53:07.946Z",
+      "lastClaimPeriod": "2026-09-04",
+      "streakStartedAt": "2026-09-03T14:53:07.935Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 30,
+      "lastClaimDate": "2026-09-04",
+      "streakDays": 4,
+      "totalClaimed": 30
+    },
+    "user-streak-break-1788447187950": {
+      "userUid": "user-streak-break-1788447187950",
+      "ownerUid": "user-streak-break-1788447187950",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:53:07.960Z",
+      "lastClaimPeriod": "2026-09-05",
+      "streakStartedAt": "2026-09-03T14:53:07.960Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 25,
+      "lastClaimDate": "2026-09-05",
+      "streakDays": 1,
+      "totalClaimed": 25
+    },
+    "user-spend-1788447187963": {
+      "userUid": "user-spend-1788447187963",
+      "ownerUid": "user-spend-1788447187963",
+      "currentStreak": 2,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-03T14:53:07.968Z",
+      "lastClaimPeriod": "2026-09-02",
+      "streakStartedAt": "2026-09-03T14:53:07.963Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 10,
+      "lastClaimDate": "2026-09-02",
+      "streakDays": 2,
+      "totalClaimed": 10
+    },
+    "user-audit-chain-1788447187974": {
+      "userUid": "user-audit-chain-1788447187974",
+      "ownerUid": "user-audit-chain-1788447187974",
+      "currentStreak": 3,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:53:07.984Z",
+      "lastClaimPeriod": "2026-09-03",
+      "streakStartedAt": "2026-09-03T14:53:07.974Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 20,
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 3,
+      "totalClaimed": 20
+    },
+    "user-persist-1788447187993": {
+      "userUid": "user-persist-1788447187993",
+      "ownerUid": "user-persist-1788447187993",
+      "currentStreak": 3,
+      "streakActive": true,
+      "lastClaimAt": "2026-09-03T14:53:08.000Z",
+      "lastClaimPeriod": "2026-09-03",
+      "streakStartedAt": "2026-09-03T14:53:07.993Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 20,
+      "lastClaimDate": "2026-09-03",
+      "streakDays": 3,
+      "totalClaimed": 20
+    },
+    "test_uid_fresh_1788516446328": {
+      "userUid": "test_uid_fresh_1788516446328",
+      "ownerUid": "test_uid_fresh_1788516446328",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-04T10:07:26.338Z",
+      "lastClaimPeriod": "2026-09-04",
+      "streakStartedAt": "2026-09-04T10:07:26.338Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-04",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "test_uid_fresh_1788516745119": {
+      "userUid": "test_uid_fresh_1788516745119",
+      "ownerUid": "test_uid_fresh_1788516745119",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-04T10:12:25.121Z",
+      "lastClaimPeriod": "2026-09-04",
+      "streakStartedAt": "2026-09-04T10:12:25.121Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-04",
+      "streakDays": 1,
+      "totalClaimed": 5
+    },
+    "test_uid_fresh_1788517179039": {
+      "userUid": "test_uid_fresh_1788517179039",
+      "ownerUid": "test_uid_fresh_1788517179039",
+      "currentStreak": 1,
+      "streakActive": false,
+      "lastClaimAt": "2026-09-04T10:19:39.042Z",
+      "lastClaimPeriod": "2026-09-04",
+      "streakStartedAt": "2026-09-04T10:19:39.042Z",
+      "timezone": "America/Sao_Paulo",
+      "totalClaimedCredits": 5,
+      "lastClaimDate": "2026-09-04",
+      "streakDays": 1,
+      "totalClaimed": 5
+    }
+  },
+  "notifications": {},
+  "journals": {}
+}
