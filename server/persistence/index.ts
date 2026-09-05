@@ -136,6 +136,28 @@ export const journalRepo = {
   save: async (j: any) => (await getPersistenceAdapter()).journals.save(j),
 };
 
+export const commercialRepo = {
+  getConfig: async () => (await getPersistenceAdapter()).commercial.getConfig(),
+  saveConfig: async (snapshot: any) => (await getPersistenceAdapter()).commercial.saveConfig(snapshot),
+};
+
+export const orderRepo = {
+  get: async (orderId: string) => (await getPersistenceAdapter()).orders.get(orderId),
+  getByProviderReference: async (ref: string) => (await getPersistenceAdapter()).orders.getByProviderReference(ref),
+  findByUser: async (userId: string) => (await getPersistenceAdapter()).orders.findByUser(userId),
+  listAll: async () => (await getPersistenceAdapter()).orders.listAll(),
+  save: async (order: any) => (await getPersistenceAdapter()).orders.save(order),
+};
+
+export const paymentRepo = {
+  get: async (paymentId: string) => (await getPersistenceAdapter()).payments.get(paymentId),
+  getByProviderPaymentId: async (providerPaymentId: string) => (await getPersistenceAdapter()).payments.getByProviderPaymentId(providerPaymentId),
+  findByOrder: async (orderId: string) => (await getPersistenceAdapter()).payments.findByOrder(orderId),
+  save: async (payment: any) => (await getPersistenceAdapter()).payments.save(payment),
+  isEventProcessed: async (eventId: string) => (await getPersistenceAdapter()).payments.isEventProcessed(eventId),
+  markEventProcessed: async (eventId: string) => (await getPersistenceAdapter()).payments.markEventProcessed(eventId),
+};
+
 export {
   DurableFilePersistenceAdapter,
   FirestorePersistenceAdapter,

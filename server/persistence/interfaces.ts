@@ -21,6 +21,8 @@ import {
   NotificationEntity,
   JournalEntryEntity,
   PersistenceStatus,
+  OrderEntity,
+  PaymentEntity,
 } from './types';
 
 export interface IUserRepository {
@@ -99,6 +101,36 @@ export interface IJournalRepository {
   save(entry: JournalEntryEntity): Promise<void>;
 }
 
+export interface CommercialStorageSnapshot {
+  products: any[];
+  regions: any[];
+  dailyCreditRule: any;
+  plans: any[];
+  versions: any[];
+}
+
+export interface ICommercialRepository {
+  getConfig(): Promise<CommercialStorageSnapshot | null>;
+  saveConfig(snapshot: CommercialStorageSnapshot): Promise<void>;
+}
+
+export interface IOrderRepository {
+  get(orderId: string): Promise<OrderEntity | null>;
+  getByProviderReference(ref: string): Promise<OrderEntity | null>;
+  findByUser(userId: string): Promise<OrderEntity[]>;
+  listAll(): Promise<OrderEntity[]>;
+  save(order: OrderEntity): Promise<OrderEntity>;
+}
+
+export interface IPaymentRepository {
+  get(paymentId: string): Promise<PaymentEntity | null>;
+  getByProviderPaymentId(providerPaymentId: string): Promise<PaymentEntity | null>;
+  findByOrder(orderId: string): Promise<PaymentEntity[]>;
+  save(payment: PaymentEntity): Promise<PaymentEntity>;
+  isEventProcessed(eventId: string): Promise<boolean>;
+  markEventProcessed(eventId: string): Promise<void>;
+}
+
 export interface IPersistenceAdapter {
   readonly driver: 'file' | 'firestore' | 'memory';
   readonly isDurable: boolean;
@@ -115,4 +147,7 @@ export interface IPersistenceAdapter {
   readonly dailyCredits: IDailyCreditRepository;
   readonly notifications: INotificationRepository;
   readonly journals: IJournalRepository;
+  readonly commercial: ICommercialRepository;
+  readonly orders: IOrderRepository;
+  readonly payments: IPaymentRepository;
 }

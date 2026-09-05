@@ -1,5 +1,6 @@
 import { walletService, AsyncLock } from '../wallet/walletService';
 import { dailyCreditRepo, profileRepo } from '../../persistence';
+import { commercialService } from '../commercial/commercialService';
 
 export interface DailyCreditStatus {
   canClaimToday: boolean;
@@ -178,9 +179,10 @@ export class DailyCreditService {
         nextStreak = 1;
       }
     }
-    const nextStreakActive = nextStreak >= 3;
-    const baseCredits = 5;
-    const streakBonusCredits = nextStreakActive ? 5 : 0;
+    const rule = await commercialService.getDailyCreditRule();
+    const nextStreakActive = nextStreak >= rule.streakRequiredDays;
+    const baseCredits = rule.baseCredits;
+    const streakBonusCredits = nextStreakActive ? rule.streakBonusCredits : 0;
     const totalAvailableToday = canClaimToday ? baseCredits + streakBonusCredits : 0;
 
     return {
@@ -359,9 +361,10 @@ export class DailyCreditService {
         streakStartedAt = nowISO;
       }
 
-      const streakActive = currentStreak >= 3;
-      const baseCredits = 5;
-      const streakBonus = streakActive ? 5 : 0;
+      const rule = await commercialService.getDailyCreditRule();
+      const streakActive = currentStreak >= rule.streakRequiredDays;
+      const baseCredits = rule.baseCredits;
+      const streakBonus = streakActive ? rule.streakBonusCredits : 0;
       const totalCredits = baseCredits + streakBonus;
 
       // 1. Authoritative grant of base daily credits

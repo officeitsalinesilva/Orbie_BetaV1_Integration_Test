@@ -551,4 +551,202 @@ export const adminApi = {
   async getAuditLogs() {
     return request<{ logs: any[] }>('/admin/audit-logs', { method: 'GET' });
   },
+
+  // Commercial Admin
+  async getCommercialProducts() {
+    return request<{ products: any[] }>('/admin/commercial/products', { method: 'GET' });
+  },
+
+  async getCommercialProduct(id: string) {
+    return request<{ product: any }>(`/admin/commercial/products/${id}`, { method: 'GET' });
+  },
+
+  async createCommercialProduct(product: any) {
+    return request<{ product: any }>('/admin/commercial/products', {
+      method: 'POST',
+      body: JSON.stringify(product),
+    });
+  },
+
+  async updateCommercialProduct(id: string, product: any) {
+    return request<{ product: any }>(`/admin/commercial/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(product),
+    });
+  },
+
+  async updateCommercialProductStatus(id: string, status: string) {
+    return request<{ product: any }>(`/admin/commercial/products/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
+
+  async getCommercialRegions() {
+    return request<{ regions: any[] }>('/admin/commercial/regions', { method: 'GET' });
+  },
+
+  async updateCommercialRegion(code: string, region: any) {
+    return request<{ region: any }>(`/admin/commercial/regions/${code}`, {
+      method: 'PUT',
+      body: JSON.stringify(region),
+    });
+  },
+
+  async getCommercialPlans() {
+    return request<{ plans: any[] }>('/admin/commercial/plans', { method: 'GET' });
+  },
+
+  async updateCommercialPlan(id: string, plan: any) {
+    return request<{ plan: any }>(`/admin/commercial/plans/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(plan),
+    });
+  },
+
+  async getCommercialDailyCredits() {
+    return request<{ rule: any }>('/admin/commercial/daily-credits', { method: 'GET' });
+  },
+
+  async updateCommercialDailyCredits(rule: any) {
+    return request<{ rule: any }>('/admin/commercial/daily-credits', {
+      method: 'PUT',
+      body: JSON.stringify(rule),
+    });
+  },
+
+  async getCommercialVersions(params?: { entityType?: string; entityId?: string }) {
+    const query = new URLSearchParams();
+    if (params?.entityType) query.append('entityType', params.entityType);
+    if (params?.entityId) query.append('entityId', params.entityId);
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return request<{ versions: any[] }>(`/admin/commercial/versions${qs}`, { method: 'GET' });
+  },
+
+  async exportCommercialConfig() {
+    return request<any>('/commercial/config', { method: 'GET' });
+  },
+
+  async importCommercialConfig(config: any) {
+    return request<{ success: boolean; message: string }>('/commercial/config', {
+      method: 'PUT',
+      body: JSON.stringify(config),
+    });
+  },
+
+  async rollbackCommercialVersion(versionId: string) {
+    return request<{ success: boolean; version: any }>(`/commercial/versions/${versionId}/rollback`, {
+      method: 'POST',
+    });
+  },
+
+  async getPaymentOrders() {
+    return request<{ orders: any[] }>('/admin/payments/orders', { method: 'GET' });
+  },
 };
+
+export const commercialApi = {
+  async getCatalog() {
+    return request<{ products: any[] }>('/commercial/catalog', { method: 'GET' });
+  },
+
+  async getProduct(id: string) {
+    return request<{ product: any }>(`/commercial/catalog/${id}`, { method: 'GET' });
+  },
+
+  async getPlans() {
+    return request<{ plans: any[] }>('/commercial/plans', { method: 'GET' });
+  },
+
+  async getDailyCreditsRule() {
+    return request<{ rule: any }>('/commercial/daily-credits/rules', { method: 'GET' });
+  },
+
+  async getQuote(data: {
+    productId: string;
+    detectedCountry?: string;
+    selectedCountry?: string;
+    billingCountry?: string;
+    currencyHint?: string;
+    couponCode?: string;
+  }) {
+    return request<any>('/pricing/quote', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async purchaseWithCredits(productId: string, profileId?: string) {
+    return request<{
+      success: boolean;
+      product: any;
+      creditsDeducted: number;
+      newBalance: number;
+      entitlementGranted: string;
+      message: string;
+    }>('/commercial/purchase-with-credits', {
+      method: 'POST',
+      body: JSON.stringify({ productId, profileId }),
+    });
+  },
+};
+
+export const paymentsApi = {
+  async checkout(data: {
+    quoteId: string;
+    paymentMethodPreference?: 'pix' | 'credit_card' | 'preference';
+    payerEmail?: string;
+    payerName?: string;
+    payerIdentification?: { type: string; number: string };
+    returnUrl?: string;
+    notificationUrl?: string;
+  }) {
+    return request<{
+      orderId: string;
+      productId: string;
+      productName: string;
+      amountInCents: number;
+      currency: string;
+      status: string;
+      provider: string;
+      providerReference?: string;
+      paymentMethod?: string;
+      preference?: {
+        id: string;
+        initPoint: string;
+        sandboxInitPoint?: string;
+      };
+      pix?: {
+        paymentId: string;
+        status: string;
+        qrCode: string;
+        qrCodeBase64: string;
+        ticketUrl?: string;
+        expiresAt?: string;
+      };
+      createdAt: string;
+    }>('/payments/checkout', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getOrder(orderId: string) {
+    return request<{ order: any; payments: any[] }>(`/payments/order/${orderId}`, {
+      method: 'GET',
+    });
+  },
+
+  async getUserOrders() {
+    return request<{ orders: any[] }>('/payments/user/orders', {
+      method: 'GET',
+    });
+  },
+
+  async simulatePaymentApproval(providerPaymentId: string) {
+    return request<any>(`/payments/simulate-approval/${providerPaymentId}`, {
+      method: 'POST',
+    });
+  },
+};
+

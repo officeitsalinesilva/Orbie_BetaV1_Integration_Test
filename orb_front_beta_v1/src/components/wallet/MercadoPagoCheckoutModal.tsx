@@ -17,6 +17,7 @@ import {
   Smartphone,
   Clock,
   RefreshCw,
+  Tag,
 } from 'lucide-react';
 import {
   CurrencyInfo,
@@ -28,6 +29,7 @@ import {
   resolveCountryProfile,
   TIER_DEFINITIONS,
 } from '../../utils/pricingEngine';
+import { commercialApi, paymentsApi } from '../../services/api';
 
 interface Props {
   isOpen: boolean;
@@ -78,6 +80,102 @@ export function MercadoPagoCheckoutModal({
   const [transactionId, setTransactionId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Authoritative Commercial Quote & Provider Reference State (Phase 4G)
+  const [authoritativeQuote, setAuthoritativeQuote] = useState<any | null>(null);
+  const [pixProviderId, setPixProviderId] = useState<string>('');
+
+  // Coupon State (Phase 4G: Quote + Coupon Authority)
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCouponCode, setAppliedCouponCode] = useState('');
+  const [couponError, setCouponError] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  // Determine commercial product code based on checkout intent
+  const resolveProductCode = () => {
+    if (isPlanSubscription) {
+      return 'PLAN-PRO';
+    }
+    if (credits <= 10) return 'CRD-PACK-10';
+    if (credits <= 50) return 'CRD-PACK-50';
+    return 'CRD-PACK-100';
+  };
+
+  const handleApplyCoupon = async () => {
+    const code = couponInput.trim().toUpperCase();
+    if (!code) return;
+    setCouponLoading(true);
+    setCouponError('');
+    try {
+      const prodCode = resolveProductCode();
+      const quote = await commercialApi.getQuote({
+        productId: prodCode,
+        selectedCountry,
+        billingCountry: selectedCountry,
+        couponCode: code,
+      });
+      if (quote) {
+        if (quote.appliedCoupon) {
+          setAuthoritativeQuote(quote);
+          setAppliedCouponCode(quote.appliedCoupon.code);
+          setCouponError('');
+        } else {
+          setCouponError(isEnglish ? 'Coupon not valid for this product or expired.' : 'Cupom inválido para este item ou expirado.');
+        }
+      }
+    } catch (err: any) {
+      setCouponError(err.message || (isEnglish ? 'Failed to apply coupon.' : 'Erro ao aplicar cupom.'));
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    setCouponInput('');
+    setAppliedCouponCode('');
+    setCouponError('');
+    setCouponLoading(true);
+    try {
+      const prodCode = resolveProductCode();
+      const quote = await commercialApi.getQuote({
+        productId: prodCode,
+        selectedCountry,
+        billingCountry: selectedCountry,
+      });
+      if (quote) {
+        setAuthoritativeQuote(quote);
+      }
+    } catch (err) {
+      console.warn('Error resetting quote after coupon removal:', err);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  // Fetch Authoritative Backend PriceQuote whenever modal opens or country/package changes
+  useEffect(() => {
+    if (!isOpen) return;
+    let isCancelled = false;
+    const fetchQuote = async () => {
+      try {
+        const prodCode = resolveProductCode();
+        const quote = await commercialApi.getQuote({
+          productId: prodCode,
+          selectedCountry,
+          billingCountry: selectedCountry,
+        });
+        if (!isCancelled && quote) {
+          setAuthoritativeQuote(quote);
+        }
+      } catch (err) {
+        console.warn('[MercadoPagoCheckoutModal] Could not fetch server quote, relying on pricing engine fallback:', err);
+      }
+    };
+    fetchQuote();
+    return () => {
+      isCancelled = true;
+    };
+  }, [isOpen, selectedCountry, credits, isPlanSubscription]);
+
   // Sync country when prop changes
   useEffect(() => {
     if (country) {
@@ -106,11 +204,21 @@ export function MercadoPagoCheckoutModal({
 
   if (!isOpen) return null;
 
-  // Regional Pricing Calculation
+  // Regional Pricing Calculation (Prioritizes server-authoritative quote when available)
   const calculated = calculateRegionalPrice(credits, selectedCountry);
-  const currentCurrency = calculated.currency;
-  const priceValue = calculated.finalAmount;
-  const formattedPrice = calculated.formattedAmount;
+  const currentCurrency: CurrencyInfo = authoritativeQuote
+    ? {
+        ...calculated.currency,
+        code: authoritativeQuote.currency,
+        symbol: authoritativeQuote.currencySymbol || calculated.currency.symbol,
+      }
+    : calculated.currency;
+  const priceValue = authoritativeQuote
+    ? authoritativeQuote.finalPriceInCents / 100
+    : calculated.finalAmount;
+  const formattedPrice = authoritativeQuote
+    ? `${authoritativeQuote.currencySymbol || (authoritativeQuote.currency === 'BRL' ? 'R$' : '$')} ${(authoritativeQuote.finalPriceInCents / 100).toFixed(2)}`
+    : calculated.formattedAmount;
   const tierInfo = TIER_DEFINITIONS[calculated.tier];
 
   // Format timer mm:ss
@@ -120,32 +228,43 @@ export function MercadoPagoCheckoutModal({
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Generate PIX Payment
+  // Generate PIX Payment (Server-authoritative Order and Payment)
   const handleGeneratePix = async () => {
     setLoading(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/mercadopago/create-pix', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          credits,
-          amount: priceValue,
-          userName,
-          userEmail,
-          cpf,
-        }),
+      let quote = authoritativeQuote;
+      if (!quote) {
+        quote = await commercialApi.getQuote({
+          productId: resolveProductCode(),
+          selectedCountry,
+          billingCountry: selectedCountry,
+        });
+        setAuthoritativeQuote(quote);
+      }
+
+      const checkoutData = await paymentsApi.checkout({
+        quoteId: quote.quoteId,
+        paymentMethodPreference: 'pix',
+        payerEmail: userEmail || 'cliente@orbie.app',
+        payerName: userName || 'Cliente Orbie',
+        payerIdentification: {
+          type: 'CPF',
+          number: (cpf || '').replace(/\D/g, '') || '19119119100',
+        },
       });
 
-      const data = await res.json();
-      setPixCode(data.qrCode || `00020126580014br.gov.bcb.pix0136${Math.random().toString(36).substring(2, 12)}520400005303986540${priceValue}.005802BR5916ORB INTELLIGENCE6009SAO PAULO62070503***6304`);
-      setPixQrBase64(data.qrCodeBase64 || null);
-      setPixTransactionId(data.id || `PIX-${Date.now()}`);
+      const qr = checkoutData.pix?.qrCode || `00020126580014br.gov.bcb.pix0136${Math.random().toString(36).substring(2, 12)}520400005303986540${priceValue.toFixed(2)}5802BR5916ORB INTELLIGENCE6009SAO PAULO62070503***6304`;
+      setPixCode(qr);
+      setPixQrBase64(checkoutData.pix?.qrCodeBase64 || null);
+      setPixTransactionId(checkoutData.orderId);
+      setPixProviderId(checkoutData.pix?.paymentId || checkoutData.providerReference || checkoutData.orderId);
       setStep('pix_screen');
     } catch (err: any) {
       console.error('PIX generation error:', err);
-      // Fallback
-      setPixCode(`00020126580014br.gov.bcb.pix0136${Math.random().toString(36).substring(2, 12)}520400005303986540${priceValue}.005802BR5916ORB INTELLIGENCE6009SAO PAULO62070503***6304`);
+      setErrorMsg(err.message || 'Erro ao gerar PIX');
+      // Fallback for resilient preview
+      setPixCode(`00020126580014br.gov.bcb.pix0136${Math.random().toString(36).substring(2, 12)}520400005303986540${priceValue.toFixed(2)}5802BR5916ORB INTELLIGENCE6009SAO PAULO62070503***6304`);
       setPixTransactionId(`PIX-${Date.now()}`);
       setStep('pix_screen');
     } finally {
@@ -153,35 +272,45 @@ export function MercadoPagoCheckoutModal({
     }
   };
 
-  // Process Credit Card Payment
+  // Process Credit Card Payment (Server-authoritative Order and Payment)
   const handleProcessCardPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/mercadopago/process-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: priceValue,
-          credits,
-          currency: currentCurrency.code,
-          installments: parseInt(installments, 10),
-          cardholderName: cardHolder,
-          userEmail,
-          paymentMethodId: 'credit_card',
-        }),
+      let quote = authoritativeQuote;
+      if (!quote) {
+        quote = await commercialApi.getQuote({
+          productId: resolveProductCode(),
+          selectedCountry,
+          billingCountry: selectedCountry,
+        });
+        setAuthoritativeQuote(quote);
+      }
+
+      const checkoutData = await paymentsApi.checkout({
+        quoteId: quote.quoteId,
+        paymentMethodPreference: 'credit_card',
+        payerEmail: userEmail || 'cliente@orbie.app',
+        payerName: cardHolder || userName || 'Cliente Orbie',
       });
 
-      const data = await res.json();
-      setTransactionId(data.id || `PAY-${Date.now()}`);
+      const orderId = checkoutData.orderId || `ORD-${Date.now()}`;
+      setTransactionId(orderId);
       setStep('processing');
 
-      // Short delay for realistic processing animation
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      // Trigger automatic sandbox payment approval and ledger reconciliation
+      if (checkoutData.providerReference) {
+        try {
+          await paymentsApi.simulatePaymentApproval(checkoutData.providerReference);
+        } catch {
+          // ignore error in simulation
+        }
+      }
 
+      await new Promise((resolve) => setTimeout(resolve, 800));
       setStep('success');
-      onPaymentSuccess(credits, data.id || `PAY-${Date.now()}`, isPlanSubscription);
+      onPaymentSuccess(credits, orderId, isPlanSubscription);
     } catch (err: any) {
       console.error('Card Payment Error:', err);
       const fallbackId = `PAY-${Date.now()}`;
@@ -193,32 +322,43 @@ export function MercadoPagoCheckoutModal({
     }
   };
 
-  // Mercado Pago Checkout Pro (Preference redirect / popup)
+  // Mercado Pago Checkout Pro (Server-authoritative Order & Preference)
   const handleStartMercadoPagoPreference = async () => {
     setLoading(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/mercadopago/create-preference', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          credits,
-          amount: priceValue,
-          currency: currentCurrency.code,
-          userEmail,
-          userName,
-          isPlan: isPlanSubscription,
-        }),
+      let quote = authoritativeQuote;
+      if (!quote) {
+        quote = await commercialApi.getQuote({
+          productId: resolveProductCode(),
+          selectedCountry,
+          billingCountry: selectedCountry,
+        });
+        setAuthoritativeQuote(quote);
+      }
+
+      const checkoutData = await paymentsApi.checkout({
+        quoteId: quote.quoteId,
+        paymentMethodPreference: 'preference',
+        payerEmail: userEmail || 'cliente@orbie.app',
+        payerName: userName || 'Cliente Orbie',
       });
 
-      const data = await res.json();
-      setTransactionId(data.id || `MP-${Date.now()}`);
+      const orderId = checkoutData.orderId || `ORD-${Date.now()}`;
+      setTransactionId(orderId);
       setStep('processing');
 
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      if (checkoutData.providerReference) {
+        try {
+          await paymentsApi.simulatePaymentApproval(checkoutData.providerReference);
+        } catch {
+          // ignore
+        }
+      }
 
+      await new Promise((resolve) => setTimeout(resolve, 800));
       setStep('success');
-      onPaymentSuccess(credits, data.id || `MP-${Date.now()}`, isPlanSubscription);
+      onPaymentSuccess(credits, orderId, isPlanSubscription);
     } catch (err: any) {
       console.error('MP Preference Error:', err);
       const fallbackId = `MP-${Date.now()}`;
@@ -236,9 +376,17 @@ export function MercadoPagoCheckoutModal({
     setTimeout(() => setPixCopied(false), 3000);
   };
 
+  // Authoritative Webhook Trigger on Confirmation
   const handleSimulatePixConfirmation = async () => {
     setLoading(true);
     setStep('processing');
+    try {
+      if (pixProviderId) {
+        await paymentsApi.simulatePaymentApproval(pixProviderId);
+      }
+    } catch (simErr) {
+      console.warn('Simulation webhook execution notice:', simErr);
+    }
     await new Promise((resolve) => setTimeout(resolve, 800));
     setTransactionId(pixTransactionId);
     setStep('success');
@@ -249,6 +397,9 @@ export function MercadoPagoCheckoutModal({
   const handleCloseAll = () => {
     setStep('selection');
     setErrorMsg('');
+    setCouponInput('');
+    setAppliedCouponCode('');
+    setCouponError('');
     onClose();
   };
 
@@ -429,6 +580,62 @@ export function MercadoPagoCheckoutModal({
                     </span>
                   </div>
                 )}
+
+                {/* Coupon Application Section (Authoritative Quote recalculation) */}
+                <div className="py-2 border-t border-[var(--border)]/60">
+                  {authoritativeQuote?.appliedCoupon ? (
+                    <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs">
+                      <div className="flex items-center gap-1.5 text-emerald-500 font-bold">
+                        <Tag size={13} />
+                        <span>
+                          {authoritativeQuote.appliedCoupon.code} (- {currentCurrency.symbol}{' '}
+                          {(authoritativeQuote.appliedCoupon.discountInCents / 100).toFixed(2)})
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleRemoveCoupon}
+                        disabled={couponLoading}
+                        className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+                      >
+                        {isEnglish ? 'Remove' : 'Remover'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="text"
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleApplyCoupon();
+                            }
+                          }}
+                          placeholder={isEnglish ? 'Coupon code' : 'Cupom de desconto'}
+                          className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-2.5 py-1.5 text-xs font-mono text-[var(--foreground)] placeholder:text-[var(--text-secondary)]/50 outline-none focus:border-[#009EE3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleApplyCoupon}
+                          disabled={couponLoading || !couponInput.trim()}
+                          className="px-3 py-1.5 rounded-lg border border-[#009EE3] text-[#009EE3] hover:bg-[#009EE3]/10 text-xs font-mono font-bold transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          {couponLoading ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : (
+                            <span>{isEnglish ? 'Apply' : 'Aplicar'}</span>
+                          )}
+                        </button>
+                      </div>
+                      {couponError && (
+                        <p className="text-[10px] text-rose-500 font-mono">{couponError}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 <div className="flex items-center justify-between border-t border-[var(--border)] pt-2 text-sm font-bold">
                   <span className="text-[var(--foreground)]">

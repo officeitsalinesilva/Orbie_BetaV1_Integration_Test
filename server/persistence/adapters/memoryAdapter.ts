@@ -15,6 +15,10 @@ import {
   IDailyCreditRepository,
   INotificationRepository,
   IJournalRepository,
+  ICommercialRepository,
+  CommercialStorageSnapshot,
+  IOrderRepository,
+  IPaymentRepository,
 } from '../interfaces';
 import {
   UserEntity,
@@ -34,6 +38,8 @@ import {
   NotificationEntity,
   JournalEntryEntity,
   PersistenceStatus,
+  OrderEntity,
+  PaymentEntity,
 } from '../types';
 
 export class MemoryPersistenceAdapter implements IPersistenceAdapter {
@@ -55,6 +61,10 @@ export class MemoryPersistenceAdapter implements IPersistenceAdapter {
   private dailyCreditsMap = new Map<string, UserCheckInStateEntity>();
   private notificationsMap = new Map<string, NotificationEntity[]>();
   private journalsMap = new Map<string, JournalEntryEntity[]>();
+  private commercialConfig: CommercialStorageSnapshot | null = null;
+  private ordersMap = new Map<string, OrderEntity>();
+  private paymentsMap = new Map<string, PaymentEntity>();
+  private processedEventsSet = new Set<string>();
 
   public async init(): Promise<void> {}
   public async close(): Promise<void> {}
@@ -262,6 +272,64 @@ export class MemoryPersistenceAdapter implements IPersistenceAdapter {
       if (idx >= 0) list[idx] = { ...entry };
       else list.unshift({ ...entry });
       this.journalsMap.set(entry.ownerUid, list);
+    },
+  };
+
+  public readonly commercial: ICommercialRepository = {
+    getConfig: async () => {
+      return this.commercialConfig ? JSON.parse(JSON.stringify(this.commercialConfig)) : null;
+    },
+    saveConfig: async (snapshot: CommercialStorageSnapshot) => {
+      this.commercialConfig = JSON.parse(JSON.stringify(snapshot));
+    },
+  };
+
+  public readonly orders: IOrderRepository = {
+    get: async (orderId: string) => {
+      const o = this.ordersMap.get(orderId);
+      return o ? { ...o } : null;
+    },
+    getByProviderReference: async (ref: string) => {
+      for (const o of this.ordersMap.values()) {
+        if (o.providerReference === ref || o.orderId === ref) return { ...o };
+      }
+      return null;
+    },
+    findByUser: async (userId: string) => {
+      return Array.from(this.ordersMap.values()).filter((o) => o.userId === userId).map((o) => ({ ...o }));
+    },
+    listAll: async () => {
+      return Array.from(this.ordersMap.values()).map((o) => ({ ...o }));
+    },
+    save: async (order: OrderEntity) => {
+      this.ordersMap.set(order.orderId, { ...order, updatedAt: new Date().toISOString() });
+      return { ...this.ordersMap.get(order.orderId)! };
+    },
+  };
+
+  public readonly payments: IPaymentRepository = {
+    get: async (paymentId: string) => {
+      const p = this.paymentsMap.get(paymentId);
+      return p ? { ...p } : null;
+    },
+    getByProviderPaymentId: async (providerPaymentId: string) => {
+      for (const p of this.paymentsMap.values()) {
+        if (p.providerPaymentId === providerPaymentId || p.paymentId === providerPaymentId) return { ...p };
+      }
+      return null;
+    },
+    findByOrder: async (orderId: string) => {
+      return Array.from(this.paymentsMap.values()).filter((p) => p.orderId === orderId).map((p) => ({ ...p }));
+    },
+    save: async (payment: PaymentEntity) => {
+      this.paymentsMap.set(payment.paymentId, { ...payment, updatedAt: new Date().toISOString() });
+      return { ...this.paymentsMap.get(payment.paymentId)! };
+    },
+    isEventProcessed: async (eventId: string) => {
+      return this.processedEventsSet.has(eventId);
+    },
+    markEventProcessed: async (eventId: string) => {
+      this.processedEventsSet.add(eventId);
     },
   };
 }

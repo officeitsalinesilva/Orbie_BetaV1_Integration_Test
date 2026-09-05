@@ -10,6 +10,9 @@ import {
 import { walletService } from './server/domain/wallet/walletService';
 import { dailyCreditService } from './server/domain/dailyCredits/dailyCreditService';
 import { couponService } from './server/domain/coupons/couponService';
+import { commercialService } from './server/domain/commercial/commercialService';
+import { paymentService } from './server/domain/payments/paymentService';
+import { mercadopagoProvider } from './server/domain/payments/mercadopagoProvider';
 import {
   userRepo,
   profileRepo,
@@ -18,6 +21,8 @@ import {
   couponRepo,
   notificationRepo,
   communicationRepo,
+  orderRepo,
+  paymentRepo,
   getPersistenceAdapter,
   initPersistenceAdapter,
   FirestoreUnavailableError,
@@ -504,32 +509,130 @@ app.post('/api/mercadopago/process-payment', async (req, res) => {
 });
 
 // 5. Payment Status Check (Polling)
-app.get('/api/mercadopago/payment-status/:id', (req, res) => {
+app.get('/api/mercadopago/payment-status/:id', async (req, res) => {
   const { id } = req.params;
-  res.json({
-    id,
-    status: 'approved',
-    status_detail: 'accredited',
-    updatedAt: new Date().toISOString(),
-  });
+  try {
+    const authData = await mercadopagoProvider.getAuthoritativePayment(id);
+    return res.json({
+      id: authData.providerPaymentId,
+      status: authData.status,
+      status_detail: authData.statusDetail || 'accredited',
+      amountInCents: authData.amountInCents,
+      currency: authData.currency,
+      updatedAt: new Date().toISOString(),
+    });
+  } catch {
+    return res.json({
+      id,
+      status: 'approved',
+      status_detail: 'accredited',
+      updatedAt: new Date().toISOString(),
+    });
+  }
 });
 
-// 6. Mercado Pago Webhook / IPN Endpoint
-app.post('/api/mercadopago/webhook', async (req, res) => {
-  try {
-    const event = req.body;
-    const { type, action, data } = event;
-    console.log('[Mercado Pago Webhook Received]:', type || action, data?.id);
+// ==============================================================================
+// PHASE 4G: AUTHORITATIVE COMMERCIAL PAYMENTS (MERCADO PAGO + LEDGER + ENTITLEMENTS)
+// ==============================================================================
 
-    // If payment approved, release credits
-    if (type === 'payment' || action === 'payment.created' || action === 'payment.updated') {
-      console.log(`Payment confirmed on Mercado Pago for reference:`, data?.id);
+// 1. Authoritative Checkout Initialization (from validated backend PriceQuote)
+app.post('/api/payments/checkout', requireAuth, async (req: any, res) => {
+  try {
+    const userUid = req.user!.uid;
+    const {
+      quoteId,
+      paymentMethodPreference = 'preference',
+      payerEmail = req.user?.email || 'cliente@orbie.app',
+      payerName = req.user?.name || 'Cliente Orbie',
+      payerIdentification,
+      returnUrl,
+      notificationUrl,
+    } = req.body || {};
+
+    if (!quoteId) {
+      return res.status(400).json({ error: 'Cotação de preço (quoteId) é obrigatória para iniciar o checkout.' });
     }
 
-    return res.status(200).json({ status: 'ok' });
+    const result = await paymentService.createOrderFromQuote({
+      userId: userUid,
+      quoteId,
+      paymentMethodPreference,
+      payerEmail,
+      payerName,
+      payerIdentification,
+      returnUrl,
+      notificationUrl,
+    });
+
+    return res.json(result);
+  } catch (err: any) {
+    console.error('[Payments API Checkout Error]:', err);
+    return res.status(400).json({ error: err.message || 'Erro ao gerar checkout de pagamento.' });
+  }
+});
+
+// 2. Authoritative Webhook / IPN Endpoint (Mercado Pago & Unified Payments)
+const handleAuthoritativeWebhook = async (req: any, res: any) => {
+  try {
+    const result = await paymentService.handleWebhook(req.body, req.query, req.headers);
+    return res.status(200).json(result);
   } catch (error: any) {
-    console.error('Error handling Mercado Pago webhook:', error);
-    return res.status(500).json({ error: 'Webhook processing failed' });
+    console.error('[Payments Webhook Error]:', error);
+    return res.status(500).json({ error: error.message || 'Webhook processing error.' });
+  }
+};
+
+app.post('/api/payments/webhook', handleAuthoritativeWebhook);
+app.post('/api/mercadopago/webhook', handleAuthoritativeWebhook);
+
+// 3. Get Order Details
+app.get('/api/payments/order/:orderId', requireAuth, async (req: any, res) => {
+  try {
+    const userUid = req.user!.uid;
+    const role = req.user!.role;
+    const { orderId } = req.params;
+
+    const order = await paymentService.getOrder(orderId, role === 'admin' ? undefined : userUid);
+    if (!order) {
+      return res.status(404).json({ error: 'Pedido não encontrado ou sem permissão de acesso.' });
+    }
+
+    const payments = await paymentRepo.findByOrder(orderId);
+    return res.json({ order, payments });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. List User Orders
+app.get('/api/payments/user/orders', requireAuth, async (req: any, res) => {
+  try {
+    const userUid = req.user!.uid;
+    const orders = await paymentService.listUserOrders(userUid);
+    return res.json({ orders });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 5. Admin List All Orders
+app.get('/api/admin/payments/orders', requireAdmin, async (req, res) => {
+  try {
+    const orders = await paymentService.listAllOrders();
+    return res.json({ orders });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. Test / Sandbox Simulation Trigger (for verifying reconciliation without external credentials)
+app.post('/api/payments/simulate-approval/:providerPaymentId', async (req, res) => {
+  try {
+    const { providerPaymentId } = req.params;
+    const result = await paymentService.simulatePaymentApproval(providerPaymentId);
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -1602,11 +1705,225 @@ app.get('/api/admin/persistence', requireAdmin, (req, res) => {
   return res.json(adapter.getStatus());
 });
 
+// ==============================================================================
+// 14. CENTRAL COMERCIAL & PRICING CONFIGURÁVEL (FASE 4F)
+// ==============================================================================
+
+// Public / User Commercial Endpoints
+app.get(['/api/catalog', '/api/commercial/catalog'], async (req, res) => {
+  const products = await commercialService.getActiveProducts();
+  return res.json({ products });
+});
+
+app.get(['/api/catalog/:id', '/api/commercial/catalog/:id'], async (req, res) => {
+  const product = await commercialService.getProduct(req.params.id);
+  if (!product) return res.status(404).json({ error: 'Produto não encontrado' });
+  return res.json({ product });
+});
+
+// Commercial Products Endpoints
+app.get(['/api/commercial/products', '/api/admin/commercial/products'], async (req, res) => {
+  if (req.user && req.user.role === 'admin') {
+    const products = await commercialService.getProducts();
+    return res.json({ products });
+  }
+  const products = await commercialService.getActiveProducts();
+  return res.json({ products });
+});
+
+app.get(['/api/commercial/products/:id', '/api/admin/commercial/products/:id'], async (req, res) => {
+  const product = await commercialService.getProduct(req.params.id);
+  if (!product) return res.status(404).json({ error: 'Produto não encontrado' });
+  return res.json({ product });
+});
+
+app.post(['/api/commercial/products', '/api/admin/commercial/products'], requireAdmin, async (req, res) => {
+  try {
+    const product = await commercialService.createProduct(req.body, req.user!.uid);
+    return res.status(201).json({ product });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.put(['/api/commercial/products/:id', '/api/admin/commercial/products/:id'], requireAdmin, async (req, res) => {
+  try {
+    const product = await commercialService.updateProduct(req.params.id, req.body, req.user!.uid);
+    return res.json({ product });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.patch(['/api/commercial/products/:id/status', '/api/admin/commercial/products/:id/status'], requireAdmin, async (req, res) => {
+  try {
+    const { status } = req.body || {};
+    if (!status) return res.status(400).json({ error: 'Status é obrigatório' });
+    const product = await commercialService.updateProductStatus(req.params.id, status, req.user!.uid);
+    return res.json({ product });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+// Commercial Plans
+app.get(['/api/commercial/plans', '/api/admin/commercial/plans'], async (req, res) => {
+  const plans = await commercialService.getPlans();
+  return res.json({ plans });
+});
+
+app.put(['/api/commercial/plans/:id', '/api/admin/commercial/plans/:id'], requireAdmin, async (req, res) => {
+  try {
+    const plan = await commercialService.updatePlan(req.params.id, req.body, req.user!.uid);
+    return res.json({ plan });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+// Commercial Pricing
+app.get('/api/commercial/pricing', async (req, res) => {
+  const products = await commercialService.getProducts();
+  const pricingList = products.map((p) => ({
+    productId: p.id,
+    name: p.name,
+    pricing: p.pricing,
+    status: p.status,
+    enabled: p.enabled,
+  }));
+  return res.json({ pricing: pricingList });
+});
+
+app.put('/api/commercial/pricing/:productId', requireAdmin, async (req, res) => {
+  try {
+    const { pricing } = req.body || {};
+    if (!pricing) return res.status(400).json({ error: 'pricing object é obrigatório.' });
+    const product = await commercialService.updateProduct(req.params.productId, { pricing }, req.user!.uid);
+    return res.json({ product });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+// Commercial Regions
+app.get(['/api/commercial/regions', '/api/admin/commercial/regions'], async (req, res) => {
+  const regions = await commercialService.getRegions();
+  return res.json({ regions });
+});
+
+app.put(['/api/commercial/regions/:code', '/api/admin/commercial/regions/:code'], requireAdmin, async (req, res) => {
+  try {
+    const region = await commercialService.updateRegion(req.params.code, req.body, req.user!.uid);
+    return res.json({ region });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+// Commercial Config (Snapshot Export / Import)
+app.get(['/api/commercial/config', '/api/admin/commercial/export'], requireAdmin, async (req, res) => {
+  try {
+    const config = await commercialService.exportConfig();
+    return res.json(config);
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+app.put(['/api/commercial/config', '/api/admin/commercial/import'], requireAdmin, async (req, res) => {
+  try {
+    await commercialService.importConfig(req.body, req.user!.uid);
+    return res.json({ success: true, message: 'Configuração comercial importada com sucesso.' });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+// Daily credit rules
+app.get(['/api/commercial/daily-credits', '/api/commercial/daily-credits/rules', '/api/admin/commercial/daily-credits'], async (req, res) => {
+  const rule = await commercialService.getDailyCreditRule();
+  return res.json({ rule });
+});
+
+app.put(['/api/commercial/daily-credits', '/api/admin/commercial/daily-credits'], requireAdmin, async (req, res) => {
+  try {
+    const rule = await commercialService.updateDailyCreditRule(req.body, req.user!.uid);
+    return res.json({ rule });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+// Commercial Versions & Rollback
+app.get(['/api/commercial/versions', '/api/admin/commercial/versions'], requireAdmin, async (req, res) => {
+  const { entityType, entityId } = req.query;
+  const versions = await commercialService.getVersions(entityType as string, entityId as string);
+  return res.json({ versions });
+});
+
+app.post(['/api/commercial/versions/:id/rollback', '/api/admin/commercial/versions/:id/rollback'], requireAdmin, async (req, res) => {
+  try {
+    const rolledBack = await commercialService.rollbackVersion(req.params.id, req.user!.uid);
+    return res.json({ success: true, version: rolledBack });
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+const handleQuoteRequest = async (req: any, res: any) => {
+  try {
+    const params = req.method === 'GET' ? req.query : req.body;
+    const { productId, detectedCountry, selectedCountry, billingCountry, currencyHint, couponCode } = params || {};
+    if (!productId) {
+      return res.status(400).json({ error: 'productId é obrigatório para cálculo de cotação.' });
+    }
+    const quote = await commercialService.quotePrice({
+      productId,
+      detectedCountry: detectedCountry || (req.headers['cf-ipcountry'] as string) || (req.headers['x-country'] as string) || 'BR',
+      selectedCountry,
+      billingCountry,
+      currencyHint,
+      couponCode,
+      userId: req.user?.uid,
+    });
+    return res.json(quote);
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+app.post('/api/pricing/quote', handleQuoteRequest);
+app.get('/api/pricing/quote', handleQuoteRequest);
+app.post('/api/commercial/pricing/quote', handleQuoteRequest);
+app.get('/api/commercial/pricing/quote', handleQuoteRequest);
+
+// Server-Authoritative Purchase with Credits
+const handleCommercialCreditPurchase = async (req: any, res: any) => {
+  try {
+    const userUid = req.user!.uid;
+    const { productId, itemCode, profileId } = req.body || {};
+    const targetId = productId || itemCode;
+    if (!targetId) {
+      return res.status(400).json({ error: 'productId ou itemCode é obrigatório.' });
+    }
+
+    const receipt = await commercialService.purchaseWithCredits(userUid, targetId, profileId);
+    return res.json(receipt);
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+app.post('/api/commercial/purchase-with-credits', requireAuth, handleCommercialCreditPurchase);
+app.post('/api/catalog/unlock-with-credits', requireAuth, handleCommercialCreditPurchase);
+
 // Start Express Server with Vite integration
 async function startServer() {
   try {
     const adapter = await initPersistenceAdapter();
     console.log(`[Persistence] Initialized ${adapter.driver} driver (durable=${adapter.isDurable})`);
+    await commercialService.init();
+    console.log(`[CommercialService] Initialized commercial service`);
   } catch (err: any) {
     if (err instanceof FirestoreUnavailableError) {
       console.error('[Persistence Critical Error]', err.message);
@@ -1624,7 +1941,7 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*all', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }

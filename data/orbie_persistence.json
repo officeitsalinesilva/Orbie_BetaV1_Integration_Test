@@ -143,6 +143,138 @@
       "unlockedItems": [],
       "createdAt": "2026-09-04T10:19:39.058Z",
       "updatedAt": "2026-09-04T10:19:39.058Z"
+    },
+    "prof-test-user-4g-1788604486366": {
+      "id": "prof-test-user-4g-1788604486366",
+      "ownerUid": "test-user-4g-1788604486366",
+      "isPrimary": true,
+      "fullName": "Test User 4G",
+      "preferredName": "Tester",
+      "birthDay": "15",
+      "birthMonth": "06",
+      "birthYear": "1990",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCity": "São Paulo",
+      "birthCountry": "Brasil",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "tz_str": "America/Sao_Paulo",
+      "unlockedItems": [],
+      "createdAt": "2026-09-05T10:34:46.366Z",
+      "updatedAt": "2026-09-05T10:34:46.366Z"
+    },
+    "prof-test-user-4g-1788604531808": {
+      "id": "prof-test-user-4g-1788604531808",
+      "ownerUid": "test-user-4g-1788604531808",
+      "isPrimary": true,
+      "fullName": "Test User 4G",
+      "preferredName": "Tester",
+      "birthDay": "15",
+      "birthMonth": "06",
+      "birthYear": "1990",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCity": "São Paulo",
+      "birthCountry": "Brasil",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "tz_str": "America/Sao_Paulo",
+      "unlockedItems": [],
+      "createdAt": "2026-09-05T10:35:31.808Z",
+      "updatedAt": "2026-09-05T10:35:31.808Z"
+    },
+    "prof-test-user-4g-1788604558750": {
+      "id": "prof-test-user-4g-1788604558750",
+      "ownerUid": "test-user-4g-1788604558750",
+      "isPrimary": true,
+      "fullName": "Test User 4G",
+      "preferredName": "Tester",
+      "birthDay": "15",
+      "birthMonth": "06",
+      "birthYear": "1990",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCity": "São Paulo",
+      "birthCountry": "Brasil",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "tz_str": "America/Sao_Paulo",
+      "unlockedItems": [],
+      "createdAt": "2026-09-05T10:35:58.750Z",
+      "updatedAt": "2026-09-05T10:35:58.750Z"
+    },
+    "prof-test-user-4g-1788604611881": {
+      "id": "prof-test-user-4g-1788604611881",
+      "ownerUid": "test-user-4g-1788604611881",
+      "isPrimary": true,
+      "fullName": "Test User 4G",
+      "preferredName": "Tester",
+      "birthDay": "15",
+      "birthMonth": "06",
+      "birthYear": "1990",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCity": "São Paulo",
+      "birthCountry": "Brasil",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "tz_str": "America/Sao_Paulo",
+      "unlockedItems": [
+        "AST-001"
+      ],
+      "createdAt": "2026-09-05T10:36:51.881Z",
+      "updatedAt": "2026-09-05T10:36:51.881Z"
+    },
+    "prof-test-user-4g-1788604627937": {
+      "id": "prof-test-user-4g-1788604627937",
+      "ownerUid": "test-user-4g-1788604627937",
+      "isPrimary": true,
+      "fullName": "Test User 4G",
+      "preferredName": "Tester",
+      "birthDay": "15",
+      "birthMonth": "06",
+      "birthYear": "1990",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCity": "São Paulo",
+      "birthCountry": "Brasil",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "tz_str": "America/Sao_Paulo",
+      "unlockedItems": [
+        "AST-001"
+      ],
+      "createdAt": "2026-09-05T10:37:07.937Z",
+      "updatedAt": "2026-09-05T10:37:07.937Z"
+    },
+    "prof-test-user-4g-1788606558075": {
+      "id": "prof-test-user-4g-1788606558075",
+      "ownerUid": "test-user-4g-1788606558075",
+      "isPrimary": true,
+      "fullName": "Test User 4G",
+      "preferredName": "Tester",
+      "birthDay": "15",
+      "birthMonth": "06",
+      "birthYear": "1990",
+      "birthHour": "12",
+      "birthMinute": "00",
+      "birthCity": "São Paulo",
+      "birthCountry": "Brasil",
+      "timezone": "America/Sao_Paulo",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "tz_str": "America/Sao_Paulo",
+      "unlockedItems": [
+        "AST-001"
+      ],
+      "createdAt": "2026-09-05T11:09:18.075Z",
+      "updatedAt": "2026-09-05T11:09:18.075Z"
     }
   },
   "events": {
@@ -494,6 +626,54 @@
       "plan": "free",
       "createdAt": "2026-09-04T10:19:39.042Z",
       "updatedAt": "2026-09-04T10:19:39.042Z"
+    },
+    "test-user-4g-1788604486366": {
+      "ownerUid": "test-user-4g-1788604486366",
+      "userUid": "test-user-4g-1788604486366",
+      "balance": 0,
+      "plan": "free",
+      "createdAt": "2026-09-05T10:34:46.374Z",
+      "updatedAt": "2026-09-05T10:34:46.374Z"
+    },
+    "test-user-4g-1788604531808": {
+      "ownerUid": "test-user-4g-1788604531808",
+      "userUid": "test-user-4g-1788604531808",
+      "balance": 50,
+      "plan": "free",
+      "createdAt": "2026-09-05T10:35:31.811Z",
+      "updatedAt": "2026-09-05T10:35:33.042Z"
+    },
+    "test-user-4g-1788604558750": {
+      "ownerUid": "test-user-4g-1788604558750",
+      "userUid": "test-user-4g-1788604558750",
+      "balance": 50,
+      "plan": "free",
+      "createdAt": "2026-09-05T10:35:58.753Z",
+      "updatedAt": "2026-09-05T10:36:00.289Z"
+    },
+    "test-user-4g-1788604611881": {
+      "ownerUid": "test-user-4g-1788604611881",
+      "userUid": "test-user-4g-1788604611881",
+      "balance": 50,
+      "plan": "free",
+      "createdAt": "2026-09-05T10:36:51.884Z",
+      "updatedAt": "2026-09-05T10:36:53.100Z"
+    },
+    "test-user-4g-1788604627937": {
+      "ownerUid": "test-user-4g-1788604627937",
+      "userUid": "test-user-4g-1788604627937",
+      "balance": 50,
+      "plan": "free",
+      "createdAt": "2026-09-05T10:37:07.940Z",
+      "updatedAt": "2026-09-05T10:37:09.458Z"
+    },
+    "test-user-4g-1788606558075": {
+      "ownerUid": "test-user-4g-1788606558075",
+      "userUid": "test-user-4g-1788606558075",
+      "balance": 50,
+      "plan": "free",
+      "createdAt": "2026-09-05T11:09:18.078Z",
+      "updatedAt": "2026-09-05T11:09:19.338Z"
     }
   },
   "ledger": {
@@ -2341,6 +2521,280 @@
         "createdAt": "2026-09-04T10:19:39.042Z",
         "timestamp": "2026-09-04T10:19:39.042Z"
       }
+    ],
+    "test-user-4g-1788604531808": [
+      {
+        "id": "led-pay-1788604533046-01vq",
+        "ownerUid": "test-user-4g-1788604531808",
+        "userUid": "test-user-4g-1788604531808",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 22.50) - Recarga 50 Créditos (10% Bônus)",
+        "referenceId": "ORD-1788604531816-GQ3YP",
+        "idempotencyKey": "pay-ledger-ORD-1788604531816-GQ3YP",
+        "metadata": {
+          "orderId": "ORD-1788604531816-GQ3YP",
+          "paymentId": "PAY-1788604533035-lbal",
+          "provider": "mercadopago",
+          "providerPaymentId": "mp_pix_1788604533033_wp89",
+          "productId": "CRD-PACK-50",
+          "productCode": "CRD-PACK-50",
+          "currency": "BRL",
+          "amountInCents": 2250,
+          "formattedAmount": "BRL 22.50"
+        },
+        "createdAt": "2026-09-05T10:35:33.042Z",
+        "timestamp": "2026-09-05T10:35:33.042Z"
+      },
+      {
+        "id": "ledg-1788604533042-z2hwb",
+        "ownerUid": "test-user-4g-1788604531808",
+        "userUid": "test-user-4g-1788604531808",
+        "type": "credit",
+        "category": "PURCHASE",
+        "source": "ADJUSTMENT",
+        "amount": 50,
+        "balanceBefore": 0,
+        "balanceAfter": 50,
+        "referenceId": "Compra de pacote de créditos (50 créditos) via Mercado Pago",
+        "description": "ORD-1788604531816-GQ3YP",
+        "createdAt": "2026-09-05T10:35:33.042Z",
+        "timestamp": "2026-09-05T10:35:33.042Z"
+      }
+    ],
+    "test-user-4g-1788604558750": [
+      {
+        "id": "led-pay-1788604560295-gooe",
+        "ownerUid": "test-user-4g-1788604558750",
+        "userUid": "test-user-4g-1788604558750",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 22.50) - Recarga 50 Créditos (10% Bônus)",
+        "referenceId": "ORD-1788604558758-O2VW6",
+        "idempotencyKey": "pay-ledger-ORD-1788604558758-O2VW6",
+        "metadata": {
+          "orderId": "ORD-1788604558758-O2VW6",
+          "paymentId": "PAY-1788604560278-6s8x",
+          "provider": "mercadopago",
+          "providerPaymentId": "mp_pix_1788604560276_1ibu",
+          "productId": "CRD-PACK-50",
+          "productCode": "CRD-PACK-50",
+          "currency": "BRL",
+          "amountInCents": 2250,
+          "formattedAmount": "BRL 22.50"
+        },
+        "createdAt": "2026-09-05T10:36:00.289Z",
+        "timestamp": "2026-09-05T10:36:00.289Z"
+      },
+      {
+        "id": "ledg-1788604560289-86uq7",
+        "ownerUid": "test-user-4g-1788604558750",
+        "userUid": "test-user-4g-1788604558750",
+        "type": "credit",
+        "category": "PURCHASE",
+        "source": "ADJUSTMENT",
+        "amount": 50,
+        "balanceBefore": 0,
+        "balanceAfter": 50,
+        "referenceId": "Compra de pacote de créditos (50 créditos) via Mercado Pago",
+        "description": "ORD-1788604558758-O2VW6",
+        "createdAt": "2026-09-05T10:36:00.289Z",
+        "timestamp": "2026-09-05T10:36:00.289Z"
+      }
+    ],
+    "test-user-4g-1788604611881": [
+      {
+        "id": "led-pay-1788604613107-ebbu",
+        "ownerUid": "test-user-4g-1788604611881",
+        "userUid": "test-user-4g-1788604611881",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 22.50) - Recarga 50 Créditos (10% Bônus)",
+        "referenceId": "ORD-1788604611889-FBCAH",
+        "idempotencyKey": "pay-ledger-ORD-1788604611889-FBCAH",
+        "metadata": {
+          "orderId": "ORD-1788604611889-FBCAH",
+          "paymentId": "PAY-1788604613085-5jvn",
+          "provider": "mercadopago",
+          "providerPaymentId": "mp_pix_1788604613083_5mwo",
+          "productId": "CRD-PACK-50",
+          "productCode": "CRD-PACK-50",
+          "currency": "BRL",
+          "amountInCents": 2250,
+          "formattedAmount": "BRL 22.50"
+        },
+        "createdAt": "2026-09-05T10:36:53.099Z",
+        "timestamp": "2026-09-05T10:36:53.099Z"
+      },
+      {
+        "id": "ledg-1788604613100-h2pg8",
+        "ownerUid": "test-user-4g-1788604611881",
+        "userUid": "test-user-4g-1788604611881",
+        "type": "credit",
+        "category": "PURCHASE",
+        "source": "ADJUSTMENT",
+        "amount": 50,
+        "balanceBefore": 0,
+        "balanceAfter": 50,
+        "referenceId": "Compra de pacote de créditos (50 créditos) via Mercado Pago",
+        "description": "ORD-1788604611889-FBCAH",
+        "createdAt": "2026-09-05T10:36:53.100Z",
+        "timestamp": "2026-09-05T10:36:53.100Z"
+      }
+    ],
+    "test-user-4g-1788604627937": [
+      {
+        "id": "led-pay-1788604629771-1jjk",
+        "ownerUid": "test-user-4g-1788604627937",
+        "userUid": "test-user-4g-1788604627937",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 14.50) - Dossiê Mapa Astral Natal Completo",
+        "referenceId": "ORD-1788604629481-OH4ML",
+        "idempotencyKey": "pay-ledger-ORD-1788604629481-OH4ML",
+        "metadata": {
+          "orderId": "ORD-1788604629481-OH4ML",
+          "paymentId": "PAY-1788604629757-5p2u",
+          "provider": "mercadopago",
+          "providerPaymentId": "611102139-a3b045d5-7839-4a2a-bf9a-bc08d1a67a43",
+          "productId": "AST-001",
+          "productCode": "AST-001",
+          "currency": "BRL",
+          "amountInCents": 1450,
+          "formattedAmount": "BRL 14.50"
+        },
+        "createdAt": "2026-09-05T10:37:09.761Z",
+        "timestamp": "2026-09-05T10:37:09.761Z"
+      },
+      {
+        "id": "led-pay-1788604629466-3qzd",
+        "ownerUid": "test-user-4g-1788604627937",
+        "userUid": "test-user-4g-1788604627937",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 22.50) - Recarga 50 Créditos (10% Bônus)",
+        "referenceId": "ORD-1788604627943-4P7EG",
+        "idempotencyKey": "pay-ledger-ORD-1788604627943-4P7EG",
+        "metadata": {
+          "orderId": "ORD-1788604627943-4P7EG",
+          "paymentId": "PAY-1788604629443-499t",
+          "provider": "mercadopago",
+          "providerPaymentId": "mp_pix_1788604629440_y91v",
+          "productId": "CRD-PACK-50",
+          "productCode": "CRD-PACK-50",
+          "currency": "BRL",
+          "amountInCents": 2250,
+          "formattedAmount": "BRL 22.50"
+        },
+        "createdAt": "2026-09-05T10:37:09.458Z",
+        "timestamp": "2026-09-05T10:37:09.458Z"
+      },
+      {
+        "id": "ledg-1788604629458-h3ez3",
+        "ownerUid": "test-user-4g-1788604627937",
+        "userUid": "test-user-4g-1788604627937",
+        "type": "credit",
+        "category": "PURCHASE",
+        "source": "ADJUSTMENT",
+        "amount": 50,
+        "balanceBefore": 0,
+        "balanceAfter": 50,
+        "referenceId": "Compra de pacote de créditos (50 créditos) via Mercado Pago",
+        "description": "ORD-1788604627943-4P7EG",
+        "createdAt": "2026-09-05T10:37:09.458Z",
+        "timestamp": "2026-09-05T10:37:09.458Z"
+      }
+    ],
+    "test-user-4g-1788606558075": [
+      {
+        "id": "led-pay-1788606559664-mnm1",
+        "ownerUid": "test-user-4g-1788606558075",
+        "userUid": "test-user-4g-1788606558075",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 14.50) - Dossiê Mapa Astral Natal Completo",
+        "referenceId": "ORD-1788606559362-N2LLZ",
+        "idempotencyKey": "pay-ledger-ORD-1788606559362-N2LLZ",
+        "metadata": {
+          "orderId": "ORD-1788606559362-N2LLZ",
+          "paymentId": "PAY-1788606559650-sbzz",
+          "provider": "mercadopago",
+          "providerPaymentId": "611102139-a867d5b6-db22-4c4a-aa29-939cbee8ff4b",
+          "productId": "AST-001",
+          "productCode": "AST-001",
+          "currency": "BRL",
+          "amountInCents": 1450,
+          "formattedAmount": "BRL 14.50"
+        },
+        "createdAt": "2026-09-05T11:09:19.659Z",
+        "timestamp": "2026-09-05T11:09:19.659Z"
+      },
+      {
+        "id": "led-pay-1788606559346-4huh",
+        "ownerUid": "test-user-4g-1788606558075",
+        "userUid": "test-user-4g-1788606558075",
+        "amount": 0,
+        "balanceBefore": 50,
+        "balanceAfter": 50,
+        "type": "CREDIT",
+        "category": "PURCHASE",
+        "source": "PURCHASE",
+        "description": "Pagamento aprovado Mercado Pago (BRL 22.50) - Recarga 50 Créditos (10% Bônus)",
+        "referenceId": "ORD-1788606558084-BOVNT",
+        "idempotencyKey": "pay-ledger-ORD-1788606558084-BOVNT",
+        "metadata": {
+          "orderId": "ORD-1788606558084-BOVNT",
+          "paymentId": "PAY-1788606559325-8u68",
+          "provider": "mercadopago",
+          "providerPaymentId": "mp_pix_1788606559323_k6fh",
+          "productId": "CRD-PACK-50",
+          "productCode": "CRD-PACK-50",
+          "currency": "BRL",
+          "amountInCents": 2250,
+          "formattedAmount": "BRL 22.50"
+        },
+        "createdAt": "2026-09-05T11:09:19.338Z",
+        "timestamp": "2026-09-05T11:09:19.338Z"
+      },
+      {
+        "id": "ledg-1788606559338-dyzc6",
+        "ownerUid": "test-user-4g-1788606558075",
+        "userUid": "test-user-4g-1788606558075",
+        "type": "credit",
+        "category": "PURCHASE",
+        "source": "ADJUSTMENT",
+        "amount": 50,
+        "balanceBefore": 0,
+        "balanceAfter": 50,
+        "referenceId": "Compra de pacote de créditos (50 créditos) via Mercado Pago",
+        "description": "ORD-1788606558084-BOVNT",
+        "createdAt": "2026-09-05T11:09:19.338Z",
+        "timestamp": "2026-09-05T11:09:19.338Z"
+      }
     ]
   },
   "entitlements": {
@@ -2463,6 +2917,28 @@
         "itemCode": "neuro-soundscape",
         "source": "CREDIT_REDEMPTION",
         "unlockedAt": "2026-09-03T14:53:07.989Z"
+      }
+    ],
+    "test-user-4g-1788604627937": [
+      {
+        "id": "ent-1788604629769-o3hqo",
+        "ownerUid": "test-user-4g-1788604627937",
+        "userUid": "test-user-4g-1788604627937",
+        "scopeType": "global",
+        "itemCode": "AST-001",
+        "source": "PURCHASE",
+        "unlockedAt": "2026-09-05T10:37:09.769Z"
+      }
+    ],
+    "test-user-4g-1788606558075": [
+      {
+        "id": "ent-1788606559662-lpanf",
+        "ownerUid": "test-user-4g-1788606558075",
+        "userUid": "test-user-4g-1788606558075",
+        "scopeType": "global",
+        "itemCode": "AST-001",
+        "source": "PURCHASE",
+        "unlockedAt": "2026-09-05T11:09:19.662Z"
       }
     ]
   },
@@ -2622,6 +3098,9 @@
       "nextAvailableAt": ""
     }
   ],
+  "distributions": [],
+  "communicationDrafts": [],
+  "auditLogs": [],
   "dailyCredits": {
     "test_uid_alpha": {
       "userUid": "test_uid_alpha",
@@ -3015,5 +3494,1113 @@
     }
   },
   "notifications": {},
-  "journals": {}
+  "journals": {},
+  "orders": {
+    "ORD-1788604486380-NHZ00": {
+      "orderId": "ORD-1788604486380-NHZ00",
+      "userId": "test-user-4g-1788604486366",
+      "productId": "CRD-PACK-50",
+      "productCode": "CRD-PACK-50",
+      "quoteId": "quote-1788604486380-ecws6",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "status": "CHECKOUT_CREATED",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Recarga 50 Créditos (10% Bônus)",
+        "productType": "CREDIT_GRANT",
+        "basePriceInCents": 4500,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:34:46.380Z",
+      "updatedAt": "2026-09-05T10:34:47.939Z",
+      "providerReference": "mp_pix_1788604487939_aijs"
+    },
+    "ORD-1788604531816-GQ3YP": {
+      "orderId": "ORD-1788604531816-GQ3YP",
+      "userId": "test-user-4g-1788604531808",
+      "productId": "CRD-PACK-50",
+      "productCode": "CRD-PACK-50",
+      "quoteId": "quote-1788604531815-nx6rp",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Recarga 50 Créditos (10% Bônus)",
+        "productType": "CREDIT_GRANT",
+        "basePriceInCents": 4500,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:35:31.816Z",
+      "updatedAt": "2026-09-05T10:35:33.040Z",
+      "providerReference": "mp_pix_1788604533033_wp89"
+    },
+    "ORD-1788604558758-O2VW6": {
+      "orderId": "ORD-1788604558758-O2VW6",
+      "userId": "test-user-4g-1788604558750",
+      "productId": "CRD-PACK-50",
+      "productCode": "CRD-PACK-50",
+      "quoteId": "quote-1788604558757-qf4ek",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Recarga 50 Créditos (10% Bônus)",
+        "productType": "CREDIT_GRANT",
+        "basePriceInCents": 4500,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:35:58.758Z",
+      "updatedAt": "2026-09-05T10:36:00.285Z",
+      "providerReference": "mp_pix_1788604560276_1ibu"
+    },
+    "ORD-1788604560311-ZGCFZ": {
+      "orderId": "ORD-1788604560311-ZGCFZ",
+      "userId": "test-user-4g-1788604558750",
+      "productId": "AST-001",
+      "productCode": "AST-001",
+      "quoteId": "quote-1788604560311-2qppr",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "status": "CHECKOUT_CREATED",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Dossiê Mapa Astral Natal Completo",
+        "productType": "LIBRARY_ITEM",
+        "basePriceInCents": 2900,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:36:00.311Z",
+      "updatedAt": "2026-09-05T10:36:00.592Z",
+      "providerReference": "611102139-4ceefd7f-8d3f-4f2b-a91f-e37ebf777b58"
+    },
+    "ORD-1788604611889-FBCAH": {
+      "orderId": "ORD-1788604611889-FBCAH",
+      "userId": "test-user-4g-1788604611881",
+      "productId": "CRD-PACK-50",
+      "productCode": "CRD-PACK-50",
+      "quoteId": "quote-1788604611888-vzuwm",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Recarga 50 Créditos (10% Bônus)",
+        "productType": "CREDIT_GRANT",
+        "basePriceInCents": 4500,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:36:51.889Z",
+      "updatedAt": "2026-09-05T10:36:53.095Z",
+      "providerReference": "mp_pix_1788604613083_5mwo"
+    },
+    "ORD-1788604613125-RGBCE": {
+      "orderId": "ORD-1788604613125-RGBCE",
+      "userId": "test-user-4g-1788604611881",
+      "productId": "AST-001",
+      "productCode": "AST-001",
+      "quoteId": "quote-1788604613125-gj11u",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Dossiê Mapa Astral Natal Completo",
+        "productType": "LIBRARY_ITEM",
+        "basePriceInCents": 2900,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:36:53.125Z",
+      "updatedAt": "2026-09-05T10:36:53.319Z",
+      "providerReference": "611102139-5bf6c916-a858-4ba9-b906-b3b589b3f505"
+    },
+    "ORD-1788604627943-4P7EG": {
+      "orderId": "ORD-1788604627943-4P7EG",
+      "userId": "test-user-4g-1788604627937",
+      "productId": "CRD-PACK-50",
+      "productCode": "CRD-PACK-50",
+      "quoteId": "quote-1788604627943-n77us",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Recarga 50 Créditos (10% Bônus)",
+        "productType": "CREDIT_GRANT",
+        "basePriceInCents": 4500,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:37:07.943Z",
+      "updatedAt": "2026-09-05T10:37:09.454Z",
+      "providerReference": "mp_pix_1788604629440_y91v"
+    },
+    "ORD-1788604629481-OH4ML": {
+      "orderId": "ORD-1788604629481-OH4ML",
+      "userId": "test-user-4g-1788604627937",
+      "productId": "AST-001",
+      "productCode": "AST-001",
+      "quoteId": "quote-1788604629480-oqz54",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Dossiê Mapa Astral Natal Completo",
+        "productType": "LIBRARY_ITEM",
+        "basePriceInCents": 2900,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T10:37:09.481Z",
+      "updatedAt": "2026-09-05T10:37:09.759Z",
+      "providerReference": "611102139-a3b045d5-7839-4a2a-bf9a-bc08d1a67a43"
+    },
+    "ORD-1788606558084-BOVNT": {
+      "orderId": "ORD-1788606558084-BOVNT",
+      "userId": "test-user-4g-1788606558075",
+      "productId": "CRD-PACK-50",
+      "productCode": "CRD-PACK-50",
+      "quoteId": "quote-1788606558083-er9ie",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Recarga 50 Créditos (10% Bônus)",
+        "productType": "CREDIT_GRANT",
+        "basePriceInCents": 4500,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T11:09:18.084Z",
+      "updatedAt": "2026-09-05T11:09:19.334Z",
+      "providerReference": "mp_pix_1788606559323_k6fh"
+    },
+    "ORD-1788606559362-N2LLZ": {
+      "orderId": "ORD-1788606559362-N2LLZ",
+      "userId": "test-user-4g-1788606558075",
+      "productId": "AST-001",
+      "productCode": "AST-001",
+      "quoteId": "quote-1788606559362-wtnh6",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "status": "PAID",
+      "paymentProvider": "mercadopago",
+      "payerEmail": "tester@orbie.app",
+      "payerName": "Tester 4G",
+      "metadata": {
+        "productName": "Dossiê Mapa Astral Natal Completo",
+        "productType": "LIBRARY_ITEM",
+        "basePriceInCents": 2900,
+        "discountInCents": 0,
+        "regionalMultiplier": 0.5,
+        "billingCountry": "BR"
+      },
+      "createdAt": "2026-09-05T11:09:19.362Z",
+      "updatedAt": "2026-09-05T11:09:19.654Z",
+      "providerReference": "611102139-a867d5b6-db22-4c4a-aa29-939cbee8ff4b"
+    }
+  },
+  "payments": {
+    "PAY-1788604487942-2j3n": {
+      "paymentId": "PAY-1788604487942-2j3n",
+      "orderId": "ORD-1788604486380-NHZ00",
+      "userId": "test-user-4g-1788604486366",
+      "provider": "mercadopago",
+      "providerPaymentId": "mp_pix_1788604487939_aijs",
+      "status": "pending",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "paymentMethod": "pix",
+      "rawResponse": {
+        "providerPaymentId": "mp_pix_1788604487939_aijs",
+        "status": "pending",
+        "qrCode": "00020126580014BR.GOV.BCB.PIX0136orbie-commercial-ORD-1788604486380-NHZ0052040000530398654022.505802BR5915ORBIE TECNOLOGIA6009SAO PAULO62070503***6304E63C",
+        "qrCodeBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "ticketUrl": "https://www.mercadopago.com.br/payments/mp_pix_1788604487939_aijs/ticket",
+        "expiresAt": "2026-09-05T11:04:47.939Z"
+      },
+      "createdAt": "2026-09-05T10:34:46.380Z",
+      "updatedAt": "2026-09-05T10:34:47.942Z"
+    },
+    "PAY-1788604533035-lbal": {
+      "paymentId": "PAY-1788604533035-lbal",
+      "orderId": "ORD-1788604531816-GQ3YP",
+      "userId": "test-user-4g-1788604531808",
+      "provider": "mercadopago",
+      "providerPaymentId": "mp_pix_1788604533033_wp89",
+      "status": "approved",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "paymentMethod": "pix",
+      "rawResponse": {
+        "simulated": true,
+        "orderId": "ORD-1788604531816-GQ3YP"
+      },
+      "createdAt": "2026-09-05T10:35:31.816Z",
+      "updatedAt": "2026-09-05T10:35:33.051Z"
+    },
+    "PAY-1788604560278-6s8x": {
+      "paymentId": "PAY-1788604560278-6s8x",
+      "orderId": "ORD-1788604558758-O2VW6",
+      "userId": "test-user-4g-1788604558750",
+      "provider": "mercadopago",
+      "providerPaymentId": "mp_pix_1788604560276_1ibu",
+      "status": "approved",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "paymentMethod": "pix",
+      "rawResponse": {
+        "simulated": true,
+        "orderId": "ORD-1788604558758-O2VW6"
+      },
+      "createdAt": "2026-09-05T10:35:58.758Z",
+      "updatedAt": "2026-09-05T10:36:00.304Z"
+    },
+    "PAY-1788604560620-nxko": {
+      "paymentId": "PAY-1788604560620-nxko",
+      "orderId": "ORD-1788604560311-ZGCFZ",
+      "userId": "test-user-4g-1788604558750",
+      "provider": "mercadopago",
+      "providerPaymentId": "611102139-4ceefd7f-8d3f-4f2b-a91f-e37ebf777b58",
+      "status": "pending",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "paymentMethod": "unknown",
+      "rawResponse": {
+        "notFound": true
+      },
+      "createdAt": "2026-09-05T10:36:00.620Z",
+      "updatedAt": "2026-09-05T10:36:00.620Z"
+    },
+    "PAY-1788604613085-5jvn": {
+      "paymentId": "PAY-1788604613085-5jvn",
+      "orderId": "ORD-1788604611889-FBCAH",
+      "userId": "test-user-4g-1788604611881",
+      "provider": "mercadopago",
+      "providerPaymentId": "mp_pix_1788604613083_5mwo",
+      "status": "approved",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "paymentMethod": "pix",
+      "rawResponse": {
+        "simulated": true,
+        "orderId": "ORD-1788604611889-FBCAH"
+      },
+      "createdAt": "2026-09-05T10:36:51.889Z",
+      "updatedAt": "2026-09-05T10:36:53.116Z"
+    },
+    "PAY-1788604613317-y9ej": {
+      "paymentId": "PAY-1788604613317-y9ej",
+      "orderId": "ORD-1788604613125-RGBCE",
+      "userId": "test-user-4g-1788604611881",
+      "provider": "mercadopago",
+      "providerPaymentId": "611102139-5bf6c916-a858-4ba9-b906-b3b589b3f505",
+      "status": "approved",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "paymentMethod": "sandbox",
+      "createdAt": "2026-09-05T10:36:53.317Z",
+      "updatedAt": "2026-09-05T10:36:53.317Z"
+    },
+    "PAY-1788604629443-499t": {
+      "paymentId": "PAY-1788604629443-499t",
+      "orderId": "ORD-1788604627943-4P7EG",
+      "userId": "test-user-4g-1788604627937",
+      "provider": "mercadopago",
+      "providerPaymentId": "mp_pix_1788604629440_y91v",
+      "status": "approved",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "paymentMethod": "pix",
+      "rawResponse": {
+        "simulated": true,
+        "orderId": "ORD-1788604627943-4P7EG"
+      },
+      "createdAt": "2026-09-05T10:37:07.943Z",
+      "updatedAt": "2026-09-05T10:37:09.473Z"
+    },
+    "PAY-1788604629757-5p2u": {
+      "paymentId": "PAY-1788604629757-5p2u",
+      "orderId": "ORD-1788604629481-OH4ML",
+      "userId": "test-user-4g-1788604627937",
+      "provider": "mercadopago",
+      "providerPaymentId": "611102139-a3b045d5-7839-4a2a-bf9a-bc08d1a67a43",
+      "status": "approved",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "paymentMethod": "sandbox",
+      "createdAt": "2026-09-05T10:37:09.757Z",
+      "updatedAt": "2026-09-05T10:37:09.757Z"
+    },
+    "PAY-1788606559325-8u68": {
+      "paymentId": "PAY-1788606559325-8u68",
+      "orderId": "ORD-1788606558084-BOVNT",
+      "userId": "test-user-4g-1788606558075",
+      "provider": "mercadopago",
+      "providerPaymentId": "mp_pix_1788606559323_k6fh",
+      "status": "approved",
+      "amountInCents": 2250,
+      "currency": "BRL",
+      "paymentMethod": "pix",
+      "rawResponse": {
+        "simulated": true,
+        "orderId": "ORD-1788606558084-BOVNT"
+      },
+      "createdAt": "2026-09-05T11:09:18.084Z",
+      "updatedAt": "2026-09-05T11:09:19.354Z"
+    },
+    "PAY-1788606559650-sbzz": {
+      "paymentId": "PAY-1788606559650-sbzz",
+      "orderId": "ORD-1788606559362-N2LLZ",
+      "userId": "test-user-4g-1788606558075",
+      "provider": "mercadopago",
+      "providerPaymentId": "611102139-a867d5b6-db22-4c4a-aa29-939cbee8ff4b",
+      "status": "approved",
+      "amountInCents": 1450,
+      "currency": "BRL",
+      "paymentMethod": "sandbox",
+      "createdAt": "2026-09-05T11:09:19.650Z",
+      "updatedAt": "2026-09-05T11:09:19.650Z"
+    }
+  },
+  "processedEvents": [
+    "sim-approval-1788604533038",
+    "sim-approval-1788604533051",
+    "sim-approval-1788604560281",
+    "sim-approval-1788604560304",
+    "sim-approval-1788604560595",
+    "sim-approval-1788604613090",
+    "sim-approval-1788604613116",
+    "sim-approval-1788604629449",
+    "sim-approval-1788604629473",
+    "sim-approval-1788604629731",
+    "sim-approval-1788606559330",
+    "sim-approval-1788606559354",
+    "sim-approval-1788606559614"
+  ],
+  "commercial": {
+    "products": [
+      {
+        "id": "FER-001",
+        "code": "FER-001",
+        "name": "Horóscopo Diário Personalizável",
+        "nameEn": "Customizable Daily Horoscope",
+        "description": "Análise diária personalizada das forças astrológicas com precisão oracular.",
+        "descriptionEn": "Personalized daily force analysis with oracular precision.",
+        "category": "ferramentas",
+        "type": "TOOL",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 0,
+          "baseCurrency": "BRL",
+          "creditPrice": 1,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": false
+        },
+        "entitlement": {
+          "type": "USAGE_LIMITED",
+          "usageLimit": 1,
+          "targetScope": "matrix"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "FER-002",
+        "code": "FER-002",
+        "name": "Oráculo Orbie Diário",
+        "nameEn": "Daily Orbie Oracle",
+        "description": "Síntese oracular em 3 cartas com reflexão meditativa profunda.",
+        "descriptionEn": "3-card oracular synthesis with deep meditative reflection.",
+        "category": "ferramentas",
+        "type": "TOOL",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 0,
+          "baseCurrency": "BRL",
+          "creditPrice": 2,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": false
+        },
+        "entitlement": {
+          "type": "USAGE_LIMITED",
+          "usageLimit": 1,
+          "targetScope": "matrix"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "FER-003",
+        "code": "FER-003",
+        "name": "Estúdio Neuroacústico",
+        "nameEn": "Neuroacoustic Studio",
+        "description": "Frequências binaurais e síntese sonora terapêutica alinhada aos operadores diários.",
+        "descriptionEn": "Binaural frequencies and sound synthesis aligned with daily operators.",
+        "category": "ferramentas",
+        "type": "TOOL",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 0,
+          "baseCurrency": "BRL",
+          "creditPrice": 3,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": false
+        },
+        "entitlement": {
+          "type": "FEATURE_ACCESS",
+          "targetScope": "global"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "FER-004",
+        "code": "FER-004",
+        "name": "Sinastria Express",
+        "nameEn": "Express Synastry",
+        "description": "Mapeamento relacional harmônico entre dois perfis com cálculo de ressonância.",
+        "descriptionEn": "Harmonic relational mapping between two profiles with resonance index.",
+        "category": "ferramentas",
+        "type": "TOOL",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 0,
+          "baseCurrency": "BRL",
+          "creditPrice": 5,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": false
+        },
+        "entitlement": {
+          "type": "USAGE_LIMITED",
+          "usageLimit": 1,
+          "targetScope": "profile"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "FER-005",
+        "code": "FER-005",
+        "name": "Biorritmo Integrado",
+        "nameEn": "Integrated Biorhythm",
+        "description": "Ciclos físicos, emocionais e intelectuais sincronizados à matriz biológica.",
+        "descriptionEn": "Physical, emotional and intellectual cycles synchronized to biological matrix.",
+        "category": "ferramentas",
+        "type": "TOOL",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 0,
+          "baseCurrency": "BRL",
+          "creditPrice": 2,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": false
+        },
+        "entitlement": {
+          "type": "USAGE_LIMITED",
+          "usageLimit": 1,
+          "targetScope": "matrix"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "FER-006",
+        "code": "FER-006",
+        "name": "Tarot e Cabala Express",
+        "nameEn": "Kabbalah & Tarot Express",
+        "description": "Tiragem hermética conectada às 22 trilhas da Árvore da Vida.",
+        "descriptionEn": "Hermetic reading connected to the 22 paths of the Tree of Life.",
+        "category": "ferramentas",
+        "type": "TOOL",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 0,
+          "baseCurrency": "BRL",
+          "creditPrice": 3,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": false
+        },
+        "entitlement": {
+          "type": "USAGE_LIMITED",
+          "usageLimit": 1,
+          "targetScope": "matrix"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "AST-001",
+        "code": "AST-001",
+        "name": "Dossiê Mapa Astral Natal Completo",
+        "nameEn": "Natal Chart Complete Dossier",
+        "description": "Análise aprofundada de todas as forças, casas e aspectos com geração permanente.",
+        "descriptionEn": "In-depth analysis of all forces, sectors and harmonic aspects stored permanently.",
+        "category": "perfil-astrologia",
+        "type": "LIBRARY_ITEM",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 2900,
+          "baseCurrency": "BRL",
+          "creditPrice": 100,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "PERMANENT",
+          "targetScope": "library"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": true,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "CAB-001",
+        "code": "CAB-001",
+        "name": "Dossiê Árvore da Vida Pessoal",
+        "nameEn": "Personal Tree of Life Dossier",
+        "description": "Mapeamento cabalístico com as 10 sephiroth pessoais e 22 caminhos da sabedoria.",
+        "descriptionEn": "Kabbalistic mapping of the 10 personal sephiroth and 22 wisdom paths.",
+        "category": "perfil-cabala",
+        "type": "LIBRARY_ITEM",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 3900,
+          "baseCurrency": "BRL",
+          "creditPrice": 150,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "PERMANENT",
+          "targetScope": "library"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": true,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "NUM-001",
+        "code": "NUM-001",
+        "name": "Dossiê Numerológico Completo",
+        "nameEn": "Complete Numerology Dossier",
+        "description": "Cálculo analítico dos operadores de destino, expressão, alma e lições cármicas.",
+        "descriptionEn": "Analytical calculation of destiny, soul, personality and karmic lesson operators.",
+        "category": "perfil-numerologia",
+        "type": "LIBRARY_ITEM",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 2500,
+          "baseCurrency": "BRL",
+          "creditPrice": 80,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "PERMANENT",
+          "targetScope": "library"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": true,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "CHV-001",
+        "code": "CHV-001",
+        "name": "Chave Mestra Síntese Suprema",
+        "nameEn": "Supreme Master Key Synthesis",
+        "description": "Convergência holística unindo Astrologia, Cabala, Numerologia e Biorritmo em um dossiê monumental.",
+        "descriptionEn": "Holistic convergence joining Astrology, Kabbalah, Numerology and Biorhythm in a monumental dossier.",
+        "category": "perfil-chave-mestra",
+        "type": "LIBRARY_ITEM",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 8900,
+          "baseCurrency": "BRL",
+          "creditPrice": 350,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "PERMANENT",
+          "targetScope": "library"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": true,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "MEN-001",
+        "code": "MEN-001",
+        "name": "Revolução Solar & Trânsitos Mensais",
+        "nameEn": "Solar Return & Monthly Transits",
+        "description": "Guia de navegação temporal para os próximos 30 dias com datas críticas.",
+        "descriptionEn": "Temporal navigation guide for the next 30 days with critical dates.",
+        "category": "mensais-anuais",
+        "type": "SERVICE",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 1900,
+          "baseCurrency": "BRL",
+          "creditPrice": 60,
+          "allowsCreditPurchase": true,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "TEMPORARY",
+          "durationDays": 30,
+          "targetScope": "library"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": true,
+          "couponEligible": true,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "CRD-PACK-10",
+        "code": "CRD-PACK-10",
+        "name": "Recarga 10 Créditos",
+        "nameEn": "10 Credits Top-up",
+        "description": "Pacote inicial de 10 créditos individuais para a plataforma.",
+        "descriptionEn": "Starter pack of 10 individual credits for the platform.",
+        "category": "creditos",
+        "type": "CREDIT_GRANT",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 1000,
+          "baseCurrency": "BRL",
+          "creditPrice": 0,
+          "allowsCreditPurchase": false,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "CREDIT_BALANCE",
+          "usageLimit": 10,
+          "targetScope": "global"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "CRD-PACK-50",
+        "code": "CRD-PACK-50",
+        "name": "Recarga 50 Créditos (10% Bônus)",
+        "nameEn": "50 Credits Top-up (10% Bonus)",
+        "description": "Pacote intermediário de 50 créditos com desconto de conveniência.",
+        "descriptionEn": "Intermediate pack of 50 credits with convenience bonus.",
+        "category": "creditos",
+        "type": "CREDIT_GRANT",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 4500,
+          "baseCurrency": "BRL",
+          "creditPrice": 0,
+          "allowsCreditPurchase": false,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "CREDIT_BALANCE",
+          "usageLimit": 50,
+          "targetScope": "global"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "CRD-PACK-100",
+        "code": "CRD-PACK-100",
+        "name": "Recarga 100 Créditos (20% Bônus)",
+        "nameEn": "100 Credits Top-up (20% Bonus)",
+        "description": "Pacote mestre de 100 créditos para desbloqueio amplo de artefatos.",
+        "descriptionEn": "Master pack of 100 credits for wide artifact unlocking.",
+        "category": "creditos",
+        "type": "CREDIT_GRANT",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 8000,
+          "baseCurrency": "BRL",
+          "creditPrice": 0,
+          "allowsCreditPurchase": false,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "CREDIT_BALANCE",
+          "usageLimit": 100,
+          "targetScope": "global"
+        },
+        "policy": {
+          "freeAllowed": true,
+          "subscriptionIncluded": false,
+          "couponEligible": false,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "PLAN-PRO",
+        "code": "PLAN-PRO",
+        "name": "Assinatura Pro Mensal",
+        "nameEn": "Pro Monthly Subscription",
+        "description": "Acesso analítico irrestrito, 20 créditos diários renováveis e recursos mensais liberados.",
+        "descriptionEn": "Unrestricted analytical access, 20 daily renewable credits and unlocked monthly resources.",
+        "category": "planos",
+        "type": "SUBSCRIPTION",
+        "status": "active",
+        "enabled": true,
+        "pricing": {
+          "basePriceInCents": 4900,
+          "baseCurrency": "BRL",
+          "creditPrice": 0,
+          "allowsCreditPurchase": false,
+          "allowsFiatPurchase": true
+        },
+        "entitlement": {
+          "type": "FEATURE_ACCESS",
+          "targetScope": "global"
+        },
+        "policy": {
+          "freeAllowed": false,
+          "subscriptionIncluded": true,
+          "couponEligible": true,
+          "regionalEligibility": [
+            "*"
+          ]
+        },
+        "version": 1,
+        "createdAt": "2026-09-05T10:17:37.663Z",
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      }
+    ],
+    "regions": [
+      {
+        "code": "BR",
+        "name": "Brasil",
+        "currency": "BRL",
+        "currencySymbol": "R$",
+        "multiplier": 0.5,
+        "discountPercent": 50,
+        "status": "active",
+        "supportedPaymentMethods": [
+          "pix",
+          "credit_card",
+          "mercadopago"
+        ]
+      },
+      {
+        "code": "US",
+        "name": "United States",
+        "currency": "USD",
+        "currencySymbol": "$",
+        "multiplier": 1,
+        "discountPercent": 0,
+        "status": "active",
+        "supportedPaymentMethods": [
+          "credit_card"
+        ]
+      },
+      {
+        "code": "EU",
+        "name": "European Union",
+        "currency": "EUR",
+        "currencySymbol": "€",
+        "multiplier": 1,
+        "discountPercent": 0,
+        "status": "active",
+        "supportedPaymentMethods": [
+          "credit_card"
+        ]
+      },
+      {
+        "code": "GB",
+        "name": "United Kingdom",
+        "currency": "GBP",
+        "currencySymbol": "£",
+        "multiplier": 1,
+        "discountPercent": 0,
+        "status": "active",
+        "supportedPaymentMethods": [
+          "credit_card"
+        ]
+      },
+      {
+        "code": "LATAM",
+        "name": "América Latina (Paridade)",
+        "currency": "USD",
+        "currencySymbol": "$",
+        "multiplier": 0.5,
+        "discountPercent": 50,
+        "status": "active",
+        "supportedPaymentMethods": [
+          "mercadopago",
+          "credit_card"
+        ]
+      },
+      {
+        "code": "GLOBAL_TIER3",
+        "name": "Economias em Desenvolvimento (Tier 3)",
+        "currency": "USD",
+        "currencySymbol": "$",
+        "multiplier": 0.3,
+        "discountPercent": 70,
+        "status": "active",
+        "supportedPaymentMethods": [
+          "credit_card"
+        ]
+      }
+    ],
+    "dailyCreditRule": {
+      "baseCredits": 5,
+      "streakBonusCredits": 5,
+      "streakRequiredDays": 3,
+      "maxDailyBenefit": 10,
+      "isAccumulative": false,
+      "version": 1,
+      "updatedAt": "2026-09-05T10:17:37.663Z",
+      "updatedBy": "system"
+    },
+    "plans": [
+      {
+        "id": "free",
+        "name": "Plano Free",
+        "nameEn": "Free Plan",
+        "status": "active",
+        "enabled": true,
+        "priceInCents": 0,
+        "currency": "BRL",
+        "billingPeriod": "none",
+        "dailyCredits": 10,
+        "streakBonus": 5,
+        "features": [
+          "10 créditos renováveis diários (Day Use)",
+          "Acesso às ferramentas diárias por débito de créditos",
+          "Uso normal da plataforma e registro no Daily Journal",
+          "Compra avulsa de artefatos e dossiês que vão para a sua biblioteca"
+        ],
+        "featuresEn": [
+          "10 renewable daily credits (Day Use)",
+          "Access to daily tools via daily credit deduction",
+          "Standard platform use and Daily Journal entries",
+          "One-time purchase of artifacts stored in your library"
+        ],
+        "catalogAvailability": "all",
+        "discountPolicy": {
+          "discountPercent": 0,
+          "masterKeyDiscountPercent": 0
+        },
+        "couponEligibility": false,
+        "entitlements": [
+          "day_use_credits",
+          "daily_tools"
+        ],
+        "version": 1,
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      },
+      {
+        "id": "subscription",
+        "name": "Plano Assinatura Pro",
+        "nameEn": "Pro Subscription",
+        "status": "active",
+        "enabled": true,
+        "priceInCents": 4900,
+        "currency": "BRL",
+        "billingPeriod": "monthly",
+        "dailyCredits": 20,
+        "streakBonus": 10,
+        "features": [
+          "20 créditos renováveis diários (2x mais capacidade)",
+          "Todos os recursos mensais desbloqueados no painel de apoio",
+          "Trânsitos do Mês, Retorno Lunar e Progressões integrados ao Daily Journal",
+          "Todos os artefatos adquiridos armazenados na biblioteca permanente",
+          "Prioridade na geração e descontos exclusivos na Chave Mestra"
+        ],
+        "featuresEn": [
+          "20 renewable daily credits (2x daily capacity)",
+          "All monthly resources unlocked in the support panel",
+          "Monthly transits, lunar returns & progressions integrated in Daily Journal",
+          "All purchased artifacts permanently stored in personal library",
+          "Priority generation and exclusive discounts on Master Key"
+        ],
+        "catalogAvailability": "included",
+        "discountPolicy": {
+          "discountPercent": 20,
+          "masterKeyDiscountPercent": 30
+        },
+        "couponEligibility": true,
+        "entitlements": [
+          "pro_badge",
+          "monthly_cycles_unlocked",
+          "double_daily_credits"
+        ],
+        "version": 1,
+        "updatedAt": "2026-09-05T10:17:37.663Z"
+      }
+    ],
+    "versions": []
+  }
 }

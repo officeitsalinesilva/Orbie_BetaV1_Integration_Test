@@ -15,11 +15,27 @@ import {
   RefreshCw,
   Eye,
   Copy,
+  Globe,
+  Crown,
+  Sliders,
+  History,
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
 import { useOrb } from '../../context/OrbContext';
+import { AdminCommercialProductsTab } from './commercial/AdminCommercialProductsTab';
+import { AdminCommercialPricingTab } from './commercial/AdminCommercialPricingTab';
+import { AdminCommercialPlansTab } from './commercial/AdminCommercialPlansTab';
+import { AdminCommercialAuditTab } from './commercial/AdminCommercialAuditTab';
 
-type Tab = 'campaigns' | 'coupons' | 'distribution' | 'notifications' | 'audit';
+type Tab =
+  | 'products'
+  | 'pricing'
+  | 'plans'
+  | 'campaigns'
+  | 'coupons'
+  | 'distribution'
+  | 'notifications'
+  | 'audit';
 
 type Props = {
   isOpen: boolean;
@@ -30,9 +46,16 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
   const { preferences, isAdmin, refreshWallet } = useOrb();
   const isEnglish = preferences.language === 'en';
 
-  const [activeTab, setActiveTab] = useState<Tab>('campaigns');
+  const [activeTab, setActiveTab] = useState<Tab>('products');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  // Commercial Data states (Fase 4F)
+  const [commercialProducts, setCommercialProducts] = useState<any[]>([]);
+  const [commercialRegions, setCommercialRegions] = useState<any[]>([]);
+  const [commercialPlans, setCommercialPlans] = useState<any[]>([]);
+  const [commercialDailyRule, setCommercialDailyRule] = useState<any | null>(null);
+  const [commercialVersions, setCommercialVersions] = useState<any[]>([]);
 
   // Data states
   const [campaigns, setCampaigns] = useState<any[]>([]);
@@ -81,7 +104,21 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
     if (!isAdmin) return;
     setLoading(true);
     try {
-      const [campRes, coupRes, distRes, redRes, notifRes, draftsRes, auditRes, usersRes] = await Promise.all([
+      const [
+        campRes,
+        coupRes,
+        distRes,
+        redRes,
+        notifRes,
+        draftsRes,
+        auditRes,
+        usersRes,
+        prodRes,
+        regRes,
+        plansRes,
+        dailyRes,
+        versRes,
+      ] = await Promise.all([
         adminApi.getCampaigns().catch(() => ({ campaigns: [] })),
         adminApi.getCoupons().catch(() => ({ coupons: [] })),
         adminApi.getDistributions().catch(() => ({ distributions: [] })),
@@ -90,6 +127,11 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
         adminApi.getCommunicationDrafts().catch(() => ({ drafts: [] })),
         adminApi.getAuditLogs().catch(() => ({ logs: [] })),
         adminApi.getUsers().catch(() => ({ users: [] })),
+        adminApi.getCommercialProducts().catch(() => ({ products: [] })),
+        adminApi.getCommercialRegions().catch(() => ({ regions: [] })),
+        adminApi.getCommercialPlans().catch(() => ({ plans: [] })),
+        adminApi.getCommercialDailyCredits().catch(() => ({ rule: null })),
+        adminApi.getCommercialVersions().catch(() => ({ versions: [] })),
       ]);
 
       setCampaigns(campRes.campaigns || []);
@@ -100,6 +142,11 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
       setDrafts(draftsRes.drafts || []);
       setAuditLogs(auditRes.logs || []);
       setUsers(usersRes.users || []);
+      setCommercialProducts(prodRes.products || []);
+      setCommercialRegions(regRes.regions || []);
+      setCommercialPlans(plansRes.plans || []);
+      setCommercialDailyRule(dailyRes.rule || null);
+      setCommercialVersions(versRes.versions || []);
 
       if (campRes.campaigns?.length && !selectedCampId) {
         setSelectedCampId(campRes.campaigns[0].id);
@@ -316,6 +363,48 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
         <div className="flex items-center gap-1 border-b border-[var(--border)] bg-[var(--surface-2)] px-6 py-2 overflow-x-auto shrink-0 font-mono text-xs">
           <button
             type="button"
+            onClick={() => setActiveTab('products')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'products'
+                ? 'bg-[var(--accent)] text-[var(--accent-foreground)] font-bold shadow-2xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]'
+            }`}
+          >
+            <Tag size={13} />
+            <span>{isEnglish ? 'Products' : 'Produtos & Catálogo'}</span>
+            <span className="ml-1 text-[10px] opacity-80">({commercialProducts.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('pricing')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'pricing'
+                ? 'bg-[var(--accent)] text-[var(--accent-foreground)] font-bold shadow-2xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]'
+            }`}
+          >
+            <Globe size={13} />
+            <span>{isEnglish ? 'Pricing & Regions' : 'Pricing & Regiões'}</span>
+            <span className="ml-1 text-[10px] opacity-80">({commercialRegions.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('plans')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'plans'
+                ? 'bg-[var(--accent)] text-[var(--accent-foreground)] font-bold shadow-2xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]'
+            }`}
+          >
+            <Crown size={13} />
+            <span>{isEnglish ? 'Plans & Credits' : 'Planos & Créditos'}</span>
+            <span className="ml-1 text-[10px] opacity-80">({commercialPlans.length})</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab('campaigns')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeTab === 'campaigns'
@@ -323,7 +412,7 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
                 : 'text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]'
             }`}
           >
-            <Tag size={13} />
+            <Sliders size={13} />
             <span>{isEnglish ? 'Campaigns' : 'Campanhas'}</span>
             <span className="ml-1 text-[10px] opacity-80">({campaigns.length})</span>
           </button>
@@ -379,9 +468,9 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
                 : 'text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]'
             }`}
           >
-            <FileText size={13} />
-            <span>{isEnglish ? 'Redemptions & Audit' : 'Resgates & Auditoria'}</span>
-            <span className="ml-1 text-[10px] opacity-80">({redemptions.length})</span>
+            <History size={13} />
+            <span>{isEnglish ? 'Audit & Versions' : 'Auditoria & Versões'}</span>
+            <span className="ml-1 text-[10px] opacity-80">({commercialVersions.length + redemptions.length})</span>
           </button>
         </div>
 
@@ -401,6 +490,41 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
 
         {/* Tab Contents */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* TAB 0A: COMMERCIAL PRODUCTS & CATALOG (Fase 4F) */}
+          {activeTab === 'products' && (
+            <AdminCommercialProductsTab
+              products={commercialProducts}
+              loading={loading}
+              onRefresh={loadData}
+              showToast={showToast}
+              isEnglish={isEnglish}
+            />
+          )}
+
+          {/* TAB 0B: PRICING & REGIONAL POLICIES (Fase 4F) */}
+          {activeTab === 'pricing' && (
+            <AdminCommercialPricingTab
+              regions={commercialRegions}
+              products={commercialProducts}
+              loading={loading}
+              onRefresh={loadData}
+              showToast={showToast}
+              isEnglish={isEnglish}
+            />
+          )}
+
+          {/* TAB 0C: PLANS & DAILY CREDITS (Fase 4F) */}
+          {activeTab === 'plans' && (
+            <AdminCommercialPlansTab
+              plans={commercialPlans}
+              dailyRule={commercialDailyRule}
+              loading={loading}
+              onRefresh={loadData}
+              showToast={showToast}
+              isEnglish={isEnglish}
+            />
+          )}
+
           {/* TAB 1: CAMPAIGNS */}
           {activeTab === 'campaigns' && (
             <div className="space-y-6">
@@ -1054,91 +1178,16 @@ export function AdminCouponCenterModal({ isOpen, onClose }: Props) {
             </div>
           )}
 
-          {/* TAB 5: AUDIT & REDEMPTIONS */}
+          {/* TAB 5: AUDIT, VERSIONS & REDEMPTIONS (Fase 4F) */}
           {activeTab === 'audit' && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-bold text-[var(--foreground)] font-mono">
-                  {isEnglish ? 'Audit Trail & Redemption Records' : 'Trilha de Auditoria & Registro de Resgates'}
-                </h3>
-                <p className="text-xs text-[var(--text-secondary)]">
-                  {isEnglish
-                    ? 'Immutable log of administrative operations and user coupon redemptions.'
-                    : 'Log imutável de operações administrativas e resgates de cupons dos usuários.'}
-                </p>
-              </div>
-
-              {/* Redemptions Table */}
-              <div className="space-y-3 font-mono">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">
-                  {isEnglish ? 'Coupon Redemptions' : 'Resgates Efetuados'}
-                </h4>
-                {redemptions.length === 0 ? (
-                  <div className="rounded-xl border border-[var(--border)] p-6 text-center text-xs text-[var(--text-secondary)]">
-                    {isEnglish ? 'No redemptions recorded yet.' : 'Nenhum resgate registrado até o momento.'}
-                  </div>
-                ) : (
-                  redemptions.map((r) => (
-                    <div
-                      key={r.id}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-xs"
-                    >
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-[var(--foreground)]">{r.couponCode}</span>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] font-bold">
-                            Saque #{r.withdrawalNumber}
-                          </span>
-                        </div>
-                        <div className="text-[11px] text-[var(--text-secondary)]">
-                          Usuário: <code className="text-[10px]">{r.userUid}</code>
-                        </div>
-                      </div>
-
-                      <div className="text-right shrink-0">
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400 block">
-                          +◎ {r.creditsGranted}
-                        </span>
-                        <span className="text-[10px] text-[var(--text-tertiary)]">
-                          {new Date(r.redeemedAt).toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Admin Audit Logs */}
-              <div className="space-y-3 font-mono pt-4 border-t border-[var(--border)]">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">
-                  {isEnglish ? 'Admin Action Audit Logs' : 'Auditoria de Ações Administrativas'}
-                </h4>
-                {auditLogs.length === 0 ? (
-                  <div className="rounded-xl border border-[var(--border)] p-6 text-center text-xs text-[var(--text-secondary)]">
-                    {isEnglish ? 'No audit actions recorded.' : 'Nenhuma ação de auditoria registrada.'}
-                  </div>
-                ) : (
-                  auditLogs.map((log) => (
-                    <div
-                      key={log.id}
-                      className="p-3 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] text-xs space-y-1"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[var(--foreground)] uppercase text-[11px]">
-                          {log.action}
-                        </span>
-                        <span className="text-[10px] text-[var(--text-tertiary)]">
-                          {new Date(log.createdAt).toLocaleString()}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-[var(--text-secondary)]">
-                        Admin: {log.adminUid} · Entidade: {log.entityType} ({log.entityId})
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
+            <AdminCommercialAuditTab
+              commercialVersions={commercialVersions}
+              redemptions={redemptions}
+              auditLogs={auditLogs}
+              showToast={showToast}
+              isEnglish={isEnglish}
+              onRefresh={loadData}
+            />
           )}
         </div>
       </div>

@@ -15,6 +15,10 @@ import {
   IDailyCreditRepository,
   INotificationRepository,
   IJournalRepository,
+  ICommercialRepository,
+  CommercialStorageSnapshot,
+  IOrderRepository,
+  IPaymentRepository,
 } from '../interfaces';
 import {
   UserEntity,
@@ -34,6 +38,8 @@ import {
   NotificationEntity,
   JournalEntryEntity,
   PersistenceStatus,
+  OrderEntity,
+  PaymentEntity,
 } from '../types';
 import fs from 'fs';
 import path from 'path';
@@ -399,6 +405,53 @@ export class FirestorePersistenceAdapter implements IPersistenceAdapter {
     findByOwner: async (ownerUid: string) => this.queryDocs<JournalEntryEntity>('journals', 'ownerUid', ownerUid),
     save: async (entry: JournalEntryEntity) => {
       await this.setDoc<JournalEntryEntity>('journals', entry.id, entry);
+    },
+  };
+
+  public readonly commercial: ICommercialRepository = {
+    getConfig: async () => {
+      return this.getDoc<CommercialStorageSnapshot>('commercial_configs', 'current');
+    },
+    saveConfig: async (snapshot: CommercialStorageSnapshot) => {
+      await this.setDoc<CommercialStorageSnapshot>('commercial_configs', 'current', snapshot);
+    },
+  };
+
+  public readonly orders: IOrderRepository = {
+    get: async (orderId: string) => this.getDoc<OrderEntity>('orders', orderId),
+    getByProviderReference: async (ref: string) => {
+      const list = await this.queryDocs<OrderEntity>('orders', 'providerReference', ref);
+      if (list.length > 0) return list[0];
+      return this.getDoc<OrderEntity>('orders', ref);
+    },
+    findByUser: async (userId: string) => this.queryDocs<OrderEntity>('orders', 'userId', userId),
+    listAll: async () => this.queryDocs<OrderEntity>('orders'),
+    save: async (order: OrderEntity) => {
+      const updated = { ...order, updatedAt: new Date().toISOString() };
+      await this.setDoc<OrderEntity>('orders', order.orderId, updated);
+      return updated;
+    },
+  };
+
+  public readonly payments: IPaymentRepository = {
+    get: async (paymentId: string) => this.getDoc<PaymentEntity>('payments', paymentId),
+    getByProviderPaymentId: async (providerPaymentId: string) => {
+      const list = await this.queryDocs<PaymentEntity>('payments', 'providerPaymentId', providerPaymentId);
+      if (list.length > 0) return list[0];
+      return this.getDoc<PaymentEntity>('payments', providerPaymentId);
+    },
+    findByOrder: async (orderId: string) => this.queryDocs<PaymentEntity>('payments', 'orderId', orderId),
+    save: async (payment: PaymentEntity) => {
+      const updated = { ...payment, updatedAt: new Date().toISOString() };
+      await this.setDoc<PaymentEntity>('payments', payment.paymentId, updated);
+      return updated;
+    },
+    isEventProcessed: async (eventId: string) => {
+      const doc = await this.getDoc<{ eventId: string }>('processed_webhook_events', eventId);
+      return !!doc;
+    },
+    markEventProcessed: async (eventId: string) => {
+      await this.setDoc('processed_webhook_events', eventId, { eventId, processedAt: new Date().toISOString() });
     },
   };
 }

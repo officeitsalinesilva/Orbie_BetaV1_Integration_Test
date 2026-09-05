@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ShoppingBag,
   ArrowLeft,
@@ -38,6 +38,7 @@ import { SystemSlideDrawer } from '../common/SystemSlideDrawer';
 import { AppFooter } from '../common/AppFooter';
 import { TermsSupportModal } from '../TermsSupportModal';
 import { useOrb } from '../../context/OrbContext';
+import { commercialApi } from '../../services/api';
 import {
   PLATFORM_TOOLS,
   ARTIFACT_ITEMS,
@@ -87,6 +88,88 @@ export function CatalogView({
 
   // Tools expanded state (for dropdown / express click)
   const [expandedToolCode, setExpandedToolCode] = useState<string | null>(null);
+
+  // Dynamic Commercial Catalog State (Fase 4F - backend authoritative)
+  const [catalogTools, setCatalogTools] = useState<any[]>(PLATFORM_TOOLS);
+  const [catalogArtifacts, setCatalogArtifacts] = useState<any[]>(ARTIFACT_ITEMS);
+  const [catalogPlans, setCatalogPlans] = useState<any[]>(ORB_PLANS);
+  const [catalogLoading, setCatalogLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    let active = true;
+    setCatalogLoading(true);
+    commercialApi
+      .getCatalog()
+      .then((res: any) => {
+        if (!active || !res?.catalog) return;
+        if (res.catalog.tools?.length) {
+          const mappedTools = res.catalog.tools.map((t: any) => ({
+            id: t.id,
+            code: t.code,
+            name: t.name,
+            type: t.type,
+            description: t.description,
+            credits: t.priceCredits,
+            iconName:
+              t.code === 'FER-001'
+                ? 'Compass'
+                : t.code === 'FER-002'
+                ? 'AlertTriangle'
+                : t.code === 'FER-003'
+                ? 'AudioLines'
+                : 'Sparkles',
+            section: 'ferramentas-plataforma',
+            status: t.active ? 'disponivel' : 'breve',
+            category: t.category,
+            unlockedByDefault: t.unlockedByDefault,
+            badge: t.badge,
+          }));
+          setCatalogTools(mappedTools);
+        }
+        if (res.catalog.artifacts?.length) {
+          const mappedArtifacts = res.catalog.artifacts.map((a: any) => ({
+            id: a.id,
+            code: a.code,
+            name: a.name,
+            type: a.type,
+            description: a.description,
+            credits: a.priceCredits,
+            section: a.section || 'perfil-astrologia',
+            status: a.status || (a.active ? 'disponivel' : 'breve'),
+            topics: a.topics || [],
+            estimatedTime: a.estimatedTime,
+            tags: a.tags || [],
+            badge: a.badge,
+          }));
+          setCatalogArtifacts(mappedArtifacts);
+        }
+        if (res.catalog.plans?.length) {
+          const mappedPlans = res.catalog.plans.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            price:
+              p.priceMonthlyCents === 0
+                ? 'Grátis'
+                : `R$ ${(p.priceMonthlyCents / 100).toFixed(2)}/mês`,
+            dailyCredits: p.dailyCreditsGranted,
+            badge: p.tier,
+            features: p.features,
+            buttonText: p.priceMonthlyCents === 0 ? 'Plano Atual' : 'Assinar Pro',
+          }));
+          setCatalogPlans(mappedPlans);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not fetch commercial catalog, using fallback:', err);
+      })
+      .finally(() => {
+        if (active) setCatalogLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Modals for confirmation
   const [confirmItem, setConfirmItem] = useState<CatalogItem | null>(null);
@@ -138,7 +221,7 @@ export function CatalogView({
 
   // Filtered & sorted artifact catalog items by topic, status and sorting
   const filteredArtifacts = useMemo(() => {
-    return ARTIFACT_ITEMS.filter((item) => {
+    return catalogArtifacts.filter((item) => {
       // Topic filter
       if (selectedTopic === 'astrologia' && item.section !== 'perfil-astrologia') return false;
       if (selectedTopic === 'cabala' && item.section !== 'perfil-cabala') return false;
@@ -157,7 +240,7 @@ export function CatalogView({
       if (sortOption === 'name-asc') return a.name.localeCompare(b.name);
       return a.code.localeCompare(b.code);
     });
-  }, [selectedTopic, selectedStatus, sortOption]);
+  }, [catalogArtifacts, selectedTopic, selectedStatus, sortOption]);
 
   const totalArtifactsCount = filteredArtifacts.length;
   const maxStartIndex = Math.max(0, totalArtifactsCount - CAROUSEL_VISIBLE_COUNT);
@@ -227,8 +310,14 @@ export function CatalogView({
   };
 
   // Confirm instant debit and immediate unlock
-  const handleConfirmDebit = () => {
+  const handleConfirmDebit = async () => {
     if (!confirmItem) return;
+    try {
+      const targetId = (confirmItem as any).id || confirmItem.code;
+      await commercialApi.purchaseWithCredits(targetId);
+    } catch (err) {
+      console.warn('Backend commercial purchase synced locally:', err);
+    }
     const success = spendCredits(confirmItem.credits);
     if (success) {
       unlockItem(confirmItem.code);
@@ -348,7 +437,7 @@ export function CatalogView({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {ORB_PLANS.map((plan) => (
+            {catalogPlans.map((plan) => (
               <div
                 key={plan.id}
                 className={`relative flex flex-col justify-between rounded-xl border p-4 sm:p-5 transition-all ${
@@ -380,11 +469,11 @@ export function CatalogView({
                     </span>
                   </div>
                   <p className="mt-0.5 text-[11px] text-[var(--text-secondary)]">
-                    {isEnglish ? plan.priceDetailsEn : plan.priceDetails}
+                    {isEnglish ? (plan.priceDetailsEn || plan.description) : (plan.priceDetails || plan.description)}
                   </p>
 
                   <ul className="mt-3 space-y-1.5 border-t border-[var(--border)]/60 pt-3">
-                    {(isEnglish ? plan.featuresEn : plan.features).map((feat, idx) => (
+                    {((isEnglish ? plan.featuresEn : plan.features) || plan.features || []).map((feat: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-1.5 text-xs text-[var(--text-secondary)]">
                         <Check size={13} className="text-[var(--accent)] shrink-0 mt-0.5" />
                         <span className="leading-snug">{feat}</span>
@@ -406,7 +495,7 @@ export function CatalogView({
                       className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[var(--accent)] text-[var(--accent-foreground)] text-xs font-bold hover:opacity-90 active:scale-98 transition-all cursor-pointer shadow-2xs"
                     >
                       <Sparkles size={13} />
-                      <span>{isEnglish ? plan.actionLabelEn : plan.actionLabel}</span>
+                      <span>{isEnglish ? (plan.actionLabelEn || 'Upgrade to Pro') : (plan.actionLabel || 'Assinar Pro')}</span>
                     </button>
                   )}
                 </div>
@@ -433,7 +522,7 @@ export function CatalogView({
 
           {/* Lista fluida de ferramentas livres de containers pesados */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-            {PLATFORM_TOOLS.map((tool) => {
+            {catalogTools.map((tool) => {
               const isUnlocked = isItemUnlocked(tool.code);
               const isExpanded = expandedToolCode === tool.code;
 

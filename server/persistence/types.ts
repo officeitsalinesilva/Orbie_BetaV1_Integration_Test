@@ -273,3 +273,53 @@ export interface PersistenceStatus {
   location?: string;
   details?: string;
 }
+
+export type OrderStatus =
+  | 'PENDING'
+  | 'CHECKOUT_CREATED'
+  | 'PAID'
+  | 'FAILED'
+  | 'CANCELLED'
+  | 'REFUNDED';
+
+export type PaymentStatus =
+  | 'pending'
+  | 'approved'
+  | 'in_process'
+  | 'rejected'
+  | 'refunded'
+  | 'cancelled';
+
+export interface OrderEntity {
+  orderId: string;
+  userId: string;
+  productId: string;
+  productCode: string;
+  quoteId: string;
+  amountInCents: number;
+  currency: string;
+  status: OrderStatus;
+  paymentProvider: 'mercadopago' | string;
+  providerReference?: string;
+  payerEmail?: string;
+  payerName?: string;
+  metadata?: Record<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentEntity {
+  paymentId: string;
+  orderId: string;
+  userId: string;
+  provider: 'mercadopago' | string;
+  providerPaymentId?: string;
+  status: PaymentStatus;
+  amountInCents: number;
+  currency: string;
+  paymentMethod?: string; // 'pix' | 'credit_card' | 'mp_preference' | etc.
+  installments?: number;
+  rawResponse?: any;
+  createdAt: string;
+  updatedAt: string;
+}

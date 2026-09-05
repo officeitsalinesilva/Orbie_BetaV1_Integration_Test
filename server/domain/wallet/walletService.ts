@@ -265,6 +265,33 @@ export class WalletService {
     return { success: true, wallet, entry, transaction: entry, entitlement };
   }
 
+  public async addEntitlement(
+    userUid: string,
+    itemCode: string,
+    scopeType: string = 'global',
+    scopeId?: string,
+    source: string = 'PURCHASE'
+  ): Promise<Entitlement> {
+    const now = new Date().toISOString();
+    const entitlement: Entitlement = {
+      id: `ent-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      ownerUid: userUid,
+      userUid,
+      scopeType: scopeType.toLowerCase() as any,
+      scopeId,
+      itemCode,
+      source: source as any,
+      unlockedAt: now,
+    };
+
+    const userEntitlements = this.entitlements.get(userUid) || [];
+    userEntitlements.push(entitlement);
+    this.entitlements.set(userUid, userEntitlements);
+
+    await walletRepo.addEntitlement(entitlement as any);
+    return entitlement;
+  }
+
   public updatePlan(userUid: string, plan: 'free' | 'premium'): Wallet {
     const wallet = this.getOrCreateWallet(userUid);
     wallet.plan = plan;

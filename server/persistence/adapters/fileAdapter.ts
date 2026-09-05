@@ -18,6 +18,10 @@ import {
   INotificationRepository,
   ICommunicationRepository,
   IJournalRepository,
+  ICommercialRepository,
+  CommercialStorageSnapshot,
+  IOrderRepository,
+  IPaymentRepository,
 } from '../interfaces';
 import {
   UserEntity,
@@ -37,6 +41,8 @@ import {
   NotificationEntity,
   JournalEntryEntity,
   PersistenceStatus,
+  OrderEntity,
+  PaymentEntity,
 } from '../types';
 
 interface StorageSchema {
@@ -56,6 +62,10 @@ interface StorageSchema {
   dailyCredits: Record<string, UserCheckInStateEntity>;
   notifications: Record<string, NotificationEntity[]>;
   journals: Record<string, JournalEntryEntity[]>;
+  commercial?: CommercialStorageSnapshot;
+  orders: Record<string, OrderEntity>;
+  payments: Record<string, PaymentEntity>;
+  processedEvents: string[];
 }
 
 const DEFAULT_STORAGE: StorageSchema = {
@@ -75,6 +85,9 @@ const DEFAULT_STORAGE: StorageSchema = {
   dailyCredits: {},
   notifications: {},
   journals: {},
+  orders: {},
+  payments: {},
+  processedEvents: [],
 };
 
 export class DurableFilePersistenceAdapter implements IPersistenceAdapter {
@@ -117,6 +130,9 @@ export class DurableFilePersistenceAdapter implements IPersistenceAdapter {
           dailyCredits: parsed.dailyCredits || {},
           notifications: parsed.notifications || {},
           journals: parsed.journals || {},
+          orders: parsed.orders || {},
+          payments: parsed.payments || {},
+          processedEvents: parsed.processedEvents || [],
         };
       } catch (err) {
         console.error(`[DurableFilePersistence] Error reading ${this.filePath}, creating clean file:`, err);
@@ -428,6 +444,75 @@ export class DurableFilePersistenceAdapter implements IPersistenceAdapter {
         list.unshift({ ...entry });
       }
       this.saveToDisk();
+    },
+  };
+
+  public readonly commercial: ICommercialRepository = {
+    getConfig: async () => {
+      if (this.data.commercial) {
+        return JSON.parse(JSON.stringify(this.data.commercial));
+      }
+      return null;
+    },
+    saveConfig: async (snapshot: CommercialStorageSnapshot) => {
+      this.data.commercial = JSON.parse(JSON.stringify(snapshot));
+      this.saveToDisk();
+    },
+  };
+
+  public readonly orders: IOrderRepository = {
+    get: async (orderId: string) => {
+      const order = this.data.orders[orderId];
+      return order ? { ...order } : null;
+    },
+    getByProviderReference: async (ref: string) => {
+      const all = Object.values(this.data.orders);
+      const match = all.find((o) => o.providerReference === ref || o.orderId === ref);
+      return match ? { ...match } : null;
+    },
+    findByUser: async (userId: string) => {
+      const all = Object.values(this.data.orders);
+      return all.filter((o) => o.userId === userId).map((o) => ({ ...o }));
+    },
+    listAll: async () => {
+      return Object.values(this.data.orders).map((o) => ({ ...o }));
+    },
+    save: async (order: OrderEntity) => {
+      this.data.orders[order.orderId] = { ...order, updatedAt: new Date().toISOString() };
+      this.saveToDisk();
+      return { ...this.data.orders[order.orderId] };
+    },
+  };
+
+  public readonly payments: IPaymentRepository = {
+    get: async (paymentId: string) => {
+      const payment = this.data.payments[paymentId];
+      return payment ? { ...payment } : null;
+    },
+    getByProviderPaymentId: async (providerPaymentId: string) => {
+      const all = Object.values(this.data.payments);
+      const match = all.find((p) => p.providerPaymentId === providerPaymentId || p.paymentId === providerPaymentId);
+      return match ? { ...match } : null;
+    },
+    findByOrder: async (orderId: string) => {
+      const all = Object.values(this.data.payments);
+      return all.filter((p) => p.orderId === orderId).map((p) => ({ ...p }));
+    },
+    save: async (payment: PaymentEntity) => {
+      this.data.payments[payment.paymentId] = { ...payment, updatedAt: new Date().toISOString() };
+      this.saveToDisk();
+      return { ...this.data.payments[payment.paymentId] };
+    },
+    isEventProcessed: async (eventId: string) => {
+      if (!this.data.processedEvents) this.data.processedEvents = [];
+      return this.data.processedEvents.includes(eventId);
+    },
+    markEventProcessed: async (eventId: string) => {
+      if (!this.data.processedEvents) this.data.processedEvents = [];
+      if (!this.data.processedEvents.includes(eventId)) {
+        this.data.processedEvents.push(eventId);
+        this.saveToDisk();
+      }
     },
   };
 }
